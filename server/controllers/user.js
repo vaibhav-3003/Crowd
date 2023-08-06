@@ -79,6 +79,23 @@ export const login = async(req,res)=>{
     }
 }
 
+export const logout = async(req,res)=>{
+  try {
+    
+    res.status(200).cookie("token",null,{expires: new Date(Date.now()),httpOnly: true})
+    .json({
+      success: true,
+      message:"Logged out"
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
 export const followAndUnfollowUser = async(req,res)=>{
   try {
 
@@ -120,8 +137,6 @@ export const followAndUnfollowUser = async(req,res)=>{
       });
     }
 
-    
-    
   } catch (error) {
     res.status(500).json({
       success : false,
@@ -129,4 +144,5 @@ export const followAndUnfollowUser = async(req,res)=>{
     })
   }
 }
+
 

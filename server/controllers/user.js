@@ -1,3 +1,4 @@
+import Post from '../models/Post.js';
 import User from '../models/User.js'
 
 export const register = async(req,res)=>{
@@ -145,4 +146,184 @@ export const followAndUnfollowUser = async(req,res)=>{
   }
 }
 
+export const updatePassword = async(req,res)=>{
+  try {
+    
+    const user = await User.findById(req.user._id).select("+password")
+
+    const {oldPassword,newPassword} = req.body;
+
+    if(!oldPassword && !newPassword){
+      return res.status(400).json({
+        success: false,
+        message: "Please provide old password and new password",
+      });
+    }
+
+    const isMatch = await user.matchPassword(oldPassword)
+
+    if(!isMatch){
+      return  res.status(401).json({
+        success: false,  
+        message: "Incorrect Password"
+      })
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password Updated"
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    })
+  }
+}
+
+export const updateProfile = async(req,res)=>{
+  try {
+    
+    const user = await User.findById(req.user._id)
+
+    const {name,email} = req.body;
+
+    if(name){
+      user.name= name
+    }
+
+    if(email){
+      user.email = email
+    }
+
+    //User Avatar todo
+
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Profile Updated"
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const deleteMyProfile = async(req,res)=>{
+  try {
+    
+    const user = await User.findById(req.user._id);
+    const posts = user.posts;
+    const followers = user.followers;
+    const following = user.following;
+    const userId = user._id
+
+    await user.deleteOne();
+
+    //logout user after deleting profile
+    res.cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
+
+    //Delete all posts of the user
+    for(p of posts){
+      const post = await Post.findById(p)
+      await post.deleteOne()
+    }
+
+    //Removing user from followers following
+    for(f of followers){
+      const follower = await User.findById(f);
+
+      const index = follower.following.indexOf(userId)
+      follower.following.splice(index,1)
+      await follower.save()
+    }
+
+    //Removing user from following's followers
+    for(f of following){
+      const follows = await User.findById(f);
+
+      const index = follows.followers.indexOf(userId);
+      follows.followers.splice(index, 1);
+      await follows.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message:"Account Deleted Successfully",
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const myProfile = async(req,res)=>{
+  try {
+    
+    const user = await User.findById(req.user._id).populate('posts');
+
+    res.status(200).json({
+      success: true,
+      user,
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const getUserProfile = async(req,res)=>{
+  try {
+    
+    const user = await User.findById(req.params.id).populate('posts');
+
+    if(!user){
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const getAllUsers = async(req,res)=>{
+  try {
+    
+    const users = await User.find({ _id: { $ne: req.user._id } });
+
+    res.status(200).json({
+      success :true,
+      users
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message: error.message
+    })
+  }
+}
 

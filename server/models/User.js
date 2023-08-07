@@ -58,4 +58,8 @@ userSchema.methods.generateToken = async function(){
     return jwt.sign({_id: this._id},process.env.JWT_SECRET)
 }
 
+userSchema.methods.getResetPasswordToken = async function(){
+
+}
+
 export default mongoose.model("User",userSchema)

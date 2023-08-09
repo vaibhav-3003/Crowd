@@ -9,7 +9,9 @@ import {
   deleteMyProfile,
   myProfile,
   getUserProfile,
-  getAllUsers
+  getAllUsers,
+  forgotPassword,
+  resetPassword
 } from "../controllers/user.js";
 import { isAuthenticated } from '../middlewares/auth.js';
 
@@ -34,5 +36,9 @@ router.get('/me',isAuthenticated,myProfile)
 router.get('/user/:id',isAuthenticated,getUserProfile)
 
 router.get('/users',isAuthenticated,getAllUsers)
+
+router.post('/forgot/password',forgotPassword)
+
+router.put('/password/reset/:token',resetPassword)
 
 export default router

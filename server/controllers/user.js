@@ -1,5 +1,7 @@
 import Post from '../models/Post.js';
 import User from '../models/User.js'
+import { sendEmail } from '../middlewares/sendEmail.js';
+import crypto from 'crypto'
 
 export const register = async(req,res)=>{
     try {
@@ -339,12 +341,74 @@ export const forgotPassword = async(req,res)=>{
       })
     }
 
-    const resetPasswordToken = user.getResetPasswordToken();
+    const resetPasswordToken = await user.getResetPasswordToken();
 
-    
+    await user.save()
+
+    const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetPasswordToken}`
+
+    const message = `Reset your password by clicking on the link below: \n\n ${resetUrl}`
+
+    try{
+      await sendEmail({
+        email: user.email,
+        subject: 'Reset Password',
+        message
+      });
+
+      res.status(200).json({
+        success: true,
+        message: `Email sent to ${user.email}`
+      })
+    }catch(error){
+      user.resetPasswordToken = undefined
+      user.resetPasswordExpire = undefined
+      await user.save()
+
+      res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
 
   } catch (error) {
     return res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const resetPassword = async(req,res)=>{
+  try {
+    
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: {$gt: Date.now()}
+    })
+
+    if(!user){
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Token or expired"
+      })
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save()
+
+    res.status(200).json({
+      success: true,
+      message: "Password Updated Successfully"
+    })
+
+  } catch (error) {
+    res.status(500).json({
       success: false,
       message: error.message
     })

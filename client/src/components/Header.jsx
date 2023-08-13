@@ -11,7 +11,7 @@ const Header = () => {
         {tab === "/" ? (
           <FontAwesomeIcon
             icon={faHouse}
-            className="text-gray-800 text-xl transition-all duration-300 ease-in-out hover:scale-110"
+            className="text-accent text-xl transition-all duration-300 ease-in-out hover:scale-110"
           />
         ) : (
           <FontAwesomeIcon
@@ -24,7 +24,7 @@ const Header = () => {
         {tab === "/add" ? (
           <FontAwesomeIcon
             icon={faPlus}
-            className="text-gray-800 text-2xl transition-all duration-300 ease-in-out hover:scale-110"
+            className="text-accent text-2xl transition-all duration-300 ease-in-out hover:scale-110"
           />
         ) : (
           <FontAwesomeIcon
@@ -37,7 +37,7 @@ const Header = () => {
         {tab === "/search" ? (
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
-            className="text-gray-800 text-xl transition-all duration-300 ease-in-out hover:scale-110"
+            className="text-accent text-xl transition-all duration-300 ease-in-out hover:scale-110"
           />
         ) : (
           <FontAwesomeIcon
@@ -50,7 +50,7 @@ const Header = () => {
         {tab === "/account" ? (
           <FontAwesomeIcon
             icon={faUser}
-            className="text-gray-800 text-xl transition-all duration-300 ease-in-out hover:scale-110"
+            className="text-accent text-xl transition-all duration-300 ease-in-out hover:scale-110"
           />
         ) : (
           <FontAwesomeIcon

@@ -1,0 +1,21 @@
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Melodrama', serif !important;
+}
+
+.nunito {
+    font-family: 'Nunito', sans-serif !important;
+}
+
+.full-width {
+    width: 100vw !important;
+    max-width: 100vw !important;
+}

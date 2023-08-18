@@ -5,13 +5,22 @@ import crypto from 'crypto'
 
 export const register = async(req,res)=>{
     try {
-        const {name,email,password} = req.body
+        const {name,username,email,password} = req.body
         let user = await User.findOne({email});
 
         if(user){
             return  res.status(400).json({success: false,message: "User already exists"})
         }
+
+        user = await User.findOne({username});
+        if (user) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Username is already taken" });
+        }
+
         user = await User.create({
+          username,
           name,
           email,
           password,

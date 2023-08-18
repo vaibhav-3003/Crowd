@@ -4,6 +4,11 @@ import jwt from "jsonwebtoken";
 import crypto from 'crypto'
 
 const userSchema = new mongoose.Schema({
+    username:{
+        type: String,
+        required: [true,"Please enter username"],
+        unique:[true,"Username already exists"]
+    },
     name:{
         type: String,
         required:[true,"Please enter your Name"]

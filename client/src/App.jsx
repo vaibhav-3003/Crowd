@@ -1,29 +1,28 @@
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import { useEffect } from 'react'
-import Header from './components/Header'
-import Login from './pages/Login'
-import { useDispatch, useSelector } from 'react-redux'
-import { loadUser } from './Actions/User'
+import './App.css'
+
+import { BrowserRouter as Router , Routes, Route } from "react-router-dom"
+import Login from "./pages/Login"
+import Header from "./components/Header"
 import Home from './pages/Home'
+import { useContext } from 'react'
+import { UserContext } from './context/UserContext'
+import LoadingPage from './pages/LoadingPage'
+import Sidebar from './components/Sidebar'
 
 function App() {
 
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(loadUser())
-  }, [])
-
-  const { isAuthenticated } = useSelector((state)=>state.user)
-  
+  const {user,userLoading} = useContext(UserContext)
 
   return (
     <Router>
-      {isAuthenticated && <Header />}
-
-      <Routes>
-        <Route path="/" element={isAuthenticated ?<Home/> : <Login />} />
-      </Routes>
+      <main className="w-full h-screen flex">
+        {user && <Sidebar />}
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={userLoading?<LoadingPage />:user? <Home/>:<Login/>}/>
+          </Routes>
+        </div>
+      </main>
     </Router>
   );
 }

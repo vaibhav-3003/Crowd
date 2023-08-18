@@ -70,7 +70,7 @@ const Sidebar = () => {
           </Link>
         </div>
       ) : (
-        <Card className="h-full rounded-none w-full max-w-[5rem] md:max-w-[6rem] lg:max-w-[17rem] p-2 md:p-4 shadow-xl shadow-blue-gray-900/5">
+        <Card className="h-full rounded-none w-full max-w-[5rem] fixed left-0 md:max-w-[6rem] lg:max-w-[17rem] p-2 md:p-4 shadow-xl shadow-blue-gray-900/5 z-20">
           <div className="mb-2 py-4 px-2">
             <Link to="/" className="flex items-center gap-4">
               <FontAwesomeIcon

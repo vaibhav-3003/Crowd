@@ -7,6 +7,7 @@ import { useContext } from 'react'
 import { UserContext } from './context/UserContext'
 import LoadingPage from './pages/LoadingPage'
 import Sidebar from './components/Sidebar'
+import CreatePost from './pages/CreatePost'
 
 function App() {
 
@@ -18,7 +19,16 @@ function App() {
         {user && <Sidebar />}
         <div className="flex-grow">
           <Routes>
-            <Route path="/" element={userLoading?<LoadingPage />:user? <Home/>:<Login/>}/>
+            <Route
+              path={user ? "/" : "/account/login"}
+              element={
+                userLoading ? <LoadingPage /> : user ? <Home /> : <Login />
+              }
+            />
+            <Route
+              path={user ? "/p/create" : "/account/login"}
+              element={user ? <CreatePost /> : <Login />}
+            />
           </Routes>
         </div>
       </main>

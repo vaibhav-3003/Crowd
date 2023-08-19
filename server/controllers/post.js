@@ -1,5 +1,6 @@
 import Post from '../models/Post.js';
 import User from '../models/User.js';
+import cloudinary from 'cloudinary'
 
 export const createPost = async(req,res)=>{
     try {
@@ -8,11 +9,15 @@ export const createPost = async(req,res)=>{
             caption
         } = req.body
 
+        const myCloud = await cloudinary.v2.uploader.upload(req.body.image,{
+            folder: "posts"
+        });
+
         const newPostData = {
             caption,
             image:{
-                public_id:"public id",
-                url: "url of image"
+                public_id:myCloud.public_id,
+                url: myCloud.secure_url
             },
             owner: req.user._id
         };
@@ -25,7 +30,7 @@ export const createPost = async(req,res)=>{
 
         res.status(201).json({
             success : true,
-            post: newPost,
+            message: "Post Created",
         });
 
     } catch (error) {

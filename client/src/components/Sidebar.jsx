@@ -90,37 +90,33 @@ const Sidebar = () => {
               <ListItemPrefix>
                 <PresentationChartBarIcon className="h-5 w-5" />
               </ListItemPrefix>
-              <p className="hidden lg:block">DashBoard</p>
+              <p className="hidden lg:block">Home</p>
             </ListItem>
             <ListItem>
               <ListItemPrefix>
                 <ShoppingBagIcon className="h-5 w-5" />
               </ListItemPrefix>
-              <p className="hidden lg:block">DashBoard</p>
+              <p className="hidden lg:block">Search</p>
             </ListItem>
             <ListItem>
               <ListItemPrefix>
                 <InboxIcon className="h-5 w-5" />
               </ListItemPrefix>
-              <p className="hidden lg:block">DashBoard</p>
+              <p className="hidden lg:block">Explore</p>
             </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <UserCircleIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <p className="hidden lg:block">DashBoard</p>
-            </ListItem>
+            <Link to={'/p/create'}>
+              <ListItem>
+                <ListItemPrefix>
+                  <UserCircleIcon className="h-5 w-5" />
+                </ListItemPrefix>
+                <p className="hidden lg:block">Create</p>
+              </ListItem>
+            </Link>
             <ListItem>
               <ListItemPrefix>
                 <Cog6ToothIcon className="h-5 w-5" />
               </ListItemPrefix>
-              <p className="hidden lg:block">DashBoard</p>
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <PowerIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <p className="hidden lg:block">DashBoard</p>
+              <p className="hidden lg:block">Profile</p>
             </ListItem>
           </List>
         </Card>

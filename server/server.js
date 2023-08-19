@@ -5,6 +5,7 @@ import postRoute from './routes/post.js'
 import userRoute from './routes/user.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
+import cloudinary from 'cloudinary'
 
 dotenv.config()
 
@@ -24,6 +25,12 @@ app.use(
 //routes
 app.use('/api/v1',postRoute)
 app.use('/api/v1',userRoute)
+
+cloudinary.v2.config({
+  cloud_name:process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 app.listen(process.env.PORT,()=> console.log(`Server running on port: ${process.env.port}`));
 //to connect the mongo db

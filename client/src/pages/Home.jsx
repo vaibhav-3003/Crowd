@@ -4,8 +4,8 @@ import Suggestions from '../components/Suggestions'
 
 const Home = () => {
   return (
-    <div className="bg-gray-50 min-h-full max-h-auto px-28 py-10">
-      <div className="pb-20 md:pb-5 md:ml-72 flex justify-between">
+    <div className="bg-gray-50 min-h-full max-h-auto md:px-28 py-10">
+      <div className="pb-20 md:pb-5 md:ml-5 lg:ml-72 flex justify-between">
         <div className="flex flex-col gap-6">
           <Post
             image={
@@ -23,7 +23,9 @@ const Home = () => {
             }
           />
         </div>
-        <Suggestions />
+        <div className='hidden md:block'>
+          <Suggestions />
+        </div>
       </div>
     </div>
   );

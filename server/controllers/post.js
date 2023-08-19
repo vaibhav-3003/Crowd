@@ -10,6 +10,13 @@ export const createPost = async(req,res)=>{
             image
         } = req.body
 
+        if(!image){
+            return res.status(400).json({
+                success: false,
+                message: 'Image is required !'
+            })
+        }
+
         const myCloud = await cloudinary.v2.uploader.upload(image,{
             folder: "posts"
         });

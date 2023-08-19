@@ -7,13 +7,12 @@ const PostReducer = (state,action)=>{
                 loading: true
             }
         case 'POST_UPLOAD_SUCCESS':
-            console.log(action.payload)
             return{
                 ...state,
-                loading: false
+                loading: false,
+                error: null
             }
         case 'POST_UPLOAD_FAIL':
-            console.log(action.payload)
             return {
                 ...state,
                 loading: false,

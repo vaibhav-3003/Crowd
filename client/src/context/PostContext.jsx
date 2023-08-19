@@ -4,6 +4,7 @@ import axios from 'axios'
 
 const initialState = {
     loading: false,
+    error: null
 }
 
 const PostContext = createContext(initialState)
@@ -27,7 +28,7 @@ const PostProvider = ({children})=>{
             },config)
             dispatch({type:'POST_UPLOAD_SUCCESS',payload:data})
         } catch (error) {
-            dispatch({type:'POST_UPLOAD_FAIL',payload:error.response})
+            dispatch({type:'POST_UPLOAD_FAIL',payload:error.response.data.message})
         }
     }
     

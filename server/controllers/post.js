@@ -6,10 +6,11 @@ export const createPost = async(req,res)=>{
     try {
 
         const {
-            caption
+            caption,
+            image
         } = req.body
 
-        const myCloud = await cloudinary.v2.uploader.upload(req.body.image,{
+        const myCloud = await cloudinary.v2.uploader.upload(image,{
             folder: "posts"
         });
 

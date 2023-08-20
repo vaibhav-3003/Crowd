@@ -6,20 +6,21 @@ import {
   ListItemPrefix,
   ListItemSuffix,
   Chip,
+  Avatar,
 } from "@material-tailwind/react";
 import {
-  PresentationChartBarIcon,
-  ShoppingBagIcon,
   UserCircleIcon,
   Cog6ToothIcon,
-  InboxIcon,
-  PowerIcon,
+  HomeIcon,
+  MagnifyingGlassIcon,
+  PlusCircleIcon,
 } from "@heroicons/react/24/solid";
 import Crowd from '../assets/Crowd.png'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from "@material-tailwind/react";
+import { faSquarePlus, faCompass } from "@fortawesome/free-regular-svg-icons";
 
 
 const Sidebar = () => {
@@ -47,30 +48,36 @@ const Sidebar = () => {
   return (
     <>
       {isMobile ? (
-        <div className="w-full fixed bottom-0 border flex justify-between px-6 py-3 z-20 bg-white">
+        <div className="w-full fixed bottom-0 border flex justify-between px-4 py-3 z-20 bg-white items-center">
           <Link to="/">
             <IconButton variant="text">
-              <FontAwesomeIcon icon={faHashtag} size="xl" />
+              <HomeIcon className="h-6 w-6" />
             </IconButton>
           </Link>
-          <Link to="/">
+          <Link to="/search">
             <IconButton variant="text">
-              <FontAwesomeIcon icon={faHashtag} size="xl" />
+              <MagnifyingGlassIcon className="h-6 w-6" />
             </IconButton>
           </Link>
-          <Link to="/">
+          <Link to="/explore">
             <IconButton variant="text">
-              <FontAwesomeIcon icon={faHashtag} size="xl" />
+              <FontAwesomeIcon icon={faCompass} className="h-6 w-6" />
             </IconButton>
           </Link>
-          <Link to="/">
+          <Link to="/p/create">
             <IconButton variant="text">
-              <FontAwesomeIcon icon={faHashtag} size="xl" />
+              <FontAwesomeIcon icon={faSquarePlus} className="h-6 w-6" />
             </IconButton>
+          </Link>
+          <Link to="/profile">
+            <Avatar
+              src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
+              className="w-8 h-8"
+            />
           </Link>
         </div>
       ) : (
-        <Card className="h-full rounded-none w-full max-w-[5rem] fixed left-0 md:max-w-[6rem] lg:max-w-[17rem] p-2 md:p-4 shadow-xl shadow-blue-gray-900/5 z-20">
+        <Card className="h-full rounded-none w-full max-w-[5rem] fixed left-0 md:max-w-[6rem] lg:max-w-[17rem] p-2 md:p-4 z-20">
           <div className="mb-2 py-4 px-2">
             <Link to="/" className="flex items-center gap-4">
               <FontAwesomeIcon
@@ -85,39 +92,50 @@ const Sidebar = () => {
               />
             </Link>
           </div>
-          <List>
-            <ListItem>
-              <ListItemPrefix>
-                <PresentationChartBarIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <p className="hidden lg:block">Home</p>
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <ShoppingBagIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <p className="hidden lg:block">Search</p>
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <InboxIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <p className="hidden lg:block">Explore</p>
-            </ListItem>
-            <Link to={'/p/create'}>
+          <List className="gap-4">
+            <Link to="/">
               <ListItem>
                 <ListItemPrefix>
-                  <UserCircleIcon className="h-5 w-5" />
+                  <HomeIcon className="h-7 w-7" />
+                </ListItemPrefix>
+                <p className="hidden lg:block">Home</p>
+              </ListItem>
+            </Link>
+            <Link to="/search">
+              <ListItem>
+                <ListItemPrefix>
+                  <MagnifyingGlassIcon className="h-7 w-7" />
+                </ListItemPrefix>
+                <p className="hidden lg:block">Search</p>
+              </ListItem>
+            </Link>
+            <Link to="/explore">
+              <ListItem>
+                <ListItemPrefix>
+                  <FontAwesomeIcon icon={faCompass} className="h-7 w-7" />
+                </ListItemPrefix>
+                <p className="hidden lg:block">Explore</p>
+              </ListItem>
+            </Link>
+            <Link to={"/p/create"}>
+              <ListItem>
+                <ListItemPrefix>
+                  <FontAwesomeIcon icon={faSquarePlus} className="h-7 w-7" />
                 </ListItemPrefix>
                 <p className="hidden lg:block">Create</p>
               </ListItem>
             </Link>
-            <ListItem>
-              <ListItemPrefix>
-                <Cog6ToothIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <p className="hidden lg:block">Profile</p>
-            </ListItem>
+            <Link to="/profile">
+              <ListItem>
+                <ListItemPrefix>
+                  <Avatar
+                    src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
+                    className="w-7 h-7"
+                  />
+                </ListItemPrefix>
+                <p className="hidden lg:block">Profile</p>
+              </ListItem>
+            </Link>
           </List>
         </Card>
       )}

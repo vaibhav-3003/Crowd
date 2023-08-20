@@ -41,7 +41,7 @@ const Post = ({image}) => {
         <img
           src={image}
           alt="post"
-          className="rounded-md mb-2"
+          className="md:rounded-md mb-2"
         />
       </div>
 

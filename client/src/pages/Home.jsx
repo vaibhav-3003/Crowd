@@ -1,6 +1,7 @@
 import React from 'react'
 import Post from '../components/Post'
 import Suggestions from '../components/Suggestions'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
   return (

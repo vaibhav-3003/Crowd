@@ -8,31 +8,39 @@ import { UserContext } from './context/UserContext'
 import LoadingPage from './pages/LoadingPage'
 import Sidebar from './components/Sidebar'
 import CreatePost from './pages/CreatePost'
+import Register from './pages/Register'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-
   const {user,userLoading} = useContext(UserContext)
 
   return (
-    <Router>
-      <main className="w-full h-screen flex">
-        {user && <Sidebar />}
-        <div className="flex-grow">
-          <Routes>
-            <Route
-              path={user ? "/" : "/account/login"}
-              element={
-                userLoading ? <LoadingPage /> : user ? <Home /> : <Login />
-              }
-            />
-            <Route
-              path={user ? "/p/create" : "/account/login"}
-              element={user ? <CreatePost /> : <Login />}
-            />
-          </Routes>
-        </div>
-      </main>
-    </Router>
+    <main className="w-full h-screen flex">
+      {user && <Sidebar />}
+      <div className="flex-grow">
+        <Routes>
+          <Route path='/account/login' element={<Login user={user}/>}/>
+          <Route
+            path={user ? "/" : "/account/login"}
+            element={
+              userLoading ? <LoadingPage /> : user ? <Home /> : <Login user={user}/>
+            }
+          />
+          <Route
+            path='/p/create'
+            element={
+              <ProtectedRoute user={user}>
+                <CreatePost />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/account/register'
+            element={<Register user={user}/>}
+          />
+        </Routes>
+      </div>
+    </main>
   );
 }
 

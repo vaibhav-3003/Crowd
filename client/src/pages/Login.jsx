@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import Lottie from 'lottie-react'
-import login from '../animations/login.json'
-import { Link } from 'react-router-dom'
+import loginAnimation from '../animations/login.json'
+import { Link,Navigate } from 'react-router-dom'
 import Crowd from '../assets/Crowd.png'
 import {Input,IconButton,Button,Alert} from '@material-tailwind/react'
 import {
@@ -16,12 +16,15 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserContext } from '../context/UserContext'
 
-const Login = () => {
+const Login = ({user}) => {
+
+  if(user){
+    return <Navigate to={'/'}/>
+  }
 
   const [isPassVisible,setIsPassVisible] = useState(false)
   const {userLogin,error} = useContext(UserContext)
   const [open,setOpen] = useState(true)
-
 
   const loginSchema = z.object({
     email: z.string().email('Invalid email format').min(5,'Email is too short'),
@@ -69,7 +72,7 @@ const Login = () => {
               <div className="camera"></div>
               <div className="display">
                 <div className="artboard artboard-demo phone-1 text-white">
-                  <Lottie animationData={login} className="w-full" />
+                  <Lottie animationData={loginAnimation} className="w-full" />
                 </div>
               </div>
             </div>

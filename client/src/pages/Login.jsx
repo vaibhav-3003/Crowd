@@ -131,9 +131,9 @@ const Login = ({user}) => {
                         onClick={() => setIsPassVisible(!isPassVisible)}
                       >
                         {isPassVisible ? (
-                          <EyeSlashIcon class="h-4 w-4 text-gray-500" />
+                          <EyeSlashIcon className="h-4 w-4 text-gray-500" />
                         ) : (
-                          <EyeIcon class="h-4 w-4 text-gray-500" />
+                          <EyeIcon className="h-4 w-4 text-gray-500" />
                         )}
                       </IconButton>
                     </div>

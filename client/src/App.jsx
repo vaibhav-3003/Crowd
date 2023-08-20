@@ -12,31 +12,30 @@ import Register from './pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-  const {user,userLoading} = useContext(UserContext)
-
+  const {user} = useContext(UserContext)
+  console.log(user)
   return (
     <main className="w-full h-screen flex">
       {user && <Sidebar />}
       <div className="flex-grow">
         <Routes>
-          <Route path='/account/login' element={<Login user={user}/>}/>
+          <Route path="/account/login" element={<Login user={user} />} />
+          <Route path="/account/register" element={<Register user={user} />} />
           <Route
-            path={user ? "/" : "/account/login"}
+            path="/"
             element={
-              userLoading ? <LoadingPage /> : user ? <Home /> : <Login user={user}/>
+              <ProtectedRoute user={user}>
+                <Home />
+              </ProtectedRoute>
             }
           />
           <Route
-            path='/p/create'
+            path="/p/create"
             element={
               <ProtectedRoute user={user}>
                 <CreatePost />
               </ProtectedRoute>
             }
-          />
-          <Route
-            path='/account/register'
-            element={<Register user={user}/>}
           />
         </Routes>
       </div>

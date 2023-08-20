@@ -15,6 +15,7 @@ import {z} from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserContext } from '../context/UserContext'
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const Login = ({user}) => {
 
@@ -130,9 +131,9 @@ const Login = ({user}) => {
                         onClick={() => setIsPassVisible(!isPassVisible)}
                       >
                         {isPassVisible ? (
-                          <FontAwesomeIcon icon={faEyeSlash} />
+                          <EyeSlashIcon class="h-4 w-4 text-gray-500" />
                         ) : (
-                          <FontAwesomeIcon icon={faEye} />
+                          <EyeIcon class="h-4 w-4 text-gray-500" />
                         )}
                       </IconButton>
                     </div>

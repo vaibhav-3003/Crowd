@@ -9,14 +9,14 @@ export const register = async(req,res)=>{
         let user = await User.findOne({email});
 
         if(user){
-            return  res.status(400).json({success: false,message: "User already exists"})
+            return  res.status(400).json({success: false,message: "Email is already resgistered"})
         }
 
         user = await User.findOne({username});
         if (user) {
           return res
             .status(400)
-            .json({ success: false, message: "Username is already taken" });
+            .json({ success: false, message: "username is already taken" });
         }
 
         user = await User.create({

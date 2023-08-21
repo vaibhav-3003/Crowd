@@ -12,8 +12,7 @@ import Register from './pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-  const {user} = useContext(UserContext)
-  console.log(user)
+  const {user,userLoading} = useContext(UserContext)
   return (
     <main className="w-full h-screen flex">
       {user && <Sidebar />}
@@ -24,9 +23,13 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute user={user}>
-                <Home />
-              </ProtectedRoute>
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <Home />
+                </ProtectedRoute>
+              )
             }
           />
           <Route

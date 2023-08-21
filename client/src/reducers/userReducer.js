@@ -24,16 +24,20 @@ const UserReducer = (state,action)=>{
             };
         
         case 'SET_USER':
-            console.log(action.payload)
             return {
                 ...state,
                 user: action.payload.user
             }
 
-        case 'SET_ERROR':
+        case 'SET_LOGIN_ERROR':
             return {
               ...state,
-              error: action.payload.response.data.message,
+              loginError: action.payload.response.data.message,
+            };
+        case 'SET_REGISTER_ERROR':
+            return {
+              ...state,
+              registerError: action.payload.response.data.message,
             };
     
         default:

@@ -6,7 +6,8 @@ import Cookies from 'js-cookie'
 const initialState = {
     isLoading: false,
     userLoading:true,
-    error: null,
+    loginError: null,
+    registerError: null,
     user:null
 }
 
@@ -42,7 +43,23 @@ const UserProvider = ({children})=>{
             dispatch({ type: "SET_LOADING_FALSE" });
         } catch (error) {
             dispatch({ type: "SET_LOADING_FALSE" });
-            dispatch({type: 'SET_ERROR',payload: error})
+            dispatch({type: 'SET_LOGIN_ERROR',payload: error})
+        }
+    }
+
+    const userRegister = async(data)=>{
+        dispatch({type:'SET_LOADING_TRUE'})
+        try {
+            const res = await axios.post('http://localhost:4000/api/v1/register',data)
+            const user = res.data
+
+            Cookies.set("token", user.token, { expires: 90 });
+
+            dispatch({ type: "SET_USER", payload: user });
+            dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            dispatch({ type: "SET_LOADING_FALSE" });
+            dispatch({type: 'SET_REGISTER_ERROR',payload: error})
         }
     }
 
@@ -54,7 +71,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,userLogin}}>
+        <UserContext.Provider value={{...state,userLogin,userRegister}}>
             {children}
         </UserContext.Provider>
     )

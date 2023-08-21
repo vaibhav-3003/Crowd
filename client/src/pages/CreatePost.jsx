@@ -12,7 +12,6 @@ const CreatePost = () => {
   const [caption,setCaption] = useState('')
 
   const {uploadPost,loading,error} = useContext(PostContext)
-  const navigate = useNavigate()
 
   const handleImageChange = (e)=>{
     const file = e.target.files[0]

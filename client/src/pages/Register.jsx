@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Navigate,Link } from 'react-router-dom'
 import Crowd from '../assets/Crowd.png'
-import {Input,IconButton, Button} from '@material-tailwind/react'
+import {Input,IconButton, Button, Spinner} from '@material-tailwind/react'
 import { EyeIcon,EyeSlashIcon } from "@heroicons/react/24/outline";
 import {z} from 'zod'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { UserContext } from '../context/UserContext';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = ({user}) => {
     if(user){
@@ -14,6 +17,7 @@ const Register = ({user}) => {
 
     const [isPassVisible, setIsPassVisible] = useState(false);
     const [isConfPassVisible, setIsConfPassVisible] = useState(false);
+    const {isLoading,userRegister,registerError} = useContext(UserContext)
 
     const registerSchema = z
       .object({
@@ -25,6 +29,7 @@ const Register = ({user}) => {
             message:
               "Username must not start with speacial character and can only contain letters, numbers, '_', '.', and '-'",
           }),
+        name: z.string(),
         email: z.string().email(),
         password: z
           .string()
@@ -52,13 +57,19 @@ const Register = ({user}) => {
     const pass = watch("password");
     const confPass = watch("confirmPassword");
 
-    const handleRegister = (data)=>{
-      console.log(data)
+    const handleRegister = async(data)=>{
+      await userRegister(data)
+      
+      if (registerError) {
+        toast.error(registerError, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
     }
 
   return (
     <div className="w-full min-h-full max-h-auto bg-gray-50 flex justify-center md:items-center lg:items-start pb-8">
-      <div className="w-11/12 md:w-[360px] mt-20 flex flex-col gap-4">
+      <div className="w-11/12 md:w-[360px] mt-12 flex flex-col gap-4">
         <div className="border border-gray-300 py-5 flex flex-col items-center gap-10 px-7">
           <Link to="/">
             <img src={Crowd} alt="logo" className="w-36" />
@@ -76,8 +87,28 @@ const Register = ({user}) => {
                 className="nunito"
               />
               {errors.username && (
+                <div className="text-red-600 text-sm mt-2">
+                  <p>Username must have</p>
+                  <ul className="list-disc ml-5">
+                    <li>not start with special character</li>
+                    <li>
+                      only contains letters, numbers and '_', '.', and '-'"
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div>
+              <Input
+                label="name"
+                required
+                autoComplete="off"
+                {...register("name")}
+                className="nunito"
+              />
+              {errors.className && (
                 <span className="text-red-800 block mt-2 text-sm">
-                  {errors.username?.message}
+                  {errors.name?.message}
                 </span>
               )}
             </div>
@@ -128,9 +159,13 @@ const Register = ({user}) => {
                 </IconButton>
               </div>
               {errors.password && (
-                <span className="text-red-800 block mt-2 text-sm">
-                  {errors.password?.message}
-                </span>
+                <div className="text-red-600 text-sm mt-2">
+                  <p>Password must have</p>
+                  <ul className="list-disc ml-5">
+                    <li>must have atleast 8 characters</li>
+                    <li>one uppercase, one lowercase, one number and one special character</li>
+                  </ul>
+                </div>
               )}
             </div>
             <div>
@@ -171,10 +206,11 @@ const Register = ({user}) => {
               )}
             </div>
             <Button
-              className="nunito w-full"
+              className="nunito w-full flex justify-center items-center gap-2"
               type="submit"
               disabled={isSubmitting}
             >
+              {isLoading ? <Spinner className="w-4 h-4" /> : null}
               Register
             </Button>
           </form>
@@ -188,6 +224,7 @@ const Register = ({user}) => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

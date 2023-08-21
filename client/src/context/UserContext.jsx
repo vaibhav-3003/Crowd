@@ -8,7 +8,8 @@ const initialState = {
     userLoading:true,
     loginError: null,
     registerError: null,
-    user:null
+    user:null,
+    userProfile: null
 }
 
 const UserContext = createContext(initialState)
@@ -63,6 +64,18 @@ const UserProvider = ({children})=>{
         }
     }
 
+    const loadUserWithUsername = async(username)=>{
+        dispatch({ type: "SET_USER_LOADING_TRUE" });
+        try {
+          const { data } = await axios.get(`http://localhost:4000/api/v1/user/${username}`);
+
+          dispatch({ type: "SET_USER_WITH_USERNAME", payload: data });
+          dispatch({ type: "SET_USER_LOADING_FALSE" });
+        } catch (error) {
+          dispatch({ type: "SET_USER_LOADING_FALSE" });
+        }
+    }
+
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
@@ -71,7 +84,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,userLogin,userRegister}}>
+        <UserContext.Provider value={{...state,userLogin,userRegister,loadUser,loadUserWithUsername}}>
             {children}
         </UserContext.Provider>
     )

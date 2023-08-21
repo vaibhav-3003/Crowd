@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React,{useContext, useEffect,useState} from 'react'
 import {
   Card,
   List,
@@ -16,24 +16,23 @@ import {
   PlusCircleIcon,
 } from "@heroicons/react/24/solid";
 import Crowd from '../assets/Crowd.png'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from "@material-tailwind/react";
 import { faSquarePlus, faCompass } from "@fortawesome/free-regular-svg-icons";
+import { UserContext } from '../context/UserContext';
 
 
 const Sidebar = () => {
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth<=600);
+  const {user} = useContext(UserContext)
+  const location = useLocation()
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 600) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
+      setIsMobile(window.innerWidth <= 600);
     };
 
     handleResize();
@@ -44,6 +43,11 @@ const Sidebar = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []); 
+
+  
+  useEffect(()=>{
+    console.log(isMobile)
+  },[isMobile])
 
   return (
     <>
@@ -69,7 +73,7 @@ const Sidebar = () => {
               <FontAwesomeIcon icon={faSquarePlus} className="h-6 w-6" />
             </IconButton>
           </Link>
-          <Link to="/profile">
+          <Link to={`/${user.username}/`}>
             <Avatar
               src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
               className="w-8 h-8"
@@ -125,7 +129,7 @@ const Sidebar = () => {
                 <p className="hidden lg:block">Create</p>
               </ListItem>
             </Link>
-            <Link to="/profile">
+            <Link to={`/${user.username}/`}>
               <ListItem>
                 <ListItemPrefix>
                   <Avatar

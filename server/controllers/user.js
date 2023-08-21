@@ -285,7 +285,7 @@ export const myProfile = async(req,res)=>{
     
     const user = await User.findById(req.user._id).populate('posts');
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       user,
     })
@@ -300,23 +300,23 @@ export const myProfile = async(req,res)=>{
 
 export const getUserProfile = async(req,res)=>{
   try {
-    
-    const user = await User.findById(req.params.id).populate('posts');
+    const username = req.params.username;
+    const user = await User.findOne({username}).populate('posts');
 
     if(!user){
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "User not found",
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       user
     });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message
     })

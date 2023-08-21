@@ -10,6 +10,7 @@ import Sidebar from './components/Sidebar'
 import CreatePost from './pages/CreatePost'
 import Register from './pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
+import Profile from './pages/Profile'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
@@ -40,6 +41,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path=':username' element={<Profile />}/>
         </Routes>
       </div>
     </main>

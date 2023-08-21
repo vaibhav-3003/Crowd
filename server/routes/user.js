@@ -33,7 +33,7 @@ router.delete('/delete/me',isAuthenticated,deleteMyProfile)
 
 router.get('/me',isAuthenticated,myProfile)
 
-router.get('/user/:id',isAuthenticated,getUserProfile)
+router.get('/user/:username',getUserProfile)
 
 router.get('/users',isAuthenticated,getAllUsers)
 

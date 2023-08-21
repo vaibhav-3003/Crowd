@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required:[true,"Please enter your Name"]
     },
+    bio : String,
     avatar:{
         public_id: String,
         url: String

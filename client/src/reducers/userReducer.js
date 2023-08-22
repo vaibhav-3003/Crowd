@@ -39,6 +39,11 @@ const UserReducer = (state,action)=>{
               ...state,
               registerError: action.payload.response.data.message,
             };
+        case 'SET_USER_ERROR':
+            return {
+              ...state,
+              error: action.payload,
+            };
 
         case 'SET_USER_WITH_USERNAME':
             return {

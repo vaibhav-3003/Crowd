@@ -6,10 +6,12 @@ import { useState } from 'react'
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import UserPosts from '../components/UserPosts'
 import SavedPosts from '../components/SavedPosts'
+import { PostContext } from '../context/PostContext'
 
 const Profile = () => {
     const {username} = useParams()
-    const {user,userProfile,loadUser,loadUserWithUsername} = useContext(UserContext)
+    const {user,userProfile,loadUser,loadUserWithUsername,userLoading} = useContext(UserContext)
+    const {posts,fetchUserPosts} = useContext(PostContext)
 
     const [tab,setTab] = useState('posts')
     
@@ -17,18 +19,25 @@ const Profile = () => {
         const userFunc = async () => {
             await loadUser();
             await loadUserWithUsername(username);
-        };
+          };
+
+        const postFunc = async()=>{
+          await fetchUserPosts(username);
+        }
         userFunc();
+        postFunc()
     },[])
 
+
   return (
-    <div className="md:ml-16 lg:ml-72">
+   
+    <div className="md:ml-16 lg:ml-72 pb-20">
       <div className="w-full md:w-3/4 mx-auto py-10 flex justify-center items-center flex-wrap md:justify-start gap-8">
         <Avatar
           src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
           className="w-[10rem] h-[10rem]"
         />
-        <div className="flex flex-col justify-center items-center md:ml-16">
+        <div className="flex flex-col justify-center items-center md:items-start md:justify-start md:ml-16">
           <div className="flex gap-5 items-center">
             <h2 className="text-2xl">{username}</h2>
             <Button className="nunito normal-case text-sm font-normal">
@@ -60,11 +69,11 @@ const Profile = () => {
                   ? "text-sm text-black font-bold border-t border-black py-2 flex items-center justify-center gap-1"
                   : "text-sm text-gray-500 font-bold py-2 flex items-center justify-center gap-1"
               }
-              onClick={()=>setTab('posts')}
+              onClick={() => setTab("posts")}
             >
               <svg
                 aria-label=""
-                className={tab==='posts'?"text-black":'text-gray-500'}
+                className={tab === "posts" ? "text-black" : "text-gray-500"}
                 color="rgb(245, 245, 245)"
                 fill="rgb(245, 245, 245)"
                 height="15"
@@ -137,7 +146,7 @@ const Profile = () => {
                   ? "text-sm text-black font-bold border-t border-black py-2 flex items-center justify-center gap-1"
                   : "text-sm text-gray-500 font-bold py-2 flex items-center justify-center gap-1"
               }
-              onClick={()=>setTab('saved')}
+              onClick={() => setTab("saved")}
             >
               <BookmarkIcon className="h-4 w-4" />
               <span>SAVED</span>
@@ -146,9 +155,11 @@ const Profile = () => {
         </div>
 
         <div>
-          {
-            user && tab==='posts' ? <UserPosts posts={user.posts}/> : <SavedPosts />
-          }
+          {user && posts && tab === "posts" ? (
+            <UserPosts posts={posts} />
+          ) : tab === "saved" ? (
+            <SavedPosts />
+          ) : null}
         </div>
       </div>
     </div>

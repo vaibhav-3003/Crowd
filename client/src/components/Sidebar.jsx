@@ -44,10 +44,6 @@ const Sidebar = () => {
     };
   }, []); 
 
-  
-  useEffect(()=>{
-    console.log(isMobile)
-  },[isMobile])
 
   return (
     <>

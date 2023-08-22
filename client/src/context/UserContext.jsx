@@ -8,6 +8,7 @@ const initialState = {
     userLoading:true,
     loginError: null,
     registerError: null,
+    error:null,
     user:null,
     userProfile: null
 }
@@ -65,14 +66,15 @@ const UserProvider = ({children})=>{
     }
 
     const loadUserWithUsername = async(username)=>{
-        dispatch({ type: "SET_USER_LOADING_TRUE" });
+        dispatch({ type: "SET_LOADING_TRUE" });
         try {
           const { data } = await axios.get(`http://localhost:4000/api/v1/user/${username}`);
 
           dispatch({ type: "SET_USER_WITH_USERNAME", payload: data });
-          dispatch({ type: "SET_USER_LOADING_FALSE" });
+          dispatch({ type: "SET_LOADING_FALSE" });
         } catch (error) {
-          dispatch({ type: "SET_USER_LOADING_FALSE" });
+            dispatch({ type: "SET_LOADING_FALSE" });
+          dispatch({type:'SET_USER_ERROR',payload: error.response.data.message})
         }
     }
 

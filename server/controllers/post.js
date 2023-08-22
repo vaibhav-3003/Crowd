@@ -146,6 +146,27 @@ export const getPostOfFollowing = async(req,res)=>{
     }
 }
 
+export const fetchUserPosts = async(req,res)=>{
+    try {
+        
+        const {username} = req.params
+        let user = await User.findOne({username})
+
+        let posts = await Post.find({owner: user._id})
+
+        res.status(200).json({
+            success: true,
+            posts
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        })
+    }
+}
+
 export const updateCaption = async(req,res)=>{
     try {
         

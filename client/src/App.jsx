@@ -11,12 +11,15 @@ import CreatePost from './pages/CreatePost'
 import Register from './pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 import Profile from './pages/Profile'
+import Search from './pages/Search'
+import ErrorPage from './pages/ErrorPage'
+import PostPage from './pages/PostPage'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
   return (
     <main className="w-full h-screen flex">
-      {user && <Sidebar />}
+      {user && !userLoading && <Sidebar />}
       <div className="flex-grow">
         <Routes>
           <Route path="/account/login" element={<Login user={user} />} />
@@ -42,7 +45,9 @@ function App() {
             }
           />
 
-          <Route path=':username' element={<Profile />}/>
+          <Route path=':username' element={<Profile/>}/>
+          
+          <Route path='/p/:id' element={<PostPage/>}/>
 
         </Routes>
       </div>

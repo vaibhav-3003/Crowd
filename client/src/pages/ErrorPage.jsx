@@ -2,7 +2,7 @@ import React from 'react'
 
 const ErrorPage = () => {
   return (
-    <div>
+    <div className='lg:ml-72'>
       404 Not found
     </div>
   )

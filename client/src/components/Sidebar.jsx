@@ -26,13 +26,12 @@ import { UserContext } from '../context/UserContext';
 
 const Sidebar = () => {
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth<=600);
+  const [isMobile, setIsMobile] = useState(window.innerWidth<=715);
   const {user} = useContext(UserContext)
-  const location = useLocation()
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 600);
+      setIsMobile(window.innerWidth <= 715);
     };
 
     handleResize();

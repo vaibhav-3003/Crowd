@@ -14,6 +14,7 @@ import Profile from './pages/Profile'
 import Search from './pages/Search'
 import ErrorPage from './pages/ErrorPage'
 import PostPage from './pages/PostPage'
+import PostComments from './pages/PostComments'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
@@ -47,7 +48,17 @@ function App() {
 
           <Route path=':username' element={<Profile/>}/>
           
-          <Route path='/p/:id' element={<PostPage/>}/>
+          <Route 
+            path='/p/:id' 
+            element={
+              <PostPage/>
+            }
+          />
+
+          <Route 
+            path='/p/:id/comments'
+            element={<PostComments />}
+          />
 
         </Routes>
       </div>

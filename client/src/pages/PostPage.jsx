@@ -1,12 +1,22 @@
 import React,{useState,useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { IconButton,Avatar,Button } from '@material-tailwind/react'
+import {
+  IconButton,
+  Avatar,
+  Button,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+} from "@material-tailwind/react";
 import {
   HeartIcon,
   BookmarkIcon,
   ChatBubbleOvalLeftIcon,
   FaceSmileIcon,
+  EllipsisHorizontalIcon,
+  ChevronLeftIcon,
 } from "@heroicons/react/24/outline";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -48,7 +58,91 @@ const PostPage = () => {
   return (
     <>
       {isMobile ? (
-        <div className='ml-0 md:ml-28 lg:ml-72'>Mobile View</div>
+        <div className="ml-0 md:ml-28 lg:ml-72 pb-20 ">
+          <div className="px-4 py-3 border-b flex items-center sticky top-0 bg-gray-50">
+            <Link to={"/"}>
+              <ChevronLeftIcon className="w-6 h-6 font-bold" />
+            </Link>
+            <h3 className="text-center w-full text-xl font-bold">Post</h3>
+          </div>
+
+          {/* profile show */}
+          <div className="flex-none w-full px-4 py-3 flex justify-between items-center">
+            <Link className="flex items-center justify-center gap-2">
+              <Avatar
+                variant="circular"
+                alt="user 1"
+                className="w-10 h-10"
+                src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+              />
+              <span>vaibhavmahajan30</span>
+            </Link>
+            <Menu>
+              <MenuHandler>
+                <IconButton className="mr-4 rounded-full" variant="text">
+                  <EllipsisHorizontalIcon className="w-5 h-5" />
+                </IconButton>
+              </MenuHandler>
+              <MenuList>
+                <MenuItem className="nunito text-red-500">Delete</MenuItem>
+                <MenuItem className="nunito">Edit</MenuItem>
+                <MenuItem className="nunito">About this account</MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
+
+          <div className="w-full mt-2">
+            <img
+              src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+              alt="post image"
+              className="object-cover"
+            />
+
+            {/* like,comment,save */}
+            <div className="flex justify-between items-center px-4 mt-2">
+              <div className="flex gap-2">
+                <IconButton variant="text" className="rounded-full">
+                  <HeartIcon className="w-6 h-6" />
+                </IconButton>
+                <Link to={`/p/${id}/comments`}>
+                  <IconButton variant="text" className="rounded-full">
+                    <ChatBubbleOvalLeftIcon className="w-6 h-6" />
+                  </IconButton>
+                </Link>
+              </div>
+              <IconButton variant="text" className="rounded-full">
+                <BookmarkIcon className="w-6 h-6" />
+              </IconButton>
+            </div>
+
+            {/* likes */}
+            <div className="flex gap-2 items-center px-4 mt-1">
+              <div className="flex items-center -space-x-3">
+                <Avatar
+                  variant="circular"
+                  alt="user 1"
+                  className="w-7 h-7"
+                  src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                />
+                <Avatar
+                  variant="circular"
+                  alt="user 2"
+                  className="w-7 h-7"
+                  src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                />
+                <Avatar
+                  variant="circular"
+                  alt="user 3"
+                  className="w-7 h-7"
+                  src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                />
+              </div>
+
+              <p className="font-semibold text-sm">16 likes</p>
+            </div>
+            <p className="text-xs uppercase mt-1 px-4">Date</p>
+          </div>
+        </div>
       ) : (
         <div className="px-8 md:ml-20 md:px-8 lg:ml-72 flex justify-center min-h-screen max-h-auto py-20">
           <div className="flex grow justify-center">
@@ -71,7 +165,18 @@ const PostPage = () => {
                   />
                   <span>vaibhavmahajan30</span>
                 </Link>
-                <button className="mr-4">...</button>
+                <Menu>
+                  <MenuHandler>
+                    <IconButton className="mr-4 rounded-full" variant="text">
+                      <EllipsisHorizontalIcon className="w-5 h-5" />
+                    </IconButton>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem className="nunito text-red-500">Delete</MenuItem>
+                    <MenuItem className="nunito">Edit</MenuItem>
+                    <MenuItem className="nunito">About this account</MenuItem>
+                  </MenuList>
+                </Menu>
               </div>
 
               <div className="border-b flex-grow flex flex-col overflow-auto justify-center items-center">

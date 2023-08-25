@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Lottie from 'lottie-react'
 import loginAnimation from '../animations/login.json'
 import { Link,Navigate } from 'react-router-dom'
@@ -39,8 +39,8 @@ const Login = ({user}) => {
 
   const handleLogin = async(data)=>{
     await userLogin(data)
-    if(loginError){
-      toast.error(registerError, {
+    if (loginError) {
+      toast.error(loginError, {
         position: toast.POSITION.TOP_CENTER,
       });
     }
@@ -158,4 +158,3 @@ const Login = ({user}) => {
 }
 
 export default Login
-Login

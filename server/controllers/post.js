@@ -167,6 +167,31 @@ export const fetchUserPosts = async(req,res)=>{
     }
 }
 
+export const getPost = async(req,res)=>{
+    try {
+        const {id} = req.params
+        let post = await Post.findById(id).populate('owner comments likes')
+
+        if(!post){
+            return res.status(404).json({
+                success: false,
+                message: "Post not found"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            post
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        })
+    }
+}
+
 export const updateCaption = async(req,res)=>{
     try {
         

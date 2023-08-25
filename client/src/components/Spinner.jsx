@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Search = () => {
+const Spinner = () => {
   return (
     <div>
-      Search
+      Spinner...
     </div>
   )
 }
 
-export default Search
+export default Spinner

@@ -12,11 +12,7 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Login = ({user}) => {
-
-  if(user){
-    return <Navigate to={'/'}/>
-  }
+const Login = () => {
 
   const [isPassVisible,setIsPassVisible] = useState(false)
   const {userLogin,loginError} = useContext(UserContext)

@@ -29,7 +29,7 @@ const PostComments = () => {
     };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col lg:ml-72 md:ml-20 pb-16">
       <div className="flex-none px-4 py-3 border-b flex items-center sticky top-0 bg-gray-50">
         <Link to={`/p/${id}`}>
           <ChevronLeftIcon className="w-6 h-6 font-bold" />
@@ -74,7 +74,7 @@ const PostComments = () => {
         </div>
 
         {iconBoxVisible && (
-          <div className="absolute bottom-20 right-0">
+          <div className="absolute bottom-32 right-0">
             <Picker data={data} onEmojiSelect={addEmoji} />
           </div>
         )}

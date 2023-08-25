@@ -3,9 +3,10 @@ import reducer from '../reducers/postReducer'
 import axios from 'axios'
 
 const initialState = {
-    loading: true,
+    loading: false,
     error: null,
-    posts:[]
+    posts:[],
+    post: null
 }
 
 const PostContext = createContext(initialState)
@@ -47,8 +48,21 @@ const PostProvider = ({children})=>{
             dispatch({type:'SET_ERROR',payload: error.response.data.message})
         }
     }
+
+    const fetchPost = async(id)=>{
+        try {
+            dispatch({type: 'SET_LOADING_TRUE'})
+            const {data} = await axios.get(`http://localhost:4000/api/v1/post/${id}`,{
+                withCredentials: true
+            })
+            dispatch({type: 'SET_POST',payload: data})
+            dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            dispatch({type:'SET_ERROR',payload: error.response.data.message})
+        }
+    }
     
-    return <PostContext.Provider value={{...state,uploadPost,fetchUserPosts}}>
+    return <PostContext.Provider value={{...state,uploadPost,fetchUserPosts,fetchPost}}>
         {children}
     </PostContext.Provider>
 }

@@ -13,6 +13,7 @@ const PostReducer = (state,action)=>{
         };
 
       case "SET_ERROR":
+        console.log(action.payload)
         return {
           ...state,
           loading: false,
@@ -24,6 +25,13 @@ const PostReducer = (state,action)=>{
           ...state,
           posts: action.payload.posts,
         };
+      
+      case 'SET_POST':
+        console.log(action.payload.post)
+        return {
+          ...state,
+          post: action.payload.post
+        }
     }
 }
 

@@ -11,20 +11,21 @@ import CreatePost from './pages/CreatePost'
 import Register from './pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 import Profile from './pages/Profile'
-import Search from './pages/Search'
 import ErrorPage from './pages/ErrorPage'
 import PostPage from './pages/PostPage'
 import PostComments from './pages/PostComments'
+import { PostContext } from './context/PostContext'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
+  const {loading} = useContext(PostContext)
+
+
   return (
     <main className="w-full h-screen flex">
       {user && !userLoading && <Sidebar />}
       <div className="flex-grow">
         <Routes>
-          <Route path="/account/login" element={<Login user={user} />} />
-          <Route path="/account/register" element={<Register user={user} />} />
           <Route
             path="/"
             element={
@@ -40,26 +41,35 @@ function App() {
           <Route
             path="/p/create"
             element={
-              <ProtectedRoute user={user}>
-                <CreatePost />
-              </ProtectedRoute>
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <CreatePost />
+                </ProtectedRoute>
+              )
             }
           />
 
-          <Route path=':username' element={<Profile/>}/>
-          
-          <Route 
-            path='/p/:id' 
+          <Route path=":username" element={<Profile />} />
+
+          <Route
+            path="/p/:id"
             element={
-              <PostPage/>
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <PostPage />
+                </ProtectedRoute>
+              )
             }
           />
 
-          <Route 
-            path='/p/:id/comments'
-            element={<PostComments />}
-          />
+          <Route path="/p/:id/comments" element={<PostComments />} />
 
+          <Route path="/account/login" element={<Login />} />
+          <Route path="/account/register" element={<Register user={user} />} />
         </Routes>
       </div>
     </main>

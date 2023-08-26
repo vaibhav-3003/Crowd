@@ -20,6 +20,9 @@ const postSchema = new mongoose.Schema({
         ref: "User",
       },
   ],
+  ownerComment:{
+    type:String,
+  },
   comments: [
     {
       user: {
@@ -28,7 +31,6 @@ const postSchema = new mongoose.Schema({
       },
       comment:{
         type :String,
-        required: true
       }
     },
   ],

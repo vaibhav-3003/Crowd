@@ -170,7 +170,7 @@ export const fetchUserPosts = async(req,res)=>{
 export const getPost = async(req,res)=>{
     try {
         const {id} = req.params
-        let post = await Post.findById(id).populate('owner comments likes')
+        let post = await Post.findById(id).populate('owner comments.user')
 
         if(!post){
             return res.status(404).json({
@@ -230,7 +230,6 @@ export const commentOnPost = async(req,res)=>{
     try {
         
         const post = await Post.findById(req.params.id);
-
         if(!post){
             res.status(404).json({
               success: false,
@@ -238,33 +237,33 @@ export const commentOnPost = async(req,res)=>{
             });
         }
 
-        let commentIndex = -1
-
-        post.comments.forEach((item,index)=>{
-            if(item.user.toString() === req.user._id.toString()){
-                commentIndex = index;
+        if(post.owner._id.toString() === req.user._id.toString()){
+            const newComment = {
+                owner: req.body.comment
             }
-        })
+            post.ownerComment = req.body.comment
+            await post.save()
+            return res.status(200).json({
+              success: true,
+              message: "Comment Added",
+              comment: newComment
+            });
+        }else{
+            const newComment = {
+              user: req.user._id,
+              comment: req.body.comment,
+            };
 
-        if (commentIndex !== -1) {
-          post.comments[commentIndex].comment = req.body.comment;
-          await post.save();
-          res.status(200).json({
-            success: true,
-            message: "Comment Updated",
-          });
-        } else {
-          const newComment = {
-            user: req.user._id,
-            comment: req.body.comment,
-          };
-
-          post.comments.push(newComment);
-          await post.save();
-          res.status(200).json({
-            success: true,
-            message: "Comment Added",
-          });
+            post.comments.push(newComment);
+            await post.save();
+            res.status(200).json({
+              success: true,
+              message: "Comment Added",
+              comment: {
+                ...newComment,
+                user: req.user
+              },
+            });
         }
 
     } catch (error) {
@@ -273,6 +272,34 @@ export const commentOnPost = async(req,res)=>{
             message: error.message 
         })
     }
+}
+
+export const updateComment = async(req,res)=>{
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    let commentIndex = -1
+    
+    post.comments.forEach((item,index)=>{
+        if(item.user.toString() === req.user._id.toString()){
+            commentIndex = index;
+        }
+    })
+
+    if (commentIndex !== -1) {
+        post.comments[commentIndex].comment = req.body.comment;
+        await post.save();
+        res.status(200).json({
+            success: true,
+            message: "Comment Updated",
+        });
+    }
+    
 }
 
 export const deleteComment = async(req,res)=>{

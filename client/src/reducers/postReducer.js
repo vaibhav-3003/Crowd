@@ -27,10 +27,28 @@ const PostReducer = (state,action)=>{
         };
       
       case 'SET_POST':
-        console.log(action.payload.post)
+        console.log(action.payload.post.comments)
         return {
           ...state,
-          post: action.payload.post
+          post: action.payload.post,
+          comments: action.payload.post.comments,
+          ownerComment: action.payload.post.ownerComment
+        }
+
+      case 'SET_COMMENT':
+        if(action.payload.comment.hasOwnProperty('owner')){
+          return {
+            ...state,
+            ownerComment:action.payload.comment.owner
+          }
+        }else{
+          return {
+            ...state,
+            post:{
+              ...state.post,
+              comments: [...state.post.comments,action.payload.comment]
+            }
+          }
         }
     }
 }

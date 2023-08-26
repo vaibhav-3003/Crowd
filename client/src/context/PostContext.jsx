@@ -6,7 +6,9 @@ const initialState = {
     loading: false,
     error: null,
     posts:[],
-    post: null
+    post: null,
+    comments:null,
+    ownerComment:null
 }
 
 const PostContext = createContext(initialState)
@@ -61,8 +63,25 @@ const PostProvider = ({children})=>{
             dispatch({type:'SET_ERROR',payload: error.response.data.message})
         }
     }
+
+    const commentOnPost = async(id,comment)=>{
+        try {
+          dispatch({ type: "SET_LOADING_TRUE" });
+          const { data } = await axios.put(
+            `http://localhost:4000/api/v1/post/comment/${id}`,{
+              comment,
+            },{
+                withCredentials: true,
+            }
+          );
+          dispatch({ type: "SET_COMMENT", payload: data });
+          dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+          dispatch({ type: "SET_ERROR", payload: error.response.data.message });
+        }
+    }
     
-    return <PostContext.Provider value={{...state,uploadPost,fetchUserPosts,fetchPost}}>
+    return <PostContext.Provider value={{...state,uploadPost,fetchUserPosts,fetchPost,commentOnPost}}>
         {children}
     </PostContext.Provider>
 }

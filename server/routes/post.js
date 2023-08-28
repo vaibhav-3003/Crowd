@@ -1,5 +1,5 @@
 import express from 'express';
-import {commentOnPost, createPost, deleteComment, deletePost, fetchUserPosts, getPost, getPostOfFollowing, likeAndUnlikePost, updateCaption} from '../controllers/post.js';
+import {commentOnPost, createPost, deleteComment, deletePost, fetchUserPosts, getPost, getPostOfFollowing, likeAndUnlikePost, postLiked, updateCaption} from '../controllers/post.js';
 import { isAuthenticated } from '../middlewares/auth.js';
 
 const router = express.Router()
@@ -7,6 +7,8 @@ const router = express.Router()
 router.post('/post/upload',isAuthenticated,createPost)
 
 router.get('/post/like/:id',isAuthenticated,likeAndUnlikePost)
+
+router.get('/post/liked/:id',isAuthenticated,postLiked)
 
 router.get('/:username/posts',fetchUserPosts)
 

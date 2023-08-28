@@ -1,6 +1,7 @@
 import { createContext, useReducer } from "react";
 import reducer from '../reducers/postReducer'
 import axios from 'axios'
+import { useContext } from "react";
 
 const initialState = {
     loading: false,
@@ -8,7 +9,9 @@ const initialState = {
     posts:[],
     post: null,
     comments:null,
-    ownerComment:null
+    ownerComment:null,
+    isPostLiked: null,
+    likes: null
 }
 
 const PostContext = createContext(initialState)
@@ -80,10 +83,53 @@ const PostProvider = ({children})=>{
           dispatch({ type: "SET_ERROR", payload: error.response.data.message });
         }
     }
+
+    const likePost = async(id)=>{
+        try {
+            const { data } = await axios.get(
+              `http://localhost:4000/api/v1/post/like/${id}`,{
+                withCredentials: true,
+              }
+            );
+            dispatch({ type: "SET_LIKE"});
+        } catch (error) {
+            dispatch({ type: "SET_ERROR", payload: error.response.data.message });
+        }
+    }
+
+    const postLiked = async(id)=>{
+        try {
+            const { data } = await axios.get(
+              `http://localhost:4000/api/v1/post/liked/${id}`,{
+                withCredentials: true,
+              }
+            );
+            dispatch({ type: "SET_POST_LIKED",payload: data});
+        } catch (error) {
+            dispatch({ type: "SET_ERROR", payload: error.response.data.message });
+        }
+    }
     
-    return <PostContext.Provider value={{...state,uploadPost,fetchUserPosts,fetchPost,commentOnPost}}>
+    const increaseLikes = ()=>{
+        dispatch({type: 'INCREASE_LIKES'})
+    }
+
+    const decreaseLikes = ()=>{
+        dispatch({type: 'DECREASE_LIKES'})
+    }
+
+    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes}}>
         {children}
     </PostContext.Provider>
 }
+
+// custom hook to update state from any component
+export const usePostState = () => {
+  const context = useContext(PostContext);
+  if (!context) {
+    throw new Error("usePostState must be used within a PostProvider");
+  }
+  return context;
+};
 
 export {PostContext,PostProvider}

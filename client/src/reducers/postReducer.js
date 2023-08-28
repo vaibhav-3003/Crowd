@@ -27,12 +27,12 @@ const PostReducer = (state,action)=>{
         };
       
       case 'SET_POST':
-        console.log(action.payload.post.comments)
         return {
           ...state,
           post: action.payload.post,
           comments: action.payload.post.comments,
-          ownerComment: action.payload.post.ownerComment
+          ownerComment: action.payload.post.ownerComment,
+          likes: action.payload.post.likes.length
         }
 
       case 'SET_COMMENT':
@@ -50,6 +50,37 @@ const PostReducer = (state,action)=>{
             }
           }
         }
+      
+      case 'SET_LIKE':
+        return{
+          ...state,
+        }
+      
+      case 'SET_POST_LIKED':
+        if(action.payload.message==='Liked'){
+          return {
+            ...state,
+            isPostLiked: true,
+          };
+        }else{
+          return {
+            ...state,
+            isPostLiked: false,
+          };
+        }
+
+      case 'INCREASE_LIKES':
+        return {
+          ...state,
+          likes: state.likes + 1
+        }
+      
+      case 'DECREASE_LIKES':
+        return {
+          ...state,
+          likes: state.likes - 1
+        }
+        
     }
 }
 

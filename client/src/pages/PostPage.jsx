@@ -12,24 +12,28 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import {
-  HeartIcon,
+  HeartIcon as OutlineHeart,
   BookmarkIcon,
   ChatBubbleOvalLeftIcon,
   FaceSmileIcon,
   EllipsisHorizontalIcon,
   ChevronLeftIcon,
 } from "@heroicons/react/24/outline";
+import {
+  HeartIcon as SolidHeart,
+} from "@heroicons/react/24/solid"
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useContext } from 'react';
 import { PostContext } from '../context/PostContext';
+import { usePostState } from '../context/PostContext';
 
 const PostPage = () => {
     const {id} = useParams()
     const [comment, setComment] = useState("");
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
     const [iconBoxVisible,setIconBoxVisible] = useState(false)
-    const {fetchPost,post,loading,comments,commentOnPost,ownerComment} = useContext(PostContext)
+    const {fetchPost,post,loading,comments,commentOnPost,ownerComment,likePost,postLiked,isPostLiked,dispatch,likes,increaseLikes,decreaseLikes} = useContext(PostContext)
 
     useEffect(() => {
       const handleResize = () => {
@@ -42,7 +46,12 @@ const PostPage = () => {
         await fetchPost(id);
       };
 
+      const likedPost = async()=>{
+        await postLiked(id);
+      }
+
       userPost();
+      likedPost();
 
       return () => {
         window.removeEventListener("resize", handleResize);
@@ -83,6 +92,18 @@ const PostPage = () => {
 
       await commentOnPost(id,comment)
       setComment('')
+    }
+
+    const setLikes = async()=>{
+      
+      await likePost(id)
+      if(isPostLiked){
+        dispatch({type:'SET_POST_LIKED', payload: {message: 'Unliked'}})
+        decreaseLikes()
+      }else{
+        dispatch({ type: "SET_POST_LIKED", payload: { message: "Liked" } });
+        increaseLikes()
+      }
     }
 
   return (
@@ -143,9 +164,15 @@ const PostPage = () => {
                   {/* like,comment,save */}
                   <div className="flex justify-between items-center px-4 mt-2">
                     <div className="flex gap-2">
-                      <IconButton variant="text" className="rounded-full">
-                        <HeartIcon className="w-6 h-6" />
-                      </IconButton>
+                      {isPostLiked ? (
+                        <IconButton variant="text" className="rounded-full">
+                          <SolidHeart className="w-6 h-6" />
+                        </IconButton>
+                      ) : (
+                        <IconButton variant="text" className="rounded-full">
+                          <OutlineHeart className="w-6 h-6" />
+                        </IconButton>
+                      )}
                       <Link to={`/p/${id}/comments`}>
                         <IconButton variant="text" className="rounded-full">
                           <ChatBubbleOvalLeftIcon className="w-6 h-6" />
@@ -181,14 +208,15 @@ const PostPage = () => {
                                 variant="circular"
                                 alt="user"
                                 className="w-7 h-7"
-                                src={user.image.url}
+                                src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                key={user._id}
                               />
                             );
                           })}
                     </div>
 
                     <p className="font-semibold text-sm">
-                      {post && post.likes.length} likes
+                      {likes && likes} likes
                     </p>
                   </div>
                   <p className="text-xs uppercase mt-1 px-4">
@@ -204,7 +232,8 @@ const PostPage = () => {
           {loading ? (
             <Spinner />
           ) : (
-            post && comments && (
+            post &&
+            comments && (
               <div className="flex grow justify-center">
                 <div className="w-1/2 h-full">
                   <img
@@ -250,14 +279,14 @@ const PostPage = () => {
                   </div>
 
                   {post.comments.length === 0 ? (
-                    <div className="border-b flex-grow flex flex-col overflow-auto justify-center items-center">
+                    <div className="border-b flex-grow flex flex-col overflow-auto justify-center items-center" key={post._id}>
                       <h2 className="text-3xl font-semibold">
                         No comments yet.
                       </h2>
                       <p className="mt-2">Start the conversation</p>
                     </div>
                   ) : (
-                    <div className="border-b flex-grow flex flex-col overflow-auto pt-2 px-2">
+                    <div className="border-b flex-grow flex flex-col overflow-auto pt-2 px-2" key={post._id}>
                       {/* comment box */}
                       <div className="w-full">
                         {/* owner comment */}
@@ -266,7 +295,7 @@ const PostPage = () => {
                             <div>
                               <Link
                                 to={`/${post.owner.username}/`}
-                                className="flex items-center gap-2"
+                                className="flex items-center gap-2 w-fit"
                               >
                                 <Avatar
                                   variant="circular"
@@ -289,14 +318,11 @@ const PostPage = () => {
                         <div className="w-full flex flex-col gap-3 mt-3 pb-4">
                           {post.comments.map((item) => {
                             return (
-                              <div
-                                className="w-full"
-                                key={item._id}
-                              >
+                              <div className="w-full" key={item._id}>
                                 <div>
                                   <Link
                                     to={`/${item.user.username}/`}
-                                    className="flex items-center gap-2"
+                                    className="flex items-center gap-2 w-fit"
                                   >
                                     <Avatar
                                       variant="circular"
@@ -324,8 +350,12 @@ const PostPage = () => {
                     {/* Post actions */}
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2">
-                        <IconButton variant="text" className="rounded-full">
-                          <HeartIcon className="w-6 h-6" />
+                        <IconButton variant="text" className="rounded-full" onClick={setLikes}>
+                          {isPostLiked && isPostLiked ? (
+                            <SolidHeart className="w-6 h-6 text-red-500" />
+                          ) : (
+                            <OutlineHeart className="w-6 h-6" />
+                          )}
                         </IconButton>
                         <IconButton variant="text" className="rounded-full">
                           <ChatBubbleOvalLeftIcon className="w-6 h-6" />
@@ -348,7 +378,8 @@ const PostPage = () => {
                                     variant="circular"
                                     alt="user"
                                     className="w-7 h-7"
-                                    src={user.image.url}
+                                    src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                    key={user._id}
                                   />
                                 );
                               })
@@ -360,14 +391,15 @@ const PostPage = () => {
                                   variant="circular"
                                   alt="user"
                                   className="w-7 h-7"
-                                  src={user.image.url}
+                                  src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                  key={user._id}
                                 />
                               );
                             })}
                       </div>
 
                       <p className="font-semibold text-sm">
-                        {post && post.likes.length} likes
+                        {likes} likes
                       </p>
                     </div>
                     <p className="text-xs uppercase mt-1">

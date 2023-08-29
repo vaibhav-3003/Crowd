@@ -38,16 +38,13 @@ const UserProvider = ({children})=>{
             const res = await axios.post('http://localhost:4000/api/v1/login',data)
             const user = res.data
 
-            console.log(res)
+            Cookies.set("token", user.token, { expires: 90 });
 
-            // Cookies.set("token", user.token, { expires: 90 });
-
-            // dispatch({ type: "SET_USER", payload: user });
-            // dispatch({ type: "SET_LOADING_FALSE" });
+            dispatch({ type: "SET_USER", payload: user });
+            dispatch({ type: "SET_LOADING_FALSE" });
         } catch (error) {
-            // dispatch({ type: "SET_LOADING_FALSE" });
-            // dispatch({type: 'SET_LOGIN_ERROR',payload: error})
-            console.log(error)
+            dispatch({ type: "SET_LOADING_FALSE" });
+            dispatch({type: 'SET_LOGIN_ERROR',payload: error})
         }
     }
 

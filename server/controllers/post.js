@@ -18,7 +18,7 @@ export const createPost = async(req,res)=>{
         }
 
         const myCloud = await cloudinary.v2.uploader.upload(image,{
-            folder: "posts"
+            folder: "crowd/posts"
         });
 
         const newPostData = {
@@ -200,7 +200,7 @@ export const fetchUserPosts = async(req,res)=>{
 export const getPost = async(req,res)=>{
     try {
         const {id} = req.params
-        let post = await Post.findById(id).populate('owner comments.user')
+        let post = await Post.findById(id).populate('owner comments.user likes')
 
         if(!post){
             return res.status(404).json({

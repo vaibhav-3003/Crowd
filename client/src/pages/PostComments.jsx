@@ -134,7 +134,7 @@ const PostComments = () => {
         <Avatar
           variant="circular"
           alt="user 1"
-          className="w-10 h-9"
+          className="w-10 md:w-9 h-9"
           src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
         />
         <form className="flex items-center w-full" onSubmit={postComment}>

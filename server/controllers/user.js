@@ -24,7 +24,10 @@ export const register = async(req,res)=>{
           name,
           email,
           password,
-          avatar: { public_id: "sample_id", url: "sample_url" },
+          avatar: {
+            public_id: "crowd/profiles/default_pa5rxq",
+            url: "https://res.cloudinary.com/dsz55cxdz/image/upload/v1693316753/crowd/profiles/default_pa5rxq.jpg",
+          },
         });
 
         const token = await user.generateToken();
@@ -219,6 +222,31 @@ export const updateProfile = async(req,res)=>{
     res.status(200).json({
       success: true,
       message: "Profile Updated"
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const updateProfileImage = async(req,res)=>{
+  try {
+    
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Profile Image Updated"
     })
 
   } catch (error) {

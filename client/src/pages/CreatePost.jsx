@@ -27,7 +27,6 @@ const CreatePost = () => {
     Reader.onload = (e)=>{
       if(Reader.readyState === 2){
         setImage(Reader.result)
-        console.log(Reader.result)
       }
     }
 

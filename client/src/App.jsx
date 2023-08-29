@@ -15,6 +15,7 @@ import ErrorPage from './pages/ErrorPage'
 import PostPage from './pages/PostPage'
 import PostComments from './pages/PostComments'
 import { PostContext } from './context/PostContext'
+import EditProfile from './pages/EditProfile'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
@@ -66,7 +67,31 @@ function App() {
             }
           />
 
-          <Route path="/p/:id/comments" element={<PostComments />} />
+          <Route
+            path="/p/:id/comments"
+            element={
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <PostComments />
+                </ProtectedRoute>
+              )
+            }
+          />
+
+          <Route
+            path=":username/edit"
+            element={
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <EditProfile />
+                </ProtectedRoute>
+              )
+            }
+          />
 
           <Route path="/account/login" element={<Login />} />
           <Route path="/account/register" element={<Register user={user} />} />

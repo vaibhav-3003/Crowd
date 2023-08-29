@@ -53,6 +53,8 @@ const PostPage = () => {
       userPost();
       likedPost();
 
+      console.log(post);
+
       return () => {
         window.removeEventListener("resize", handleResize);
       };
@@ -385,7 +387,7 @@ const PostPage = () => {
                               })
                           : post &&
                             post.likes.length > 0 &&
-                            post.likes.map((user) => {
+                            post.likes.reverse().map((user) => {
                               return (
                                 <Avatar
                                   variant="circular"

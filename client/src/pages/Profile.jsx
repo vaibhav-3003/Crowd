@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { UserContext } from '../context/UserContext'
-import { Avatar,Button } from '@material-tailwind/react'
+import { Avatar,Button, Spinner } from '@material-tailwind/react'
 import { useState } from 'react'
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import UserPosts from '../components/UserPosts'
@@ -13,7 +13,7 @@ import ErrorPage from './ErrorPage'
 const Profile = () => {
     const {username} = useParams()
     const {user,userProfile,loadUserWithUsername,userLoading,error} = useContext(UserContext)
-    const {posts,fetchUserPosts} = useContext(PostContext)
+    const {posts,fetchUserPosts,loading} = useContext(PostContext)
 
     const [tab,setTab] = useState('posts')
 
@@ -36,7 +36,7 @@ const Profile = () => {
     <>
       {userLoading ? (
         <LoadingPage />
-      ) : error && error==='User not found' ? (
+      ) : error && error === "User not found" ? (
         <ErrorPage />
       ) : (
         <div className="md:ml-16 lg:ml-72 pb-20">
@@ -49,9 +49,11 @@ const Profile = () => {
               <div className="flex gap-5 items-center">
                 <h2 className="text-2xl">{username}</h2>
                 {user && user.username === username ? (
-                  <Button className="nunito normal-case text-sm font-normal">
-                    Edit Profile
-                  </Button>
+                  <Link to={`/${username}/edit`}>
+                    <Button className="nunito normal-case text-sm font-normal">
+                      Edit Profile
+                    </Button>
+                  </Link>
                 ) : (
                   <Button
                     className="nunito normal-case text-sm font-normal w-28 rounded-full"
@@ -174,9 +176,21 @@ const Profile = () => {
 
             <div>
               {user && posts && tab === "posts" ? (
-                <UserPosts posts={posts} />
+                loading ? (
+                  <div className="w-full flex justify-center items-center">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <UserPosts posts={posts} />
+                )
               ) : tab === "saved" ? (
-                <SavedPosts />
+                loading ? (
+                  <div className="w-full flex justify-center items-center">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <SavedPosts />
+                )
               ) : null}
             </div>
           </div>

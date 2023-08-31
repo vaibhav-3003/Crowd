@@ -40,11 +40,20 @@ const Profile = () => {
         <ErrorPage />
       ) : (
         <div className="md:ml-16 lg:ml-72 pb-20">
-          <div className="w-full md:w-3/4 mx-auto py-10 flex justify-center items-center flex-wrap md:justify-start gap-8">
+          <div className="w-full px-8 md:px-20 py-10 flex justify-center  md:justify-start gap-8">
             <Avatar
-              src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
-              className="w-[10rem] h-[10rem]"
+              src={userProfile.avatar.url}
+              className="w-[10rem] h-[10rem] hover:cursor-pointer"
+              onClick={() => window.avatar_modal.showModal()}
             />
+            <dialog id="avatar_modal" className="modal">
+              <form method="dialog" className="modal-box p-0 rounded-none">
+                <img src={userProfile.avatar.url} alt="avatar" className='w-full object-cover'/>
+              </form>
+              <form method="dialog" className="modal-backdrop">
+                <button>close</button>
+              </form>
+            </dialog>
             <div className="flex flex-col justify-center items-center md:items-start md:justify-start md:ml-16">
               <div className="flex gap-5 items-center">
                 <h2 className="text-2xl">{username}</h2>

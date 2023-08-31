@@ -11,7 +11,8 @@ import {
   getUserProfile,
   getAllUsers,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  updateProfileImage
 } from "../controllers/user.js";
 import { isAuthenticated } from '../middlewares/auth.js';
 
@@ -28,6 +29,8 @@ router.get('/follow/:id',isAuthenticated,followAndUnfollowUser)
 router.put('/update/password',isAuthenticated,updatePassword)
 
 router.put('/update/profile',isAuthenticated,updateProfile)
+
+router.put('/update/profile/photo',isAuthenticated,updateProfileImage)
 
 router.delete('/delete/me',isAuthenticated,deleteMyProfile)
 

@@ -1,23 +1,32 @@
-import { Avatar, Button } from '@material-tailwind/react'
-import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Avatar, Button, Spinner } from '@material-tailwind/react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { Input,Textarea } from "@material-tailwind/react";
 import { UserContext } from '../context/UserContext';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const EditProfile = () => {
     const {username} = useParams()
-    const {loadUserWithUsername,userProfile} = useContext(UserContext)
-    const [profileImage,setProfileImage] = useState(null)
+    const {loadUserWithUsername,userProfile,changeProfilePhoto,error,updateProfile,isLoading} = useContext(UserContext)
+    const [profileImage,setProfileImage] = useState(userProfile && userProfile.avatar.url)
+
+    const profileModal = useRef(null)
+
+    const navigate = useNavigate()
 
     const {
       register,
       handleSubmit,
-      setValue
+      setValue,
+      watch
     } = useForm();
 
-    const editProfile = (data) => {
-      console.log(data)
+    const editProfile = async(data) => {
+      await updateProfile(data)
+      navigate(`/${username}`)
     }
 
     const handleProfileChange = async(e)=>{
@@ -25,15 +34,25 @@ const EditProfile = () => {
 
       const Reader = new FileReader();
 
-      Reader.onload = (e) => {
+      Reader.onload = async(e) => {
         if (Reader.readyState === 2) {
           setProfileImage(Reader.result);
+          await changeProfilePhoto(Reader.result)
+
+          if(error){
+            toast.error(error, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }else{
+            toast.success('Profile Photo Changed', {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }
         }
       };
 
       Reader.readAsDataURL(file);
-
-      
+      profileModal.current.checked = false
     }
 
     useEffect(()=>{
@@ -42,39 +61,47 @@ const EditProfile = () => {
       };
 
       userFunc()
+
     },[])
 
     useEffect(() => {
       if (userProfile) {
         setValue("name", userProfile.name);
         setValue("bio", userProfile.bio);
+        setProfileImage(userProfile.avatar.url)
       }
     }, [userProfile, setValue]); 
 
+
   return (
-    <div className="md:ml-20 lg:ml-72 h-full">
+    <div className="md:ml-20 lg:ml-72">
       <div className="w-full h-full py-5">
         <div className="w-full md:w-3/4 lg:w-1/2 mx-auto md:border md:mt-5 py-5">
           <h2 className="text-3xl font-semibold text-center">Edit Profile</h2>
           <div className="mt-5 flex flex-col gap-4 justify-center items-center">
-            <Avatar
-              src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
-              className="w-[10rem] h-[10rem]"
-            />
-            <div className='w-full flex flex-col justify-center items-center'>
-              <h3 className="text-xl">{userProfile && userProfile.username}</h3>
-              <button onClick={() => window.my_modal_2.showModal()} className='text-sm mt-2 text-gray-700'>
-                Change Profile Photo
-              </button>
+            <div className="relative">
+              <Avatar src={profileImage} className="w-[10rem] h-[10rem]" />
             </div>
-            <dialog
-              id="my_modal_2"
-              className="modal modal-bottom sm:modal-middle"
-            >
-              <form method="dialog" className="modal-box bg-white p-0">
+            <div className="w-full flex flex-col justify-center items-center">
+              <h3 className="text-xl">{userProfile && userProfile.username}</h3>
+              <label
+                htmlFor="profile_modal"
+                className="mt-2 text-gray-600 cursor-pointer"
+              >
+                Change Profile Photo
+              </label>
+            </div>
+            <input
+              type="checkbox"
+              id="profile_modal"
+              className="modal-toggle"
+              ref={profileModal}
+            />
+            <div className="modal modal-bottom sm:modal-middle">
+              <div className="modal-box bg-white p-0">
                 <div className="border flex flex-col justify-center items-center pt-5 gap-4">
                   <Avatar
-                    src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
+                    src={userProfile && userProfile.avatar.url}
                     className="w-[5rem] h-[5rem]"
                   />
                   <h3 className="text-xl font-bold">Profile Photo</h3>
@@ -102,12 +129,19 @@ const EditProfile = () => {
                       </button>
                     </div>
                     <div className="py-2 border-t border-b w-full flex justify-center items-center">
-                      <button>Cancel</button>
+                      <button
+                        onClick={() => (profileModal.current.checked = false)}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 </div>
-              </form>
-            </dialog>
+              </div>
+              <label className="modal-backdrop" htmlFor="profile_modal">
+                Close
+              </label>
+            </div>
           </div>
 
           <form
@@ -117,10 +151,12 @@ const EditProfile = () => {
             <Input label="name" className="nunito" {...register("name")} />
             <Textarea label="bio" className="nunito" {...register("bio")} />
             <Button
-              className="nunito text-sm font-normal normal-case"
+              className="nunito text-sm font-normal normal-case flex justify-center items-center gap-2"
               type="submit"
               variant="gradient"
+              disabled={isLoading}
             >
+              {isLoading ? <Spinner className="w-4" /> : null}
               Submit
             </Button>
           </form>

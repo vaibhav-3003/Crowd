@@ -77,6 +77,37 @@ const UserProvider = ({children})=>{
         }
     }
 
+    const changeProfilePhoto = async(image)=>{
+        dispatch({type:'SET_LOADING_TRUE'})
+        try {
+            const {data} = await axios.put('http://localhost:4000/api/v1/update/profile/photo',{
+                avatar: image
+            },{
+                withCredentials: true
+            })
+            dispatch({type:'SET_LOADING_FALSE'})
+        } catch (error) {
+            dispatch({type:'SET_LOADING_FALSE'})
+            dispatch({type:'SET_USER_ERROR',payload: error.response.data.message})
+        }
+    }
+
+    const updateProfile = async(values)=>{
+        dispatch({type:'SET_LOADING_TRUE'})
+        try {
+            const {data} = await axios.put('http://localhost:4000/api/v1/update/profile',{
+                name: values.name,
+                bio: values.bio
+            },{
+                withCredentials: true
+            })
+            dispatch({type:'SET_LOADING_FALSE'})
+        } catch (error) {
+            dispatch({type:'SET_LOADING_FALSE'})
+            dispatch({type:'SET_USER_ERROR',payload: error.response.data.message})
+        }
+    }
+
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
@@ -85,7 +116,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,userLogin,userRegister,loadUser,loadUserWithUsername}}>
+        <UserContext.Provider value={{...state,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile}}>
             {children}
         </UserContext.Provider>
     )

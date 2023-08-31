@@ -40,6 +40,7 @@ const UserReducer = (state,action)=>{
               registerError: action.payload.response.data.message,
             };
         case 'SET_USER_ERROR':
+            console.log(action.payload)
             return {
               ...state,
               error: action.payload,

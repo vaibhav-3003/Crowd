@@ -2,6 +2,7 @@ import Post from '../models/Post.js';
 import User from '../models/User.js'
 import { sendEmail } from '../middlewares/sendEmail.js';
 import crypto from 'crypto'
+import cloudinary from "cloudinary";
 
 export const register = async(req,res)=>{
     try {
@@ -206,17 +207,10 @@ export const updateProfile = async(req,res)=>{
     
     const user = await User.findById(req.user._id)
 
-    const {name,email} = req.body;
+    const {name,bio} = req.body;
 
-    if(name){
-      user.name= name
-    }
-
-    if(email){
-      user.email = email
-    }
-
-    //User Avatar todo
+    user.name = name
+    user.bio = bio
 
     await user.save();
     res.status(200).json({
@@ -243,6 +237,15 @@ export const updateProfileImage = async(req,res)=>{
         message: "User not found"
       })
     }
+
+    const {avatar} = req.body
+    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      folder: "crowd/profiles",
+    });
+
+    user.avatar.public_id = myCloud.public_id
+    user.avatar.url = myCloud.url
+    await user.save()
 
     res.status(200).json({
       success: true,

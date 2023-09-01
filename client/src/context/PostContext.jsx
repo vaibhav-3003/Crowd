@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import reducer from '../reducers/postReducer'
 import axios from 'axios'
 import { useContext } from "react";
@@ -7,6 +7,7 @@ const initialState = {
     loading: false,
     error: null,
     posts:[],
+    followingPosts:[],
     post: null,
     comments:null,
     ownerComment:null,
@@ -117,6 +118,26 @@ const PostProvider = ({children})=>{
     const decreaseLikes = ()=>{
         dispatch({type: 'DECREASE_LIKES'})
     }
+
+    const getFollowingPosts = async()=>{
+        try {
+            dispatch({type: 'SET_LOADING_TRUE'})
+            const {data} = await axios.get('http://localhost:4000/api/v1/posts',{
+                withCredentials: true
+            })
+            dispatch({type: 'SET_FOLLOWING_POSTS',payload: data.posts})
+            dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            dispatch({type: 'SET_ERROR',payload:error.response.data.message})
+        }
+    }
+
+    useEffect(()=>{
+        const getPosts = async()=>{
+            await getFollowingPosts()
+        }
+        getPosts()
+    },[])
 
     return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes}}>
         {children}

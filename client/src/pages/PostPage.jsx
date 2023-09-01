@@ -53,8 +53,6 @@ const PostPage = () => {
       userPost();
       likedPost();
 
-      console.log(post);
-
       return () => {
         window.removeEventListener("resize", handleResize);
       };

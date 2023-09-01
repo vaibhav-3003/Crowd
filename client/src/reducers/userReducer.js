@@ -51,6 +51,19 @@ const UserReducer = (state,action)=>{
               ...state,
               userProfile: action.payload.user,
             };
+        
+        case 'SET_FOLLOWED':
+            if(action.payload==='following'){
+                return {
+                    ...state,
+                    isFollowed: true
+                }
+            }else{
+                return {
+                    ...state,
+                    isFollowed: false
+                }
+            }
     
         default:
             return {

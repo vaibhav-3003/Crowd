@@ -12,25 +12,47 @@ import ErrorPage from './ErrorPage'
 
 const Profile = () => {
     const {username} = useParams()
-    const {user,userProfile,loadUserWithUsername,userLoading,error} = useContext(UserContext)
+    const {dispatch,user,userProfile,loadUserWithUsername,followAndUnfollow,userFollowed,userLoading,isFollowed,error} = useContext(UserContext)
     const {posts,fetchUserPosts,loading} = useContext(PostContext)
 
     const [tab,setTab] = useState('posts')
 
-    const [follow,setFollow] = useState(false)
+    const [follow,setFollow] = useState(isFollowed)
+
+    const followUser = async()=>{
+      await userFollowed(username);
+      if (isFollowed) {
+        dispatch({
+          type: "SET_FOLLOWED",
+          payload: "not following",
+        });
+      } else {
+        dispatch({ type: "SET_FOLLOWED", payload: "following" });
+      }
+      await followAndUnfollow(userProfile._id)
+    }
     
     useEffect(()=>{
         const userFunc = async () => {
             await loadUserWithUsername(username);
+            
           };
 
         const postFunc = async()=>{
           await fetchUserPosts(username);
         }
+
+        const followed = async()=>{
+          await userFollowed(username);
+        }
         userFunc();
-        postFunc()  
-        console.log(userLoading)
+        postFunc();
+        followed()
     },[])
+
+    useEffect(()=>{
+      setFollow(isFollowed)
+    },[isFollowed,dispatch])
 
   return (
     userLoading ? (
@@ -70,9 +92,9 @@ const Profile = () => {
                 <Button
                   className="nunito normal-case text-sm font-normal w-28 rounded-full"
                   variant={follow ? "outlined" : "filled"}
-                  onClick={() => setFollow(!follow)}
+                  onClick={followUser}
                 >
-                  {follow ? "Unfollow" : "Follow"}
+                  {isFollowed ? "Unfollow" : "Follow"}
                 </Button>
               )}
             </div>

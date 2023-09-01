@@ -161,7 +161,7 @@ export const getPostOfFollowing = async(req,res)=>{
             owner: {
                 $in: user.following
             }
-        })
+        }).populate('owner')
 
         res.status(200).json({
             success: true,

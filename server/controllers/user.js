@@ -372,6 +372,40 @@ export const getAllUsers = async(req,res)=>{
   }
 }
 
+export const userFollowed = async(req,res)=>{
+  try{
+
+    const {followerUsername}=  req.params ;
+
+    const follower = await User.findOne({username: followerUsername});
+
+    if(!follower){
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    if (req.user.following.includes(follower._id)) {
+      return res.status(200).json({
+        success: true,
+        message: "following",
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: "not following",
+      });
+    }
+
+  }catch(error){
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
 export const forgotPassword = async(req,res)=>{
   try {
     

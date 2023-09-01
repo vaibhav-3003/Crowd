@@ -10,7 +10,8 @@ const initialState = {
     registerError: null,
     error:null,
     user:null,
-    userProfile: null
+    userProfile: null,
+    isFollowed: null,
 }
 
 const UserContext = createContext(initialState)
@@ -108,6 +109,33 @@ const UserProvider = ({children})=>{
         }
     }
 
+    const followAndUnfollow = async(id)=>{
+        dispatch({type:'SET_LOADING_TRUE'})
+        try {
+            const {data} = await axios.get(`http://localhost:4000/api/v1/follow/${id}`,{
+                withCredentials: true
+            })
+            dispatch({type:'SET_LOADING_FALSE'})
+        } catch (error) {
+            dispatch({type:'SET_LOADING_FALSE'})
+            dispatch({type:'SET_USER_ERROR',payload: error.response.data.message})
+        }
+    }
+
+    const userFollowed = async(username)=>{
+        try {
+            dispatch({type:'SET_LOADING_TRUE'})
+            const {data} = await axios.get(`http://localhost:4000/api/v1/followed/${username}`,{
+                withCredentials: true
+            })
+            dispatch({type: 'SET_FOLLOWED',payload: data.message})
+            dispatch({type:'SET_LOADING_FALSE'})
+        } catch (error) {
+            dispatch({type:'SET_LOADING_FALSE'})
+            dispatch({type:'SET_USER_ERROR',payload: error.response.data.message})
+        }
+    }
+
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
@@ -116,7 +144,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile}}>
+        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed}}>
             {children}
         </UserContext.Provider>
     )

@@ -13,7 +13,6 @@ const PostReducer = (state,action)=>{
         };
 
       case "SET_ERROR":
-        console.log(action.payload)
         return {
           ...state,
           loading: false,
@@ -51,11 +50,6 @@ const PostReducer = (state,action)=>{
           }
         }
       
-      case 'SET_LIKE':
-        return{
-          ...state,
-        }
-      
       case 'SET_POST_LIKED':
         if(action.payload.message==='Liked'){
           return {
@@ -79,6 +73,13 @@ const PostReducer = (state,action)=>{
         return {
           ...state,
           likes: state.likes - 1
+        }
+      
+      case 'SET_FOLLOWING_POSTS':
+        console.log(action.payload)
+        return {
+          ...state,
+          followingPosts: action.payload
         }
         
     }

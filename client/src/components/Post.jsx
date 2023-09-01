@@ -13,24 +13,16 @@ import {
   faHeart as solidHeart,
 } from '@fortawesome/free-solid-svg-icons'
 
-const Post = ({image}) => {
+const Post = ({avatar,username,image,likes,caption}) => {
   return (
     <div className="w-full md:w-[468px]">
       {/* Post Header */}
-      <div className="mb-2">
+      <div className="mb-2 px-2">
         <div className="flex flex-col gap-6">
-          <Link className="w-fit flex items-center gap-3">
-            <Avatar
-              src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
-              alt="avatar"
-            />
+          <Link className="w-fit flex items-center gap-3" to={`/${username}`}>
+            <Avatar src={avatar} alt="avatar" className="w-9 h-9" />
             <div>
-              <p
-                to="/user/id"
-                className="hover:text-blue-600 hover:underline"
-              >
-                Tania Andrew
-              </p>
+              <span>{username}</span>
             </div>
           </Link>
         </div>
@@ -38,11 +30,7 @@ const Post = ({image}) => {
 
       {/* Post Image */}
       <div>
-        <img
-          src={image}
-          alt="post"
-          className="md:rounded-md mb-2"
-        />
+        <img src={image} alt="post" className="md:rounded-md mb-2 aspect-square object-cover" />
       </div>
 
       {/* Post Actions */}
@@ -64,14 +52,17 @@ const Post = ({image}) => {
       </div>
 
       {/* No of Likes */}
-      <div className='py-1'>
-        <p className='font-bold text-sm'>12 Likes</p>
+      <div className="py-1 px-3">
+        <p className="font-bold text-sm">{likes} Likes</p>
       </div>
 
       {/* Post Caption */}
-      <div className='py-1'>
+      <div className="py-1 px-3">
         <p>
-          <Link to='/user/id' className='font-bold'>username</Link> Caption
+          <Link to={`/${username}`} className="font-bold">
+            {username}
+          </Link>{" "}
+          <span className='text-sm'>{caption}</span>
         </p>
       </div>
     </div>

@@ -95,6 +95,8 @@ function App() {
 
           <Route path="/account/login" element={<Login />} />
           <Route path="/account/register" element={<Register user={user} />} />
+
+          <Route path="/*" element={<ErrorPage />} />
         </Routes>
       </div>
     </main>

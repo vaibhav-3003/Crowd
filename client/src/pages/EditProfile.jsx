@@ -1,12 +1,11 @@
 import { Avatar, Button, Spinner } from '@material-tailwind/react'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { Input,Textarea } from "@material-tailwind/react";
 import { UserContext } from '../context/UserContext';
-import { TrashIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { useNavigate,Link } from 'react-router-dom';
 
 const EditProfile = () => {
     const {username} = useParams()
@@ -21,7 +20,6 @@ const EditProfile = () => {
       register,
       handleSubmit,
       setValue,
-      watch
     } = useForm();
 
     const editProfile = async(data) => {
@@ -74,7 +72,13 @@ const EditProfile = () => {
 
 
   return (
-    <div className="md:ml-20 lg:ml-72">
+    <div className="md:ml-20 lg:ml-72 pb-10 md:pb-4">
+      <div className="px-4 py-3 border-b flex items-center sticky top-0 bg-gray-50 z-20 md:hidden">
+        <Link to={`/${username}`}>
+          <ChevronLeftIcon className="w-6 h-6 font-bold" />
+        </Link>
+        <h3 className="text-center w-full text-xl font-bold">Edit Profile</h3>
+      </div>
       <div className="w-full h-full py-5">
         <div className="w-full md:w-3/4 lg:w-1/2 mx-auto md:border md:mt-5 py-5">
           <h2 className="text-3xl font-semibold text-center">Edit Profile</h2>

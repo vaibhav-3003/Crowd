@@ -152,6 +152,68 @@ export const deletePost = async(req,res)=>{
     }
 }
 
+export const savePost = async(req,res)=>{
+    try {
+        
+        const post = await Post.findById(req.params.id);
+        const user = await User.findById(req.user._id)
+        if (!post) {
+          return res.status(404).json({
+            successs: false,
+            message: "Post not found",
+          });
+        }
+
+        if (post.saved.includes(req.user._id)) {
+          const index = post.saved.indexOf(req.user._id);
+          post.saved.splice(index, 1);
+          user.savedPosts.splice(index,1);
+          await post.save();
+          await user.save();
+
+          return res.status(200).json({
+            success: true,
+            message: "Post Unsaved",
+          });
+        } else {
+          post.saved.push(req.user._id);
+          user.savedPosts.push(post._id)
+          await post.save();
+          await user.save();
+          
+          return res.status(200).json({
+            success: true,
+            message: "Post Saved",
+          });
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+// export const getSavedPosts = async(req,res)=>{
+//     try {
+//         const user = User.findById(req.user._id)
+//         if(!user){
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "User not found"
+//             })
+//         }
+
+
+//     } catch (error) {
+//         return res.status(500).json({
+//             success: false,
+//             message: error.message
+//         })
+//     }
+// }
+
 export const getPostOfFollowing = async(req,res)=>{
     try {
         

@@ -54,146 +54,144 @@ const Profile = () => {
       setFollow(isFollowed)
     },[isFollowed,dispatch])
 
-  return (
-    userLoading ? (
-      <LoadingPage />
-    ) : userProfile ? (
-      <div className="md:ml-16 lg:ml-72 pb-20">
-        <div className="w-full px-8 md:px-20 py-10 flex flex-wrap md:flex-nowrap justify-center  md:justify-start gap-8">
-          <Avatar
-            src={userProfile && userProfile.avatar.url}
-            className="w-[10rem] h-[10rem] hover:cursor-pointer"
-            onClick={() => window.avatar_modal.showModal()}
-          />
-          <dialog id="avatar_modal" className="modal">
-            <form method="dialog" className="modal-box p-0 rounded-none">
-              <img
-                src={userProfile && userProfile.avatar.url}
-                alt="avatar"
-                className="w-full object-cover"
-              />
-            </form>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
-          <div className="flex flex-col justify-center items-center md:items-start md:justify-start md:ml-16">
-            <div className="flex gap-5 items-center">
-              <h2 className="text-2xl">
-                {userProfile && userProfile.username}
-              </h2>
-              {user && user.username === username ? (
-                <Link to={`/${username}/edit`}>
-                  <Button className="nunito normal-case text-sm font-normal rounded-full">
-                    Edit Profile
-                  </Button>
-                </Link>
-              ) : (
-                <Button
-                  className="nunito normal-case text-sm font-normal w-28 rounded-full"
-                  variant={follow ? "outlined" : "filled"}
-                  onClick={followUser}
-                >
-                  {isFollowed ? "Unfollow" : "Follow"}
+  return userLoading ? (
+    <LoadingPage />
+  ) : userProfile ? (
+    <div className="md:ml-16 lg:ml-72 pb-20">
+      <div className="w-full px-8 md:px-20 py-10 flex flex-wrap md:flex-nowrap justify-center  md:justify-start gap-8">
+        <Avatar
+          src={userProfile && userProfile.avatar.url}
+          className="w-[10rem] h-[10rem] hover:cursor-pointer"
+          onClick={() => window.avatar_modal.showModal()}
+        />
+        <dialog id="avatar_modal" className="modal">
+          <form method="dialog" className="modal-box p-0 rounded-none">
+            <img
+              src={userProfile && userProfile.avatar.url}
+              alt="avatar"
+              className="w-full object-cover"
+            />
+          </form>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
+        <div className="flex flex-col justify-center items-center md:items-start md:justify-start md:ml-16">
+          <div className="flex gap-5 items-center">
+            <h2 className="text-2xl">{userProfile && userProfile.username}</h2>
+            {user && user.username === username ? (
+              <Link to={`/${username}/edit`}>
+                <Button className="nunito normal-case text-sm font-normal rounded-full">
+                  Edit Profile
                 </Button>
-              )}
-            </div>
-            <div className="flex gap-5 md:gap-8 mt-5">
-              <p>{userProfile && userProfile.posts.length} posts</p>
-              <p>{userProfile && userProfile.followers.length} followers</p>
-              <p>{userProfile && userProfile.following.length} following</p>
-            </div>
-            <div className="mt-4">
-              <p>{userProfile && userProfile.name}</p>
-            </div>
-            {userProfile && userProfile.bio && (
-              <div className="mt-4">
-                <p>{userProfile.bio}</p>
-              </div>
+              </Link>
+            ) : (
+              <Button
+                className="nunito normal-case text-sm font-normal w-28 rounded-full"
+                variant={follow ? "outlined" : "filled"}
+                onClick={followUser}
+              >
+                {isFollowed ? "Unfollow" : "Follow"}
+              </Button>
             )}
           </div>
+          <div className="flex gap-5 md:gap-8 mt-5">
+            <p>{userProfile && userProfile.posts.length} posts</p>
+            <p>{userProfile && userProfile.followers.length} followers</p>
+            <p>{userProfile && userProfile.following.length} following</p>
+          </div>
+          <div className="mt-4">
+            <p>{userProfile && userProfile.name}</p>
+          </div>
+          {userProfile && userProfile.bio && (
+            <div className="mt-4">
+              <p>{userProfile.bio}</p>
+            </div>
+          )}
         </div>
+      </div>
 
-        <div className="mt-5 px-8 md:px-20">
-          <div className="border-t border-gray-500 flex justify-center items-center">
-            <div className="flex gap-8 justify-center items-center">
-              <button
-                className={
-                  tab === "posts"
-                    ? "text-sm text-black font-bold border-t border-black py-2 flex items-center justify-center gap-1"
-                    : "text-sm text-gray-500 font-bold py-2 flex items-center justify-center gap-1"
-                }
-                onClick={() => setTab("posts")}
+      <div className="mt-5 px-8 md:px-20">
+        <div className="border-t border-gray-500 flex justify-center items-center">
+          <div className="flex gap-8 justify-center items-center">
+            <button
+              className={
+                tab === "posts"
+                  ? "text-sm text-black font-bold border-t border-black py-2 flex items-center justify-center gap-1"
+                  : "text-sm text-gray-500 font-bold py-2 flex items-center justify-center gap-1"
+              }
+              onClick={() => setTab("posts")}
+            >
+              <svg
+                aria-label=""
+                className={tab === "posts" ? "text-black" : "text-gray-500"}
+                color="rgb(245, 245, 245)"
+                fill="rgb(245, 245, 245)"
+                height="15"
+                role="img"
+                viewBox="0 0 24 24"
+                width="15"
               >
-                <svg
-                  aria-label=""
-                  className={tab === "posts" ? "text-black" : "text-gray-500"}
-                  color="rgb(245, 245, 245)"
-                  fill="rgb(245, 245, 245)"
-                  height="15"
-                  role="img"
-                  viewBox="0 0 24 24"
-                  width="15"
-                >
-                  <rect
-                    fill="none"
-                    height="18"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    width="18"
-                    x="3"
-                    y="3"
-                  ></rect>
-                  <line
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    x1="9.015"
-                    x2="9.015"
-                    y1="3"
-                    y2="21"
-                  ></line>
-                  <line
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    x1="14.985"
-                    x2="14.985"
-                    y1="3"
-                    y2="21"
-                  ></line>
-                  <line
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    x1="21"
-                    x2="3"
-                    y1="9.015"
-                    y2="9.015"
-                  ></line>
-                  <line
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    x1="21"
-                    x2="3"
-                    y1="14.985"
-                    y2="14.985"
-                  ></line>
-                </svg>
-                <span>POSTS</span>
-              </button>
+                <rect
+                  fill="none"
+                  height="18"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  width="18"
+                  x="3"
+                  y="3"
+                ></rect>
+                <line
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  x1="9.015"
+                  x2="9.015"
+                  y1="3"
+                  y2="21"
+                ></line>
+                <line
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  x1="14.985"
+                  x2="14.985"
+                  y1="3"
+                  y2="21"
+                ></line>
+                <line
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  x1="21"
+                  x2="3"
+                  y1="9.015"
+                  y2="9.015"
+                ></line>
+                <line
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  x1="21"
+                  x2="3"
+                  y1="14.985"
+                  y2="14.985"
+                ></line>
+              </svg>
+              <span>POSTS</span>
+            </button>
 
+            {user && user.username === username && (
               <button
                 className={
                   tab === "saved"
@@ -205,33 +203,33 @@ const Profile = () => {
                 <BookmarkIcon className="h-4 w-4" />
                 <span>SAVED</span>
               </button>
-            </div>
-          </div>
-
-          <div>
-            {user && posts && tab === "posts" ? (
-              loading ? (
-                <div className="w-full flex justify-center items-center">
-                  <Spinner />
-                </div>
-              ) : (
-                <UserPosts posts={posts} />
-              )
-            ) : tab === "saved" ? (
-              loading ? (
-                <div className="w-full flex justify-center items-center">
-                  <Spinner />
-                </div>
-              ) : (
-                <SavedPosts />
-              )
-            ) : null}
+            )}
           </div>
         </div>
+
+        <div>
+          {user && posts && tab === "posts" ? (
+            loading ? (
+              <div className="w-full flex justify-center items-center">
+                <Spinner />
+              </div>
+            ) : (
+              <UserPosts posts={posts} />
+            )
+          ) : tab === "saved" ? (
+            loading ? (
+              <div className="w-full flex justify-center items-center">
+                <Spinner />
+              </div>
+            ) : (
+              <SavedPosts posts={user.savedPosts} />
+            )
+          ) : null}
+        </div>
       </div>
-    ) : (
-      <ErrorPage />
-    )
+    </div>
+  ) : (
+    <ErrorPage />
   );
 }
 

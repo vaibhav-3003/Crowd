@@ -15,13 +15,19 @@ const postSchema = new mongoose.Schema({
     default: Date.now,
   },
   likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   ],
-  ownerComment:{
-    type:String,
+  saved: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  ownerComment: {
+    type: String,
   },
   comments: [
     {
@@ -29,9 +35,9 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-      comment:{
-        type :String,
-      }
+      comment: {
+        type: String,
+      },
     },
   ],
 });

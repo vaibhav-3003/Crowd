@@ -12,6 +12,7 @@ const initialState = {
     comments:null,
     ownerComment:null,
     isPostLiked: null,
+    isSaved: null,
     likes: null
 }
 
@@ -127,6 +128,17 @@ const PostProvider = ({children})=>{
             })
             dispatch({type: 'SET_FOLLOWING_POSTS',payload: data.posts})
             dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            dispatch({type: 'SET_ERROR',payload:error.response.data.message})
+        }
+    }
+
+    const postSaved = async(id)=>{
+        try {
+            const {data} = await axios.get(`http://localhost:4000/api/v1/save/post/${id}`,{
+                withCredentials: true
+            })
+            dispatch({type: 'SET_SAVED',payload: data.message})
         } catch (error) {
             dispatch({type: 'SET_ERROR',payload:error.response.data.message})
         }

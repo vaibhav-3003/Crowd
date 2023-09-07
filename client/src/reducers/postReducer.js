@@ -76,12 +76,29 @@ const PostReducer = (state,action)=>{
         }
       
       case 'SET_FOLLOWING_POSTS':
-        console.log(action.payload)
         return {
           ...state,
           followingPosts: action.payload
         }
-        
+      
+      case 'SET_SAVED':
+        if(action.payload==='true'){
+          return {
+            ...state,
+            isSaved: true
+          }
+        }else{
+          return {
+            ...state,
+            isSaved: false
+          }
+        }
+      
+      default :{
+        return {
+          ...state
+        }
+      }
     }
 }
 

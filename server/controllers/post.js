@@ -154,7 +154,6 @@ export const deletePost = async(req,res)=>{
 
 export const savePost = async(req,res)=>{
     try {
-        
         const post = await Post.findById(req.params.id);
         const user = await User.findById(req.user._id)
         if (!post) {
@@ -195,24 +194,34 @@ export const savePost = async(req,res)=>{
     }
 }
 
-// export const getSavedPosts = async(req,res)=>{
-//     try {
-//         const user = User.findById(req.user._id)
-//         if(!user){
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "User not found"
-//             })
-//         }
+export const isPostSaved = async(req,res)=>{
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+          return res.status(404).json({
+            successs: false,
+            message: "Post not found",
+          });
+        }
 
-
-//     } catch (error) {
-//         return res.status(500).json({
-//             success: false,
-//             message: error.message
-//         })
-//     }
-// }
+        if (post.saved.includes(req.user._id)) {
+          return res.status(200).json({
+            success: true,
+            message: "true",
+          });
+        } else {
+          return res.status(200).json({
+            success: true,
+            message: "false",
+          });
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
 
 export const getPostOfFollowing = async(req,res)=>{
     try {

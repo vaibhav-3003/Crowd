@@ -20,6 +20,8 @@ const Home = () => {
               {
                 followingPosts && followingPosts.map((post)=>{
                   return <Post 
+                          key={post._id}
+                          id = {post._id}
                           avatar={post.owner.avatar.url}
                           username={post.owner.username}
                           image={post.image.url}

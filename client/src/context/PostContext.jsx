@@ -93,7 +93,7 @@ const PostProvider = ({children})=>{
                 withCredentials: true,
               }
             );
-            dispatch({ type: "SET_LIKE"});
+            // dispatch({ type: "SET_LIKE"});
         } catch (error) {
             dispatch({ type: "SET_ERROR", payload: error.response.data.message });
         }
@@ -138,6 +138,17 @@ const PostProvider = ({children})=>{
             const {data} = await axios.get(`http://localhost:4000/api/v1/save/post/${id}`,{
                 withCredentials: true
             })
+            // dispatch({type: 'SET_SAVED',payload: data.message})
+        } catch (error) {
+            dispatch({type: 'SET_ERROR',payload:error.response.data.message})
+        }
+    }
+
+    const isPostSaved = async(id)=>{
+        try {
+            const {data} = await axios.get(`http://localhost:4000/api/v1/saved/post/${id}`,{
+                withCredentials: true
+            })
             dispatch({type: 'SET_SAVED',payload: data.message})
         } catch (error) {
             dispatch({type: 'SET_ERROR',payload:error.response.data.message})
@@ -151,7 +162,7 @@ const PostProvider = ({children})=>{
         getPosts()
     },[])
 
-    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes}}>
+    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved}}>
         {children}
     </PostContext.Provider>
 }

@@ -100,14 +100,12 @@ const Sidebar = () => {
                 <p className="hidden lg:block">Home</p>
               </ListItem>
             </Link>
-            <Link to="/search">
               <ListItem>
                 <ListItemPrefix>
                   <MagnifyingGlassIcon className="h-7 w-7" />
                 </ListItemPrefix>
                 <p className="hidden lg:block">Search</p>
               </ListItem>
-            </Link>
             <Link to="/explore">
               <ListItem>
                 <ListItemPrefix>
@@ -124,17 +122,17 @@ const Sidebar = () => {
                 <p className="hidden lg:block">Create</p>
               </ListItem>
             </Link>
-            <Link to={`/${user.username}/`}>
+            <a href={`/${user.username}/`}>
               <ListItem>
                 <ListItemPrefix>
                   <Avatar
-                    src="https://imgs.search.brave.com/Q8AkIdA-GfI00-jf8f-t44jmlpCYCB_3sXIEdX4HuOE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTM4/NzA5MzYyL3Bob3Rv/L3BvcnRyYWl0LW9m/LWEtZ2lybC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9VVFH/WHBlaUxySTc4bk8x/QjlwZVVuMEQwZkNT/UnJtLUo4eG9oTVdH/Mkxtcz0"
+                    src={user.avatar.url}
                     className="w-7 h-7"
                   />
                 </ListItemPrefix>
                 <p className="hidden lg:block">Profile</p>
               </ListItem>
-            </Link>
+            </a>
           </List>
         </Card>
       )}

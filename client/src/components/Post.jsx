@@ -1,19 +1,66 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Avatar } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton } from "@material-tailwind/react";
 import {
-  faHeart as outlineHeart,
-  faComment,
-  faPaperPlane,
-  faBookmark
-} from '@fortawesome/free-regular-svg-icons'
-import {
-  faHeart as solidHeart,
-} from '@fortawesome/free-solid-svg-icons'
+  HeartIcon as OutlineHeart,
+  BookmarkIcon as OutlineBookMark,
+  ChatBubbleOvalLeftIcon,
+} from "@heroicons/react/24/outline";
+import { HeartIcon as SolidHeart,BookmarkIcon as SolidBookMark } from "@heroicons/react/24/solid";
+import { PostContext } from '../context/PostContext';
 
-const Post = ({avatar,username,image,likes,caption}) => {
+const Post = ({id,avatar,username,image,likes,caption}) => {
+
+  const {
+    dispatch,
+    postSaved,
+    isPostSaved,
+    isSaved,
+    likePost,
+    postLiked,
+    isPostLiked,
+    increaseLikes,
+    decreaseLikes,
+  } = useContext(PostContext); 
+  const [saved,setSaved] = useState(isSaved)
+
+  const savePost = async(id)=>{
+    if(isSaved){
+      dispatch({type:'SET_SAVED',payload:'false'})
+    }else{
+      dispatch({ type: "SET_SAVED", payload: "true" });
+    }
+    await postSaved(id)
+  }
+
+  useEffect(()=>{
+    const getSaved = async()=>{
+      await isPostSaved(id)
+    }
+    getSaved()
+  },[])
+
+  useEffect(()=>{
+    const likedPost = async () => {
+      await postLiked(id);
+    };
+    likedPost()
+    setSaved(isSaved)
+  },[isSaved])
+
+  const setLikes = async () => {
+    await likePost(id);
+    if (isPostLiked) {
+      dispatch({ type: "SET_POST_LIKED", payload: { message: "Unliked" } });
+      decreaseLikes();
+    } else {
+      dispatch({ type: "SET_POST_LIKED", payload: { message: "Liked" } });
+      increaseLikes();
+    }
+  };
+
   return (
     <div className="w-full md:w-[468px]">
       {/* Post Header */}
@@ -30,24 +77,43 @@ const Post = ({avatar,username,image,likes,caption}) => {
 
       {/* Post Image */}
       <div>
-        <img src={image} alt="post" className="md:rounded-md mb-2 aspect-square object-cover" />
+        <img
+          src={image}
+          alt="post"
+          className="md:rounded-md mb-2 aspect-square object-cover"
+        />
       </div>
 
       {/* Post Actions */}
       <div className="flex justify-between items-center py-1">
         <div>
-          <IconButton variant="text" className="rounded-full">
-            <FontAwesomeIcon icon={outlineHeart} size="xl" />
+          <IconButton
+            variant="text"
+            className="rounded-full"
+            onClick={() => setLikes(id)}
+          >
+            {isPostLiked ? (
+              <SolidHeart className="w-6 h-6 text-red-500" />
+            ) : (
+              <OutlineHeart className="w-6 h-6" />
+            )}
           </IconButton>
-          <IconButton variant="text" className="rounded-full">
-            <FontAwesomeIcon icon={faComment} size="xl" />
-          </IconButton>
-          <IconButton variant="text" className="rounded-full">
-            <FontAwesomeIcon icon={faPaperPlane} size="xl" />
-          </IconButton>
+          <Link to={`/p/${id}`}>
+            <IconButton variant="text" className="rounded-full">
+              <ChatBubbleOvalLeftIcon className="w-6 h-6" />
+            </IconButton>
+          </Link>
         </div>
-        <IconButton variant="text" className="rounded-full">
-          <FontAwesomeIcon icon={faBookmark} size="xl" />
+        <IconButton
+          variant="text"
+          className="rounded-full"
+          onClick={() => savePost(id)}
+        >
+          {isSaved ? (
+            <SolidBookMark className="w-6 h-6" />
+          ) : (
+            <OutlineBookMark className="w-6 h-6" />
+          )}
         </IconButton>
       </div>
 
@@ -62,7 +128,7 @@ const Post = ({avatar,username,image,likes,caption}) => {
           <Link to={`/${username}`} className="font-bold">
             {username}
           </Link>{" "}
-          <span className='text-sm'>{caption}</span>
+          <span className="text-sm">{caption}</span>
         </p>
       </div>
     </div>

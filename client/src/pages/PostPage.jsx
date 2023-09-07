@@ -134,7 +134,7 @@ const PostPage = () => {
                       variant="circular"
                       alt="user 1"
                       className="w-10 h-10 z-0"
-                      src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                      src={post && post.owner.avatar.url}
                     />
                     <span>{post && post.owner.username}</span>
                   </Link>
@@ -216,7 +216,7 @@ const PostPage = () => {
                     </div>
 
                     <p className="font-semibold text-sm">
-                      {likes && likes} likes
+                      {likes} likes
                     </p>
                   </div>
                   <p className="text-xs uppercase mt-1 px-4">
@@ -253,7 +253,7 @@ const PostPage = () => {
                         variant="circular"
                         alt="user 1"
                         className="w-10 h-10"
-                        src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                        src={post && post.owner.avatar.url}
                       />
                       <span>{post && post.owner.username}</span>
                     </Link>
@@ -301,7 +301,7 @@ const PostPage = () => {
                                   variant="circular"
                                   alt="user 1"
                                   className="w-7 h-7"
-                                  src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                  src={post && post.owner.avatar.url}
                                 />
                                 <span className="text-xs hover:text-blue-600 hover:underline">
                                   {post && post.owner.username}
@@ -328,7 +328,7 @@ const PostPage = () => {
                                       variant="circular"
                                       alt="user 1"
                                       className="w-7 h-7"
-                                      src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                      src={item.user.avatar.url}
                                     />
                                     <span className="text-xs hover:text-blue-600 hover:underline">
                                       {item.user.username}
@@ -378,7 +378,7 @@ const PostPage = () => {
                                     variant="circular"
                                     alt="user"
                                     className="w-7 h-7"
-                                    src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                    src={user.avatar.url}
                                     key={user._id}
                                   />
                                 );
@@ -391,7 +391,7 @@ const PostPage = () => {
                                   variant="circular"
                                   alt="user"
                                   className="w-7 h-7"
-                                  src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                  src={user.avatar.url}
                                   key={user._id}
                                 />
                               );
@@ -411,7 +411,7 @@ const PostPage = () => {
                         variant="circular"
                         alt="user 1"
                         className="w-10 h-9"
-                        src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                        src={post && post.owner.avatar.url}
                       />
                       <form
                         className="flex items-center w-full"

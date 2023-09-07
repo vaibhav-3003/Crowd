@@ -83,20 +83,16 @@ function App() {
           <Route
             path=":username/edit"
             element={
-              userLoading ? (
-                <LoadingPage />
-              ) : (
-                <ProtectedRoute user={user}>
-                  <EditProfile />
-                </ProtectedRoute>
-              )
+              <ProtectedRoute user={user}>
+                <EditProfile />
+              </ProtectedRoute>
             }
           />
 
           <Route path="/account/login" element={<Login />} />
           <Route path="/account/register" element={<Register user={user} />} />
 
-          <Route path="/*" element={<ErrorPage />} />
+          {/* <Route path="/*" element={<ErrorPage />} /> */}
         </Routes>
       </div>
     </main>

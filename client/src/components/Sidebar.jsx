@@ -4,24 +4,20 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-  ListItemSuffix,
-  Chip,
   Avatar,
 } from "@material-tailwind/react";
 import {
-  UserCircleIcon,
-  Cog6ToothIcon,
   HomeIcon,
   MagnifyingGlassIcon,
-  PlusCircleIcon,
 } from "@heroicons/react/24/solid";
 import Crowd from '../assets/Crowd.png'
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from "@material-tailwind/react";
 import { faSquarePlus, faCompass } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from '../context/UserContext';
+import SearchModal from './SearchModal';
 
 
 const Sidebar = () => {
@@ -100,12 +96,13 @@ const Sidebar = () => {
                 <p className="hidden lg:block">Home</p>
               </ListItem>
             </Link>
-              <ListItem>
-                <ListItemPrefix>
-                  <MagnifyingGlassIcon className="h-7 w-7" />
-                </ListItemPrefix>
-                <p className="hidden lg:block">Search</p>
-              </ListItem>
+            <ListItem onClick={() => window.search_modal.showModal()}>
+              <ListItemPrefix>
+                <MagnifyingGlassIcon className="h-7 w-7" />
+              </ListItemPrefix>
+              <p className="hidden lg:block">Search</p>
+            </ListItem>
+            <SearchModal/>
             <Link to="/explore">
               <ListItem>
                 <ListItemPrefix>
@@ -125,10 +122,7 @@ const Sidebar = () => {
             <a href={`/${user.username}/`}>
               <ListItem>
                 <ListItemPrefix>
-                  <Avatar
-                    src={user.avatar.url}
-                    className="w-7 h-7"
-                  />
+                  <Avatar src={user.avatar.url} className="w-7 h-7" />
                 </ListItemPrefix>
                 <p className="hidden lg:block">Profile</p>
               </ListItem>

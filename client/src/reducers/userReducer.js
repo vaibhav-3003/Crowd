@@ -64,6 +64,19 @@ const UserReducer = (state,action)=>{
                     isFollowed: false
                 }
             }
+        
+        case 'SET_ALL_USERS':
+            return {
+                ...state,
+                allUsers: action.payload
+            }
+        
+        case 'SET_FILTERED_USERS':
+            console.log(action.payload)
+            return{
+                ...state,
+                filteredUsers: action.payload
+            }
     
         default:
             return {

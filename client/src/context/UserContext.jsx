@@ -12,6 +12,8 @@ const initialState = {
     user:null,
     userProfile: null,
     isFollowed: null,
+    allUsers: [],
+    filteredUsers: []
 }
 
 const UserContext = createContext(initialState)
@@ -30,6 +32,20 @@ const UserProvider = ({children})=>{
             dispatch({ type: "SET_USER_LOADING_FALSE" });
         } catch (error) {
             dispatch({ type: "SET_USER_LOADING_FALSE" });
+        }
+    }
+
+    const loadAllUsers = async()=>{
+        dispatch({type:'SET_LOADING_TRUE'})
+        try {
+            const {data} = await axios.get('http://localhost:4000/api/v1/users',{
+                withCredentials: true
+            })
+            dispatch({type:'SET_ALL_USERS',payload: data.users})
+            dispatch({type:'SET_LOADING_FALSE'})
+        } catch (error) {
+            dispatch({type:'SET_LOADING_FALSE'})
+            dispatch({type:'SET_USER_ERROR',payload: error.response.data.message})
         }
     }
 
@@ -136,17 +152,24 @@ const UserProvider = ({children})=>{
         }
     }
 
-    
+    const filterUsers = async(text)=>{
+        dispatch({type: 'SET_LOADING_TRUE'})
+        const filteredUsers = allUsers.filter((e)=>{
+            return e.username.includes(text)
+        })
+        dispatch({type: 'SET_FILTERED_USERS',payload: filteredUsers})
+    }
 
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
+            await loadAllUsers()
         }
         user()
     },[])
 
     return (
-        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed}}>
+        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed,filterUsers}}>
             {children}
         </UserContext.Provider>
     )

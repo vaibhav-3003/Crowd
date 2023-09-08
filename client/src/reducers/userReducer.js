@@ -70,13 +70,6 @@ const UserReducer = (state,action)=>{
                 ...state,
                 allUsers: action.payload
             }
-        
-        case 'SET_FILTERED_USERS':
-            console.log(action.payload)
-            return{
-                ...state,
-                filteredUsers: action.payload
-            }
     
         default:
             return {

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Post from '../components/Post'
 import Suggestions from '../components/Suggestions'
 import { PostContext } from '../context/PostContext'
@@ -7,6 +7,7 @@ import Crowd from "../assets/Crowd.png";
 
 const Home = () => {
   const {followingPosts,loading} = useContext(PostContext)
+
   return (
     <div className="bg-gray-50 min-h-full max-h-auto md:px-28">
       <div className="pb-20 md:pb-5 md:ml-5 lg:ml-72">

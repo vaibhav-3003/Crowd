@@ -13,7 +13,8 @@ const initialState = {
     ownerComment:null,
     isPostLiked: null,
     isSaved: null,
-    likes: null
+    likes: null,
+    allPosts:[]
 }
 
 const PostContext = createContext(initialState)
@@ -93,7 +94,6 @@ const PostProvider = ({children})=>{
                 withCredentials: true,
               }
             );
-            // dispatch({ type: "SET_LIKE"});
         } catch (error) {
             dispatch({ type: "SET_ERROR", payload: error.response.data.message });
         }
@@ -155,6 +155,20 @@ const PostProvider = ({children})=>{
         }
     }
 
+    const getAllPosts = async()=>{
+        try {
+            dispatch({type: 'SET_LOADING_TRUE'})
+            const {data} = await axios.get('http://localhost:4000/api/v1/allposts',{
+                withCredentials: true
+            })
+            dispatch({type: 'SET_ALL_POSTS',payload: data.posts})
+            dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            console.log(error)
+            dispatch({type: 'SET_ERROR',payload:error.response.data.message})
+        }
+    }
+
     useEffect(()=>{
         const getPosts = async()=>{
             await getFollowingPosts()
@@ -162,7 +176,7 @@ const PostProvider = ({children})=>{
         getPosts()
     },[])
 
-    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved}}>
+    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved,getAllPosts}}>
         {children}
     </PostContext.Provider>
 }

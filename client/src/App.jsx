@@ -16,6 +16,7 @@ import PostPage from './pages/PostPage'
 import PostComments from './pages/PostComments'
 import { PostContext } from './context/PostContext'
 import EditProfile from './pages/EditProfile'
+import Explore from './pages/Explore'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
@@ -86,6 +87,19 @@ function App() {
               <ProtectedRoute user={user}>
                 <EditProfile />
               </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/explore"
+            element={
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <Explore />
+                </ProtectedRoute>
+              )
             }
           />
 

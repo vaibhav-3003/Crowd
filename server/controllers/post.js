@@ -293,6 +293,21 @@ export const getPost = async(req,res)=>{
     }
 }
 
+export const getAllPosts = async(req,res)=>{
+    try {
+        const posts = await Post.find({owner: {$ne: req.user._id}})
+        return res.status(200).json({
+            success: true,
+            posts: posts.reverse()
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
 export const updateCaption = async(req,res)=>{
     try {
         

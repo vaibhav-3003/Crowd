@@ -152,14 +152,6 @@ const UserProvider = ({children})=>{
         }
     }
 
-    const filterUsers = async(text)=>{
-        dispatch({type: 'SET_LOADING_TRUE'})
-        const filteredUsers = allUsers.filter((e)=>{
-            return e.username.includes(text)
-        })
-        dispatch({type: 'SET_FILTERED_USERS',payload: filteredUsers})
-    }
-
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
@@ -169,7 +161,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed,filterUsers}}>
+        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed}}>
             {children}
         </UserContext.Provider>
     )

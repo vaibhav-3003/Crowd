@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../context/UserContext'
-import { useEffect } from 'react'
-import { Spinner } from '@material-tailwind/react'
+import { Avatar } from '@material-tailwind/react'
 
 const SearchModal = () => {
     const [searchText,setSearchText] = useState('')
@@ -23,9 +22,6 @@ const SearchModal = () => {
         setFilteredUsers(users);
     }
 
-    useEffect(() => {
-      console.log(filteredUsers);
-    }, [filteredUsers]);
   return (
     <dialog id="search_modal" className="modal">
       <form method="dialog" className="modal-box bg-white">
@@ -34,18 +30,18 @@ const SearchModal = () => {
         </button>
         <h3 className="font-bold text-2xl">Search</h3>
 
-        <div className="relative mt-8 flex items-center w-full py-2 px-4 rounded-lg outline-none bg-gray-50">
-          <input 
-            type="text" 
+        <div className="relative mt-8 flex items-center w-full py-2 px-4 rounded-lg outline-none bg-gray-100">
+          <input
+            type="text"
             value={searchText}
-            className="w-full bg-transparent outline-none" 
-            placeholder="Search..." 
+            className="w-full bg-transparent outline-none"
+            placeholder="Search..."
             onChange={showUsers}
-        />
+          />
           <button
             className="p-2 bg-transparent hover:bg-gray-200 rounded-full"
-            type='reset'
-            onClick={()=>setSearchText('')}
+            type="reset"
+            onClick={() => setSearchText("")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -61,12 +57,24 @@ const SearchModal = () => {
         </div>
         <hr className="mt-6" />
 
-        <div>
-            {
-                filteredUsers.map((user)=>{
-                    return <p>{user.username}</p>
-                })
-            }
+        <div className="py-4 max-h-72 overflow-y-auto flex flex-col gap-2">
+          {
+            filteredUsers.map((user)=>{
+                return (
+                  <a className="p-2 rounded-lg flex gap-4 items-center hover:bg-gray-100" href={`/${user.username}`} key={user._id}>
+                    <Avatar
+                      src={user.avatar.url}
+                      className="w-12 h-12"
+                    />
+                    <div>
+                      <p className="font-bold">{user.username}</p>
+                      <p className="text-sm text-gray-500">{user.name}</p>
+                    </div>
+                  </a>
+                );
+            })
+          }
+          
         </div>
       </form>
     </dialog>

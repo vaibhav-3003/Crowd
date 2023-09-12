@@ -1,9 +1,9 @@
 import './App.css'
 
-import { BrowserRouter as Router , Routes, Route } from "react-router-dom"
+import {Routes, Route } from "react-router-dom"
 import Login from "./pages/Login"
 import Home from './pages/Home'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { UserContext } from './context/UserContext'
 import LoadingPage from './pages/LoadingPage'
 import Sidebar from './components/Sidebar'
@@ -14,15 +14,12 @@ import Profile from './pages/Profile'
 import ErrorPage from './pages/ErrorPage'
 import PostPage from './pages/PostPage'
 import PostComments from './pages/PostComments'
-import { PostContext } from './context/PostContext'
 import EditProfile from './pages/EditProfile'
 import Explore from './pages/Explore'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
-  const {loading} = useContext(PostContext)
-
-
+  
   return (
     <main className="w-full h-screen flex">
       {user && !userLoading && <Sidebar />}

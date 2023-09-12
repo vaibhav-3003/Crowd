@@ -59,6 +59,7 @@ const SearchModal = () => {
 
         <div className="py-4 max-h-72 overflow-y-auto flex flex-col gap-2">
           {
+            filteredUsers.length > 0 ?
             filteredUsers.map((user)=>{
                 return (
                   <a className="p-2 rounded-lg flex gap-4 items-center hover:bg-gray-100" href={`/${user.username}`} key={user._id}>
@@ -73,6 +74,7 @@ const SearchModal = () => {
                   </a>
                 );
             })
+            : searchText !=='' ?<p className='text-gray-500'>No results found</p>:null
           }
           
         </div>

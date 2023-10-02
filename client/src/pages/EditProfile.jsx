@@ -12,6 +12,8 @@ const EditProfile = () => {
     const {loadUserWithUsername,userProfile,changeProfilePhoto,error,updateProfile,isLoading} = useContext(UserContext)
     const [profileImage,setProfileImage] = useState(userProfile && userProfile.avatar.url)
 
+    const {theme} = useContext(UserContext)
+
     const profileModal = useRef(null)
 
     const navigate = useNavigate()
@@ -80,7 +82,11 @@ const EditProfile = () => {
         <h3 className="text-center w-full text-xl font-bold">Edit Profile</h3>
       </div>
       <div className="w-full h-full py-5">
-        <div className="w-full md:w-3/4 lg:w-1/2 mx-auto md:border md:mt-5 py-5">
+        <div
+          className={`w-full md:w-3/4 lg:w-1/2 mx-auto md:border ${
+            theme === "dark" && "md:border-[#313a44]"
+          } md:mt-5 py-5`}
+        >
           <h2 className="text-3xl font-semibold text-center">Edit Profile</h2>
           <div className="mt-5 flex flex-col gap-4 justify-center items-center">
             <div className="relative">
@@ -90,7 +96,9 @@ const EditProfile = () => {
               <h3 className="text-xl">{userProfile && userProfile.username}</h3>
               <label
                 htmlFor="profile_modal"
-                className="mt-2 text-gray-600 cursor-pointer"
+                className={`nunito ${
+                  theme === "dark" && "text-gray-500"
+                } cursor-pointer mt-2`}
               >
                 Change Profile Photo
               </label>
@@ -101,16 +109,23 @@ const EditProfile = () => {
               className="modal-toggle"
               ref={profileModal}
             />
-            <div className="modal modal-bottom sm:modal-middle">
-              <div className="modal-box bg-white p-0">
-                <div className="border flex flex-col justify-center items-center pt-5 gap-4">
+            <div
+              className="modal modal-bottom sm:modal-middle"
+              data-theme={theme}
+            >
+              <div className="modal-box p-0" data-theme={theme}>
+                <div className="flex flex-col justify-center items-center pt-5 gap-4">
                   <Avatar
                     src={userProfile && userProfile.avatar.url}
                     className="w-[5rem] h-[5rem]"
                   />
                   <h3 className="text-xl font-bold">Profile Photo</h3>
                   <div className="w-full flex flex-col justify-center items-center">
-                    <div className="py-2 border-t w-full flex justify-center items-center">
+                    <div
+                      className={`py-2 border-t w-full flex justify-center items-center ${
+                        theme === "dark" && "border-dark"
+                      }`}
+                    >
                       <label
                         htmlFor="upload_photo"
                         className="hover:cursor-pointer"
@@ -124,7 +139,11 @@ const EditProfile = () => {
                         />
                       </label>
                     </div>
-                    <div className="py-2 border-t w-full flex justify-center items-center">
+                    <div
+                      className={`py-2 border-t w-full flex justify-center items-center ${
+                        theme === "dark" && "border-dark"
+                      }`}
+                    >
                       <button
                         className="text-red-600"
                         onClick={() => console.log("remove")}
@@ -132,7 +151,11 @@ const EditProfile = () => {
                         Remove Current Photo
                       </button>
                     </div>
-                    <div className="py-2 border-t border-b w-full flex justify-center items-center">
+                    <div
+                      className={`py-2 border-t w-full flex justify-center items-center ${
+                        theme === "dark" && "border-dark"
+                      }`}
+                    >
                       <button
                         onClick={() => (profileModal.current.checked = false)}
                       >
@@ -152,15 +175,24 @@ const EditProfile = () => {
             className="w-full md:w-3/4 mx-auto px-10 md:px-5 mt-7 flex flex-col gap-5"
             onSubmit={handleSubmit(editProfile)}
           >
-            <Input label="name" className="nunito" {...register("name")} />
-            <Textarea label="bio" className="nunito" {...register("bio")} />
+            <Input
+              label="name"
+              color="blue"
+              className={`nunito ${theme === "dark" && "text-gray-500"}`}
+              {...register("name")}
+            />
+            <Textarea
+              label="bio"
+              color="blue"
+              className={`nunito ${theme === "dark" && "text-gray-500"}`}
+              {...register("bio")}
+            />
             <Button
-              className="nunito text-sm font-normal normal-case flex justify-center items-center gap-2"
+              className="nunito text-sm font-normal normal-case flex justify-center items-center gap-2 bg-primary rounded-full shadow-lg"
               type="submit"
-              variant="gradient"
               disabled={isLoading}
             >
-              {isLoading ? <Spinner className="w-4" /> : null}
+              {isLoading ? <Spinner className="w-4" color='blue'/> : null}
               Submit
             </Button>
           </form>

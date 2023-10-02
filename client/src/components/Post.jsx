@@ -89,24 +89,28 @@ const Post = ({id,avatar,username,image,likes,caption}) => {
         <div>
           <IconButton
             variant="text"
-            className="rounded-full"
+            className="rounded-full hover:scale-110 active:scale-75 duration-300 ease-in-out transition-all"
             onClick={() => setLikes(id)}
           >
             {isPostLiked ? (
               <SolidHeart className="w-6 h-6 text-red-500" />
             ) : (
-              <OutlineHeart className="w-6 h-6" />
+              <OutlineHeart className="w-6 h-6 text-red-500" />
             )}
           </IconButton>
           <Link to={`/p/${id}`}>
             <IconButton variant="text" className="rounded-full">
-              <ChatBubbleOvalLeftIcon className="w-6 h-6" />
+              <ChatBubbleOvalLeftIcon
+                className={`w-6 h-6 scale-110 ${
+                  theme === "light" ? "text-black" : "text-gray-500"
+                }`}
+              />
             </IconButton>
           </Link>
         </div>
         <IconButton
           variant="text"
-          className="rounded-full"
+          className="rounded-full hover:scale-110 active:scale-75 duration-300 ease-in-out transition-all text-primary"
           onClick={() => savePost(id)}
         >
           {isSaved ? (

@@ -13,7 +13,8 @@ const initialState = {
     userProfile: null,
     isFollowed: null,
     allUsers: [],
-    filteredUsers: []
+    filteredUsers: [],
+    theme: localStorage.getItem("theme") || "light"
 }
 
 const UserContext = createContext(initialState)
@@ -152,6 +153,16 @@ const UserProvider = ({children})=>{
         }
     }
 
+    const toggleTheme = ()=>{
+        if(state.theme === 'light'){
+            localStorage.setItem('theme','dark')
+            dispatch({type:'SET_THEME',payload: 'dark'})
+        }else{
+            localStorage.setItem('theme','light')
+            dispatch({type:'SET_THEME',payload: 'light'})
+        }
+    }
+
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
@@ -161,7 +172,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed}}>
+        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed,toggleTheme}}>
             {children}
         </UserContext.Provider>
     )

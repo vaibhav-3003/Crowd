@@ -9,6 +9,7 @@ import SavedPosts from '../components/SavedPosts'
 import { PostContext } from '../context/PostContext'
 import LoadingPage from './LoadingPage'
 import ErrorPage from './ErrorPage'
+import ThemeSwitcher from '../components/ThemeSwitcher'
 
 const Profile = () => {
     const {username} = useParams()
@@ -65,11 +66,14 @@ const Profile = () => {
           onClick={() => window.avatar_modal.showModal()}
         />
         <dialog id="avatar_modal" className="modal">
-          <form method="dialog" className="modal-box p-0 rounded-none">
+          <form
+            method="dialog"
+            className="modal-box h-[300px] md:h-[500px] p-0 rounded-none"
+          >
             <img
               src={userProfile && userProfile.avatar.url}
               alt="avatar"
-              className="w-full object-cover"
+              className="w-full h-full object-cover"
             />
           </form>
           <form method="dialog" className="modal-backdrop">
@@ -77,23 +81,26 @@ const Profile = () => {
           </form>
         </dialog>
         <div className="flex flex-col justify-center items-center md:items-start md:justify-start md:ml-16">
-          <div className="flex gap-5 items-center">
+          <div className="flex gap-5 justify-center items-center flex-wrap md:justify-start">
             <h2 className="text-2xl">{userProfile && userProfile.username}</h2>
-            {user && user.username === username ? (
-              <Link to={`/${username}/edit`}>
-                <Button className="nunito normal-case text-sm font-normal rounded-full">
-                  Edit Profile
+            <div className='flex items-center gap-2'>
+              {user && user.username === username ? (
+                <Link to={`/${username}/edit`}>
+                  <Button className="bg-primary nunito normal-case text-sm font-normal rounded-full">
+                    Edit Profile
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  className="nunito normal-case text-sm font-normal w-28 rounded-full"
+                  variant={follow ? "outlined" : "filled"}
+                  onClick={followUser}
+                >
+                  {isFollowed ? "Unfollow" : "Follow"}
                 </Button>
-              </Link>
-            ) : (
-              <Button
-                className="nunito normal-case text-sm font-normal w-28 rounded-full"
-                variant={follow ? "outlined" : "filled"}
-                onClick={followUser}
-              >
-                {isFollowed ? "Unfollow" : "Follow"}
-              </Button>
-            )}
+              )}
+              <ThemeSwitcher />
+            </div>
           </div>
           <div className="flex gap-5 md:gap-8 mt-5">
             <p>{userProfile && userProfile.posts.length} posts</p>
@@ -117,14 +124,14 @@ const Profile = () => {
             <button
               className={
                 tab === "posts"
-                  ? "text-sm text-black font-bold border-t border-black py-2 flex items-center justify-center gap-1"
+                  ? "text-sm text-primary border-t border-primary py-2 flex items-center justify-center gap-1"
                   : "text-sm text-gray-500 font-bold py-2 flex items-center justify-center gap-1"
               }
               onClick={() => setTab("posts")}
             >
               <svg
                 aria-label=""
-                className={tab === "posts" ? "text-black" : "text-gray-500"}
+                className={tab === "posts" ? "text-primary" : "text-gray-500"}
                 color="rgb(245, 245, 245)"
                 fill="rgb(245, 245, 245)"
                 height="15"
@@ -195,7 +202,7 @@ const Profile = () => {
               <button
                 className={
                   tab === "saved"
-                    ? "text-sm text-black font-bold border-t border-black py-2 flex items-center justify-center gap-1"
+                    ? "text-sm text-primary border-t border-primary py-2 flex items-center justify-center gap-1"
                     : "text-sm text-gray-500 font-bold py-2 flex items-center justify-center gap-1"
                 }
                 onClick={() => setTab("saved")}

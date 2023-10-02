@@ -17,7 +17,7 @@ const SavedPosts = ({ posts }) => {
           );
         })
       ) : (
-        <h2 className="text-3xl font-bold text-center">No Posts Yet</h2>
+        <h2 className="text-lg md:text-3xl font-bold">No Posts Yet</h2>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Lottie from 'lottie-react'
 import loginAnimation from '../animations/login.json'
-import { Link,Navigate } from 'react-router-dom'
+import { Link,Navigate,useNavigate } from 'react-router-dom'
 import Crowd from '../assets/Crowd.png'
 import {Input,IconButton,Button} from '@material-tailwind/react'
 import {z} from 'zod'
@@ -12,10 +12,13 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Login = () => {
+const Login = ({user}) => {
+
+  const navigate = useNavigate();
 
   const [isPassVisible,setIsPassVisible] = useState(false)
   const {userLogin,loginError} = useContext(UserContext)
+  const [error,setError] = useState(loginError)
 
   const loginSchema = z.object({
     email: z.string().email('Invalid email format').min(5,'Email is too short'),
@@ -35,12 +38,18 @@ const Login = () => {
 
   const handleLogin = async(data)=>{
     await userLogin(data)
-    if (loginError) {
+    if (error) {
       toast.error(loginError, {
         position: toast.POSITION.TOP_CENTER,
       });
     }
   }
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <div className="w-full h-full flex justify-center items-center px-5 md:px-0 bg-gray-50">

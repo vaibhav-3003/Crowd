@@ -6,7 +6,7 @@ const SearchModal = () => {
     const [searchText,setSearchText] = useState('')
     const [filteredUsers,setFilteredUsers] = useState([])
 
-    const {allUsers} = useContext(UserContext)
+    const {allUsers,theme} = useContext(UserContext)
 
     const showUsers = (e)=>{
         const searchText = e.target.value;
@@ -24,13 +24,21 @@ const SearchModal = () => {
 
   return (
     <dialog id="search_modal" className="modal">
-      <form method="dialog" className="modal-box bg-white">
-        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 hover:bg-gray-200 border-none">
+      <form method="dialog" className="modal-box" data-theme={theme}>
+        <button
+          className={`btn btn-sm btn-circle btn-ghost absolute right-2 top-2 border-none ${
+            theme === "light" ? "hover:bg-gray-200" : "hover:bg-[#313a44]"
+          }`}
+        >
           ✕
         </button>
         <h3 className="font-bold text-2xl">Search</h3>
 
-        <div className="relative mt-8 flex items-center w-full py-2 px-4 rounded-lg outline-none bg-gray-100">
+        <div
+          className={`relative mt-8 flex items-center w-full py-2 px-4 rounded-lg outline-none ${
+            theme === "light" ? "bg-gray-100" : "bg-[#313a44]"
+          }`}
+        >
           <input
             type="text"
             value={searchText}
@@ -39,7 +47,7 @@ const SearchModal = () => {
             onChange={showUsers}
           />
           <button
-            className="p-2 bg-transparent hover:bg-gray-200 rounded-full"
+            className="p-2 bg-transparent rounded-full"
             type="reset"
             onClick={() => setSearchText("")}
           >
@@ -55,28 +63,32 @@ const SearchModal = () => {
             </svg>
           </button>
         </div>
-        <hr className="mt-6" />
+        <hr className={`mt-6 ${theme === "dark" && "border-[#313a44]"}`} />
 
         <div className="py-4 max-h-72 overflow-y-auto flex flex-col gap-2">
-          {
-            filteredUsers.length > 0 ?
-            filteredUsers.map((user)=>{
-                return (
-                  <a className="p-2 rounded-lg flex gap-4 items-center hover:bg-gray-100" href={`/${user.username}`} key={user._id}>
-                    <Avatar
-                      src={user.avatar.url}
-                      className="w-12 h-12"
-                    />
-                    <div>
-                      <p className="font-bold">{user.username}</p>
-                      <p className="text-sm text-gray-500">{user.name}</p>
-                    </div>
-                  </a>
-                );
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => {
+              return (
+                <a
+                  className={`p-2 rounded-lg flex gap-4 items-center ${
+                    theme === "light"
+                      ? "hover:bg-gray-100"
+                      : "hover:bg-[#313a44]"
+                  }`}
+                  href={`/${user.username}`}
+                  key={user._id}
+                >
+                  <Avatar src={user.avatar.url} className="w-12 h-12" />
+                  <div>
+                    <p className="font-bold">{user.username}</p>
+                    <p className="text-sm text-gray-500">{user.name}</p>
+                  </div>
+                </a>
+              );
             })
-            : searchText !=='' ?<p className='text-gray-500'>No results found</p>:null
-          }
-          
+          ) : searchText !== "" ? (
+            <p className="text-gray-500">No results found</p>
+          ) : null}
         </div>
       </form>
     </dialog>

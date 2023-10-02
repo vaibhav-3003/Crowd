@@ -3,7 +3,7 @@ import './App.css'
 import {Routes, Route } from "react-router-dom"
 import Login from "./pages/Login"
 import Home from './pages/Home'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { UserContext } from './context/UserContext'
 import LoadingPage from './pages/LoadingPage'
 import Sidebar from './components/Sidebar'
@@ -19,9 +19,10 @@ import Explore from './pages/Explore'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
+  const {theme} = useContext(UserContext)
   
   return (
-    <main className="w-full h-screen flex">
+    <main className="w-full flex" data-theme={theme}>
       {user && !userLoading && <Sidebar />}
       <div className="flex-grow">
         <Routes>
@@ -100,7 +101,7 @@ function App() {
             }
           />
 
-          <Route path="/account/login" element={<Login />} />
+          <Route path="/account/login" element={<Login user={user}/>} />
           <Route path="/account/register" element={<Register user={user} />} />
 
           {/* <Route path="/*" element={<ErrorPage />} /> */}

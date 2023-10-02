@@ -3,16 +3,25 @@ import Post from '../components/Post'
 import Suggestions from '../components/Suggestions'
 import { PostContext } from '../context/PostContext'
 import { Spinner } from '@material-tailwind/react'
-import Crowd from "../assets/Crowd.png";
+import logo_light from "../assets/Crowd.png";
+import logo_dark from "../assets/logo_dark.png";
+import { UserContext } from '../context/UserContext'
 
 const Home = () => {
   const {followingPosts,loading} = useContext(PostContext)
+  const {theme} = useContext(UserContext)
+  // useEffect(() => {
+  //   const getPosts = async () => {
+  //     await getFollowingPosts();
+  //   };
+  //   getPosts();
+  // }, []);
 
   return (
-    <div className="bg-gray-50 min-h-full max-h-auto md:px-28">
+    <div className="md:px-28">
       <div className="pb-20 md:pb-5 md:ml-5 lg:ml-72">
         <div className="py-6 px-3 flex justify-center items-center">
-          <img src={Crowd} alt="logo" className="w-20 md:w-24" />
+          <img src={theme==='light'?logo_light:logo_dark} alt="logo" className="w-20 md:w-24" />
         </div>
         {loading ? (
           <div className="py-4 flex justify-center items-center">
@@ -41,7 +50,8 @@ const Home = () => {
             </div>
           </div>
         )}
-      <div className='flex justify-center items-center py-4'><p className='text-lg text-gray-400'>No more Posts</p></div>
+      <div className='flex justify-center items-center py-4'>
+        <p className={`text-md md:text-lg ${theme==='light'?'text-gray-400':'text-gray-700'}`}>No more Posts</p></div>
       </div>
     </div>
   );

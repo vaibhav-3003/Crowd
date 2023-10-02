@@ -3,7 +3,7 @@ import UserPost from './UserPost'
 
 const UserPosts = ({posts}) => {
   return (
-    <div className="w-full mt-5 grid grid-cols-3 gap-1 ">
+    <div className="w-full mt-5 grid grid-cols-3 gap-1">
       {
         posts.length>0 ? posts.map((post)=>{
           return <UserPost key={post._id} postId={post._id} imageSrc={post.image.url} likes={post.likes.length} comments={post.comments.length}/>

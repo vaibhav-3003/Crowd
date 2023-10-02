@@ -70,6 +70,12 @@ const UserReducer = (state,action)=>{
                 ...state,
                 allUsers: action.payload
             }
+        
+        case 'SET_THEME':
+            return{
+                ...state,
+                theme: action.payload
+            }
     
         default:
             return {

@@ -8,6 +8,7 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { PostContext } from '../context/PostContext'
 import { useEffect } from 'react'
+import { UserContext } from '../context/UserContext'
 
 const PostComments = () => {
     const {id} = useParams()
@@ -17,6 +18,8 @@ const PostComments = () => {
     const [iconBoxVisible, setIconBoxVisible] = useState(false);
 
     const {fetchPost,post,loading,comments,commentOnPost,ownerComment} = useContext(PostContext)
+
+    const {user} = useContext(UserContext)
 
     const handleIconBox = () => {
       setIconBoxVisible(!iconBoxVisible);
@@ -48,21 +51,22 @@ const PostComments = () => {
     },[])
 
   return (
-    <div className="h-full flex flex-col lg:ml-72 md:ml-20 pb-16 md:pb-0">
-      <div className="flex-none px-4 py-3 border-b flex items-center sticky top-0 bg-gray-50 md:hidden">
+    <div className="flex flex-col lg:ml-72 md:ml-20 pb-16 md:pb-0 h-screen">
+      <div className={`z-20 flex-none px-4 py-3 flex items-center sticky top-0 ${theme==='light'?'bg-gray-50':'bg-dark'} md:hidden justify-between`}>
         <Link to={`/p/${id}`}>
           <ChevronLeftIcon className="w-6 h-6 font-bold" />
         </Link>
-        <h3 className="text-center w-full text-xl font-bold">Comments</h3>
+        <h3 className="text-center text-xl font-bold">Comments</h3>
+        <div></div>
       </div>
 
       {post && comments && post.comments.length === 0 ? (
-        <div className="border-b flex-grow flex flex-col overflow-auto justify-center items-center">
+        <div className="border-b flex-grow flex flex-col overflow-auto justify-center items-center h-full">
           <h2 className="text-3xl font-semibold">No comments yet.</h2>
           <p className="mt-2">Start the conversation</p>
         </div>
       ) : (
-        <div className="border-b flex-grow flex flex-col overflow-auto pt-2 px-2 md:pt-6">
+        <div className={`border-b ${theme==='dark' && 'border-dark'} flex-grow flex flex-col overflow-auto pt-2 px-2 md:pt-6 h-full`}>
           {/* comment box */}
           {loading ? (
             <div className="w-full flex justify-center items-center">
@@ -111,7 +115,7 @@ const PostComments = () => {
                               variant="circular"
                               alt="user 1"
                               className="w-7 h-7"
-                              src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                              src={item.user.avatar.url}
                             />
                             <span className="text-xs hover:text-blue-600 hover:underline">
                               {item.user.username}
@@ -130,18 +134,18 @@ const PostComments = () => {
         </div>
       )}
 
-      <div className="py-5 px-4 flex items-center">
+      <div className="py-5 px-2 flex items-center">
         <Avatar
           variant="circular"
           alt="user 1"
           className="w-10 md:w-9 h-9"
-          src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+          src={user.avatar.url}
         />
         <form className="flex items-center w-full" onSubmit={postComment}>
           <textarea
             type="text"
             placeholder="Add a comment..."
-            className="outline-none py-1 px-2 grow resize-none"
+            className="outline-none py-1 px-2 grow resize-none bg-transparent"
             rows={1}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -154,7 +158,7 @@ const PostComments = () => {
               ) : (
                 <Button
                   variant="text"
-                  className="font-bold p-2"
+                  className={`font-bold p-2 ${theme==='dark' && 'text-gray-500'}`}
                   type="submit"
                   disabled={loading}
                 >

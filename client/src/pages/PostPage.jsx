@@ -13,7 +13,6 @@ import {
 } from "@material-tailwind/react";
 import {
   HeartIcon as OutlineHeart,
-  BookmarkIcon,
   ChatBubbleOvalLeftIcon,
   FaceSmileIcon,
   EllipsisHorizontalIcon,
@@ -21,12 +20,12 @@ import {
 } from "@heroicons/react/24/outline";
 import {
   HeartIcon as SolidHeart,
-} from "@heroicons/react/24/solid"
+} from "@heroicons/react/24/solid";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useContext } from 'react';
 import { PostContext } from '../context/PostContext';
-import { usePostState } from '../context/PostContext';
+import { UserContext } from '../context/UserContext';
 
 const PostPage = () => {
     const {id} = useParams()
@@ -34,6 +33,7 @@ const PostPage = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
     const [iconBoxVisible,setIconBoxVisible] = useState(false)
     const {fetchPost,post,loading,comments,commentOnPost,ownerComment,likePost,postLiked,isPostLiked,dispatch,likes,increaseLikes,decreaseLikes} = useContext(PostContext)
+    const {theme,user} = useContext(UserContext)
 
     useEffect(() => {
       const handleResize = () => {
@@ -94,7 +94,7 @@ const PostPage = () => {
       setComment('')
     }
 
-    const setLikes = async()=>{
+    const setLikes = async(id)=>{
       
       await likePost(id)
       if(isPostLiked){
@@ -109,12 +109,18 @@ const PostPage = () => {
   return (
     <>
       {isMobile ? (
-        <div className="ml-0 md:ml-28 lg:ml-72 pb-20 ">
-          <div className="px-4 py-3 border-b flex items-center sticky top-0 bg-gray-50 z-20">
+        <div className="ml-0 md:ml-[97px] lg:ml-[273px] pb-20 ">
+          <div
+            className={`px-4 py-3 flex items-center sticky top-0 z-20 ${
+              theme === "light" ? "bg-gray-50" : "bg-dark"
+            }`}
+          >
             <Link to={"/"}>
               <ChevronLeftIcon className="w-6 h-6 font-bold" />
             </Link>
-            <h3 className="text-center w-full text-xl font-bold">Post</h3>
+            <h3 className="text-center w-full text-xl md:text-3xl font-bold">
+              Post
+            </h3>
           </div>
 
           {loading ? (
@@ -125,7 +131,7 @@ const PostPage = () => {
             post && (
               <div>
                 {/* profile show */}
-                <div className="flex-none w-full px-4 py-3 flex justify-between items-center">
+                <div className="flex-none w-full px-4 py-3 flex justify-between items-center mt-2">
                   <Link
                     to={`${post.owner.username}`}
                     className="flex items-center justify-center gap-2"
@@ -141,7 +147,7 @@ const PostPage = () => {
                   <Menu>
                     <MenuHandler>
                       <IconButton className="mr-4 rounded-full" variant="text">
-                        <EllipsisHorizontalIcon className="w-5 h-5" />
+                        <EllipsisHorizontalIcon className="w-5 h-5 text-gray-500" />
                       </IconButton>
                     </MenuHandler>
                     <MenuList>
@@ -154,38 +160,41 @@ const PostPage = () => {
                   </Menu>
                 </div>
 
-                <div className="w-full mt-2">
+                <div className="w-full mt-2 px-2">
                   <img
                     src={post && post.image.url}
                     alt="post image"
-                    className="w-full object-cover"
+                    className="w-full object-cover h-[400px] md:h-[600px]"
                   />
 
                   {/* like,comment,save */}
-                  <div className="flex justify-between items-center px-4 mt-2">
+                  <div className="flex justify-between items-center">
                     <div className="flex gap-2">
-                      {isPostLiked ? (
-                        <IconButton variant="text" className="rounded-full">
-                          <SolidHeart className="w-6 h-6" />
-                        </IconButton>
-                      ) : (
-                        <IconButton variant="text" className="rounded-full">
-                          <OutlineHeart className="w-6 h-6" />
-                        </IconButton>
-                      )}
+                      <IconButton
+                        variant="text"
+                        className="rounded-full hover:scale-110 active:scale-75 duration-300 ease-in-out transition-all"
+                        onClick={() => setLikes(id)}
+                      >
+                        {isPostLiked ? (
+                          <SolidHeart className="w-6 h-6 text-red-500" />
+                        ) : (
+                          <OutlineHeart className="w-6 h-6 text-red-500" />
+                        )}
+                      </IconButton>
                       <Link to={`/p/${id}/comments`}>
                         <IconButton variant="text" className="rounded-full">
-                          <ChatBubbleOvalLeftIcon className="w-6 h-6" />
+                          <ChatBubbleOvalLeftIcon
+                            className={`w-6 h-6 scale-110 ${
+                              theme === "light" ? "text-black" : "text-gray-500"
+                            }`}
+                          />
                         </IconButton>
                       </Link>
                     </div>
-                    <IconButton variant="text" className="rounded-full">
-                      <BookmarkIcon className="w-6 h-6" />
-                    </IconButton>
                   </div>
 
                   {/* likes */}
-                  <div className="flex gap-2 items-center px-4 mt-1">
+                  <div className="flex gap-2 items-center px-2">
                     <div className="flex items-center -space-x-3">
                       {post && post.likes.length > 3
                         ? post.likes
@@ -197,29 +206,30 @@ const PostPage = () => {
                                   variant="circular"
                                   alt="user"
                                   className="w-7 h-7"
-                                  src={user.image.url}
+                                  src={user.avatar.url}
+                                  key={user._id}
                                 />
                               );
                             })
-                        : post.likes.length > 0 &&
-                          post.likes.map((user) => {
+                        : post &&
+                          post.likes.length > 0 &&
+                          post.likes.reverse().map((user) => {
                             return (
                               <Avatar
                                 variant="circular"
                                 alt="user"
                                 className="w-7 h-7"
-                                src="https://imgs.search.brave.com/-ubwA6j-IXAw-aPpigoKMBVNG6StM-XE5LyzFFhXVHE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy9i/L2I2L1BlbmNpbF9k/cmF3aW5nX29mX2Ff/Z2lybF9pbl9lY3N0/YXN5LmpwZw"
+                                src={user.avatar.url}
                                 key={user._id}
                               />
                             );
                           })}
                     </div>
 
-                    <p className="font-semibold text-sm">
-                      {likes} likes
-                    </p>
+                    <p className="font-semibold text-sm">{likes} likes</p>
                   </div>
-                  <p className="text-xs uppercase mt-1 px-4">
+
+                  <p className="text-xs uppercase mt-2 px-2">
                     {post && formatDate(post.createdAt)}
                   </p>
                 </div>
@@ -228,7 +238,7 @@ const PostPage = () => {
           )}
         </div>
       ) : (
-        <div className="px-8 md:ml-20 md:px-8 lg:ml-72 flex justify-center min-h-screen max-h-full py-20">
+        <div className="px-8 lg:ml-72 flex justify-center items-center min-h-screen max-h-full py-20">
           {loading ? (
             <Spinner />
           ) : (
@@ -239,12 +249,16 @@ const PostPage = () => {
                   <img
                     src={post && post.image.url}
                     alt="post image"
-                    className="w-full object-cover h-full"
+                    className="w-full object-cover h-4/5"
                   />
                 </div>
                 <div className="flex flex-col w-1/2 px-4 relative">
                   {/* profile show */}
-                  <div className="flex-none w-full py-3 flex justify-between items-center border-b">
+                  <div
+                    className={`flex-none w-full py-3 flex justify-between items-center border-b ${
+                      theme === "dark" && "border-dark"
+                    }`}
+                  >
                     <Link
                       to={`/${post.owner.username}/`}
                       className="flex items-center justify-center gap-2"
@@ -279,14 +293,22 @@ const PostPage = () => {
                   </div>
 
                   {post.comments.length === 0 ? (
-                    <div className="border-b flex-grow flex flex-col overflow-auto justify-center items-center" key={post._id}>
+                    <div
+                      className="border-b flex-grow flex flex-col overflow-auto justify-center items-center"
+                      key={post._id}
+                    >
                       <h2 className="text-3xl font-semibold">
                         No comments yet.
                       </h2>
                       <p className="mt-2">Start the conversation</p>
                     </div>
                   ) : (
-                    <div className="border-b flex-grow flex flex-col overflow-auto pt-2 px-2" key={post._id}>
+                    <div
+                      className={`border-b ${
+                        theme === "dark" && "border-dark"
+                      } flex-grow flex flex-col overflow-auto pt-2 px-2`}
+                      key={post._id}
+                    >
                       {/* comment box */}
                       <div className="w-full">
                         {/* owner comment */}
@@ -350,20 +372,29 @@ const PostPage = () => {
                     {/* Post actions */}
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2">
-                        <IconButton variant="text" className="rounded-full" onClick={setLikes}>
-                          {isPostLiked && isPostLiked ? (
+                        <IconButton
+                          variant="text"
+                          className="rounded-full hover:scale-110 active:scale-75 duration-300 ease-in-out transition-all"
+                          onClick={() => setLikes(id)}
+                        >
+                          {isPostLiked ? (
                             <SolidHeart className="w-6 h-6 text-red-500" />
                           ) : (
-                            <OutlineHeart className="w-6 h-6" />
+                            <OutlineHeart className="w-6 h-6 text-red-500" />
                           )}
                         </IconButton>
-                        <IconButton variant="text" className="rounded-full">
-                          <ChatBubbleOvalLeftIcon className="w-6 h-6" />
-                        </IconButton>
+                        <Link to={`/p/${id}`}>
+                          <IconButton variant="text" className="rounded-full">
+                            <ChatBubbleOvalLeftIcon
+                              className={`w-6 h-6 scale-110 ${
+                                theme === "light"
+                                  ? "text-black"
+                                  : "text-gray-500"
+                              }`}
+                            />
+                          </IconButton>
+                        </Link>
                       </div>
-                      <IconButton variant="text" className="rounded-full">
-                        <BookmarkIcon className="w-6 h-6" />
-                      </IconButton>
                     </div>
 
                     <div className="flex gap-2 items-center">
@@ -398,9 +429,7 @@ const PostPage = () => {
                             })}
                       </div>
 
-                      <p className="font-semibold text-sm">
-                        {likes} likes
-                      </p>
+                      <p className="font-semibold text-sm">{likes} likes</p>
                     </div>
                     <p className="text-xs uppercase mt-1">
                       {post && formatDate(post.createdAt)}
@@ -411,7 +440,7 @@ const PostPage = () => {
                         variant="circular"
                         alt="user 1"
                         className="w-10 h-9"
-                        src={post && post.owner.avatar.url}
+                        src={user && user.avatar.url}
                       />
                       <form
                         className="flex items-center w-full"
@@ -420,7 +449,7 @@ const PostPage = () => {
                         <textarea
                           type="text"
                           placeholder="Add a comment..."
-                          className="outline-none py-1 px-2 grow resize-none"
+                          className="outline-none py-1 px-2 grow resize-none bg-transparent"
                           rows={1}
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
@@ -433,7 +462,11 @@ const PostPage = () => {
                             ) : (
                               <Button
                                 variant="text"
-                                className="font-bold p-2"
+                                className={`font-bold p-2 ${
+                                  theme === "light"
+                                    ? "text-black"
+                                    : "text-gray-500"
+                                }`}
                                 type="submit"
                                 disabled={loading}
                               >

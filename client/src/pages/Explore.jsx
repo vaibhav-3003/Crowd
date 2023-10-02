@@ -14,7 +14,7 @@ const Explore = () => {
         allUsersPosts()
     },[])
   return (
-    <div className="md:ml-20 lg:ml-72 pb-20 md:pb-0">
+    <div className="md:ml-20 lg:ml-72 pb-20 md:pb-0 min-h-screen max-h-auto">
       {loading ? (
         <div className="flex justify-center items-center mt-5">
           <Spinner />

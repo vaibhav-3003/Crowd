@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Avatar } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton } from "@material-tailwind/react";
 import {
   HeartIcon as OutlineHeart,
@@ -10,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeart,BookmarkIcon as SolidBookMark } from "@heroicons/react/24/solid";
 import { PostContext } from '../context/PostContext';
+import { UserContext } from '../context/UserContext';
 
 const Post = ({id,avatar,username,image,likes,caption}) => {
 
@@ -24,7 +24,8 @@ const Post = ({id,avatar,username,image,likes,caption}) => {
     increaseLikes,
     decreaseLikes,
   } = useContext(PostContext); 
-  const [saved,setSaved] = useState(isSaved)
+
+  const {theme} = useContext(UserContext)
 
   const savePost = async(id)=>{
     if(isSaved){
@@ -47,7 +48,6 @@ const Post = ({id,avatar,username,image,likes,caption}) => {
       await postLiked(id);
     };
     likedPost()
-    setSaved(isSaved)
   },[isSaved])
 
   const setLikes = async () => {

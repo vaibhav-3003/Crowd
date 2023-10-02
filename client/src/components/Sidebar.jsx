@@ -44,7 +44,7 @@ const Sidebar = () => {
     <>
       {isMobile ? (
         <div
-          className={`w-full fixed bottom-0 border-t ${
+          className={`w-full bg-white fixed bottom-0 border-t ${
             theme === "dark" && "border-dark bg-[#1D232A]"
           } flex justify-between px-4 py-3 z-20 items-center`}
         >

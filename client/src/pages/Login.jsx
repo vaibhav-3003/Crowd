@@ -52,7 +52,7 @@ const Login = ({user}) => {
   }, [navigate, user]);
 
   return (
-    <div className="w-full h-full flex justify-center items-center px-5 md:px-0 bg-gray-50">
+    <div className="w-full min-h-screen max-h-auto flex justify-center items-center px-5 md:px-0 bg-gray-50">
       <div className="w-full md:w-1/2 mx-auto flex lg:gap-8">
         <div className="hidden w-0 lg:w-1/2 lg:flex justify-center items-center lg:px-5">
           <div className="mockup-phone bg-[#946CF3]">

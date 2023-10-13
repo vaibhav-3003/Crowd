@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import { UserProvider } from './context/UserContext.jsx'
 import { PostProvider } from './context/PostContext.jsx'
+import { ChatProvider } from './context/ChatContext.jsx'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -11,7 +12,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Router>
       <UserProvider>
         <PostProvider>
-          <App />
+          <ChatProvider>
+            <App />
+          </ChatProvider>
         </PostProvider>
       </UserProvider>
     </Router>

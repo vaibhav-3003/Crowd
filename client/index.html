@@ -9,11 +9,10 @@
     <title>Crowd</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root" data-theme="light"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script>
       let theme = localStorage.getItem("theme") || 'light'
-      console.log(theme)
 
       document.getElementById('root').setAttribute('data-theme',theme)
       

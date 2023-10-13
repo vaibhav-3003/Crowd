@@ -16,6 +16,7 @@ import PostPage from './pages/PostPage'
 import PostComments from './pages/PostComments'
 import EditProfile from './pages/EditProfile'
 import Explore from './pages/Explore'
+import Inbox from './pages/Inbox'
 
 function App() {
   const {user,userLoading} = useContext(UserContext)
@@ -96,6 +97,32 @@ function App() {
               ) : (
                 <ProtectedRoute user={user}>
                   <Explore />
+                </ProtectedRoute>
+              )
+            }
+          />
+
+          <Route
+            path="/direct/inbox"
+            element={
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <Inbox />
+                </ProtectedRoute>
+              )
+            }
+          />
+
+          <Route
+            path="/direct/t/:chatId"
+            element={
+              userLoading ? (
+                <LoadingPage />
+              ) : (
+                <ProtectedRoute user={user}>
+                  <Inbox />
                 </ProtectedRoute>
               )
             }

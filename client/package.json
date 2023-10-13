@@ -19,6 +19,7 @@
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.2.0",
     "@material-tailwind/react": "^2.1.0",
+    "@phosphor-icons/react": "^2.0.13",
     "axios": "^1.4.0",
     "framer-motion": "^10.15.2",
     "js-cookie": "^3.0.5",

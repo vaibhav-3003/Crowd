@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import connectDb from './database/database.js';
 import postRoute from './routes/post.js'
 import userRoute from './routes/user.js'
+import messageRoute from './routes/message.js'
+import chatRoute from './routes/chat.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import cloudinary from 'cloudinary'
@@ -25,6 +27,8 @@ app.use(
 //routes
 app.use('/api/v1',postRoute)
 app.use('/api/v1',userRoute)
+app.use('/api/v1',messageRoute)
+app.use('/api/v1',chatRoute)
 
 cloudinary.v2.config({
   cloud_name:process.env.CLOUDINARY_NAME,

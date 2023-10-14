@@ -1,8 +1,10 @@
 import Chat from "../models/Chat.js"
 import Message from "../models/Message.js"
+import cloudinary from 'cloudinary'
+
 export const sendMessage = async(req,res)=>{
     try {
-        const {senderId,receiverId,type,text} = req.body
+        const {senderId,receiverId,type,text,files} = req.body
 
         if(!senderId && !receiverId && !type){
             return res.status(400).json({
@@ -23,19 +25,42 @@ export const sendMessage = async(req,res)=>{
           await existingChat.save();
         }
 
-        const message = new Message({
-          sender: senderId,
-          receiver: receiverId,
-          message: text,
-          type,
-          chatId: existingChat._id
-        }); 
-        
-        await message.save()
+        if(files.length > 0){
 
-        existingChat.messages.push(message)
+          files.forEach(async(file)=>{
+            const myCloud = await cloudinary.v2.uploader.upload(file.src,{
+              folder: "crowd/messages",
+            })
 
-        await existingChat.save()
+            const message = new Message({
+              sender: senderId,
+              receiver: receiverId,
+              message: null,
+              type,
+              file: myCloud.secure_url,
+              chatId: existingChat._id,
+            })
+
+            await message.save();
+            existingChat.messages.push(message);
+            await existingChat.save();
+          })
+        }
+
+        if(text.length>0){
+          const message = new Message({
+            sender: senderId,
+            receiver: receiverId,
+            message: text,
+            type,
+            chatId: existingChat._id,
+          });
+
+          // Save the message to MongoDB
+          await message.save();
+          existingChat.messages.push(message);
+          await existingChat.save();
+        }
 
         res.status(200).json({
           success: true,

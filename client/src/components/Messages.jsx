@@ -19,21 +19,37 @@ const Messages = ({chat}) => {
       return messageTime.toISOString().split("T")[0];
     }
   };
+
   return (
-    <div className="border flex-grow h-full w-full overflow-y-auto py-2 px-4">
+    <div className="flex-grow h-full w-full overflow-y-auto py-2 px-4">
       {
         chat && chat.messages.map(message=>{
           return message.sender === user._id ? (
-            <div className="chat chat-end" key={message._id}>
-              <div className="chat-bubble bg-primary text-white">
-                {message.message}
+            message.type === "image" ? (
+              <div className="w-full flex justify-end items-center">
+                <div className="hover:bg-blue-gray-50 p-3 rounded-xl">
+                  <img
+                    src={message.file}
+                    alt="image"
+                    className="w-[200px] object-cover hover:cursor-pointer"
+                  />
+                  <p className="text-end w-full text-xs opacity-50 mt-1">
+                    {formatMessageTime(message.createdAt)}
+                  </p>
+                </div>
               </div>
-              <div className="chat-footer">
-                <time className="text-xs opacity-50">
-                  {formatMessageTime(message.createdAt)}
-                </time>
+            ) : (
+              <div className="chat chat-end" key={message._id}>
+                <div className="chat-bubble bg-primary text-white">
+                  {message.message}
+                </div>
+                <div className="chat-footer">
+                  <time className="text-xs opacity-50">
+                    {formatMessageTime(message.createdAt)}
+                  </time>
+                </div>
               </div>
-            </div>
+            )
           ) : (
             <div className="chat chat-start" key={message._id}>
               <div className="chat-bubble bg-gray-100 text-gray-800">

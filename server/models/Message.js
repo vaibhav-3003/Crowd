@@ -15,7 +15,10 @@ const messageSchema = new mongoose.Schema({
     },
     type:{
         type: String,
-        enum: ["text", "media", "doc"],
+    },
+    file:{
+        type: String,
+        default:"",
     },
     message:{
         type: String,

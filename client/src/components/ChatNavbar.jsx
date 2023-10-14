@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const ChatNavbar = ({chat}) => {
   return (
-    <div className="py-4 px-2">
+    <div className="py-4 px-2 border-b">
       {
         chat && <div className='flex items-center'>
           <img
@@ -12,7 +12,7 @@ const ChatNavbar = ({chat}) => {
             className='rounded-full w-[45px]'
           />
           <Link to={`/${chat.members[1].username}`}>
-              <h3 className="text-lg font-bold mx-3">Vaibhav Mahajan</h3>
+              <h3 className="text-lg font-bold mx-3">{chat.members[1].name}</h3>
           </Link>
         </div>
       }

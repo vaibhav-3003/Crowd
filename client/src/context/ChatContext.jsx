@@ -66,13 +66,14 @@ const ChatProvider = ({children})=>{
         }
     }
 
-    const sendMessage = async({sender,receiver,message,type})=>{
+    const sendMessage = async({sender,receiver,message,type,files})=>{
         try {
             dispatch({type: 'SET_MESSAGE_LOADING_TRUE'})
             const {data} = await axios.post('http://localhost:4000/api/v1/send/message',{
                 senderId:sender,
                 receiverId:receiver,
                 text:message,
+                files,
                 type
             },config)
             dispatch({type: 'SET_MESSAGE_LOADING_FALSE'})

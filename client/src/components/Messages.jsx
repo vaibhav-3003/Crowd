@@ -1,8 +1,17 @@
-import React, { useContext } from 'react'
+import React, { useContext,useEffect,useState } from 'react'
 import { UserContext } from '../context/UserContext';
+import Lottie from "lottie-react";
+import heartAnimation from '../animations/heart.json'
 
 const Messages = ({chat}) => {
   const {user} = useContext(UserContext)
+  const [messages,setMessages] = useState(chat && chat.messages)
+  
+
+  useEffect(()=>{
+    setMessages(chat && chat.messages)
+  },[chat])
+
 
   const formatMessageTime = (timeString) => {
     const messageTime = new Date(timeString);
@@ -23,22 +32,49 @@ const Messages = ({chat}) => {
   return (
     <div className="flex-grow h-full w-full overflow-y-auto py-2 px-4">
       {
-        chat && chat.messages.map(message=>{
+        messages && messages.map(message=>{
           return message.sender === user._id ? (
             message.type === "image" ? (
-              <div className="w-full flex justify-end items-center">
+              <div
+                className={`w-full flex ${
+                  message.sender === user._id ? "justify-end" : "justify-start"
+                } items-center`}
+                key={message._id}
+              >
                 <div className="hover:bg-blue-gray-50 p-3 rounded-xl">
                   <img
                     src={message.file}
                     alt="image"
                     className="w-[200px] object-cover hover:cursor-pointer"
                   />
-                  <p className="text-end w-full text-xs opacity-50 mt-1">
+                  <p
+                    className={` ${
+                      message.sender === user._id ? "text-end" : "text-start"
+                    } w-full text-xs opacity-50 mt-1`}
+                  >
+                    {formatMessageTime(message.createdAt)}
+                  </p>
+                </div>
+              </div>
+            ) : message.type === "like" ? (
+              <div
+                className={`w-full flex ${
+                  message.sender === user._id ? "justify-end" : "justify-start"
+                } items-center`}
+              >
+                <div className="w-[220px]">
+                  <Lottie animationData={heartAnimation} className="w-full" />
+                  <p
+                    className={` ${
+                      message.sender === user._id ? "text-end" : "text-start"
+                    } w-full text-xs opacity-50 mt-1`}
+                  >
                     {formatMessageTime(message.createdAt)}
                   </p>
                 </div>
               </div>
             ) : (
+              
               <div className="chat chat-end" key={message._id}>
                 <div className="chat-bubble bg-primary text-white">
                   {message.message}

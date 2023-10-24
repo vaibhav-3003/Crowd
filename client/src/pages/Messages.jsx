@@ -1,18 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   ChatCircleDots,
 
 } from "@phosphor-icons/react";
 import { Button } from "@material-tailwind/react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MessageInbox from '../components/MessageInbox';
+import CreateChatModal from '../components/CreateChatModal';
 
 const Messages = () => {
   const location = useLocation()
+  const naviagte = useNavigate()
+
+  useEffect(()=>{
+    if(location.pathname==='/direct/t/undefined'){
+      naviagte('/direct/inbox')
+    }
+  },[location.pathname])
   return (
     <div className="w-full">
-      {location.pathname==='/direct/inbox' ? (
-        <div className="w-full h-full flex flex-col items-center justify-center">
+      {location.pathname === "/direct/inbox" ? (
+        <div className="w-full h-full hidden lg:flex flex-col items-center justify-center">
           <div className="rounded-full border-gray-500 border-2 w-[120px] h-[120px] flex justify-center items-center">
             <ChatCircleDots weight="thin" className="w-20 h-20 text-gray-500" />
           </div>
@@ -20,13 +28,17 @@ const Messages = () => {
           <p className="text-center text-gray-600">
             Send private messages to a friend.
           </p>
-          <Button className="mt-3 bg-primary normal-case px-4 py-2 text-sm">
-            Send message
-          </Button>
+            <label
+              htmlFor="chat_modal"
+              className="mt-3 text-white rounded-lg cursor-pointer bg-primary normal-case px-4 py-2 text-sm"
+            >
+              Send message
+            </label>
         </div>
-      ) : (
-        location.pathname.slice(0,9) ==='/direct/t' ?<MessageInbox/>:null
-      )}
+      ) : location.pathname.slice(0, 9) === "/direct/t" ? (
+        <MessageInbox />
+      ) : null}
+      <CreateChatModal />
     </div>
   );
 }

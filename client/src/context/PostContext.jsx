@@ -169,6 +169,33 @@ const PostProvider = ({children})=>{
         }
     }
 
+    const deletePost = async(id)=>{
+        try {
+            dispatch({type: 'SET_LOADING_TRUE'})
+            const {data} = await axios.delete(`http://localhost:4000/api/v1/post/delete/${id}`,{
+                withCredentials: true
+            })
+            dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            console.log(error)
+            dispatch({type: 'SET_ERROR',payload:error.response.data.message})
+        }
+    }
+
+    const updatePost = async(id,caption)=>{
+        try {
+            dispatch({type: 'SET_LOADING_TRUE'})
+            const {data} = await axios.put(`http://localhost:4000/api/v1/post/update/${id}`,{
+                caption,
+            },{
+                withCredentials: true
+            })
+            dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            dispatch({type: 'SET_ERROR',payload:error.response.data.message})
+        }
+    }
+
     useEffect(()=>{
         const getPosts = async()=>{
             await getFollowingPosts()
@@ -176,7 +203,7 @@ const PostProvider = ({children})=>{
         getPosts()
     },[])
 
-    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved,getAllPosts}}>
+    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved,getAllPosts,deletePost,updatePost}}>
         {children}
     </PostContext.Provider>
 }

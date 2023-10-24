@@ -62,6 +62,21 @@ export const sendMessage = async(req,res)=>{
           await existingChat.save();
         }
 
+        if(type==='like'){
+          const message = new Message({
+            sender: senderId,
+            receiver: receiverId,
+            message: null,
+            type,
+            chatId: existingChat._id,
+          });
+
+          // Save the message to MongoDB
+          await message.save();
+          existingChat.messages.push(message);
+          await existingChat.save();
+        }
+
         res.status(200).json({
           success: true,
           existingChat,

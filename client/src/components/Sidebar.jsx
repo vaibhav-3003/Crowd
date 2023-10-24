@@ -44,14 +44,13 @@ const Sidebar = () => {
     
   }, []); 
 
-
   return (
     <>
       {isMobile ? (
         <div
-          className={`w-full bg-white fixed bottom-0 border-t ${
-            theme === "dark" && "border-dark bg-[#1D232A]"
-          } flex justify-between px-4 py-3 z-20 items-center`}
+          className={`w-full fixed bottom-0 border-t ${
+            theme === "dark" ? "border-dark bg-[#1D232A]":"bg-white"
+          } justify-between px-4 py-3 z-20 items-center ${location.pathname.slice(0,10)==='/direct/t/' ?'hidden':'flex'}`}
         >
           <Link to="/">
             <IconButton variant="text">
@@ -110,7 +109,7 @@ const Sidebar = () => {
         <Card
           className={`h-full rounded-none w-full max-w-[5rem] fixed left-0 md:max-w-[6rem] lg:max-w-[17rem] p-2 md:p-4 z-20 border-r ${
             theme === "light" ? "bg-white" : "bg-[#1D232A] border-[#313a44]"
-          } ${location.pathname.slice(0, 7) === "/direct" && "w-[6rem]"}`}
+          } ${location.pathname.slice(0, 7) === "/direct" && "w-[6rem]"} `}
         >
           <div className="mb-2 py-4 px-2 flex justify-center lg:justify-between lg:px-2 items-center">
             <Link to="/" className="flex items-center lg:gap-4">
@@ -134,8 +133,13 @@ const Sidebar = () => {
               />
             </Link>
           </div>
-          <List className="gap-4 w-fit">
-            <Link to="/" className='w-fit'>
+          <List className="gap-4">
+            <Link
+              to="/"
+              className={`${
+                location.pathname.slice(0, 7) === "/direct" ? "w-fit" : "w-full"
+              }`}
+            >
               <ListItem
                 className={`${
                   theme === "dark" &&
@@ -172,6 +176,7 @@ const Sidebar = () => {
                 </p>
               </ListItem>
             </Link>
+
             <ListItem
               className={`${
                 theme === "dark" &&
@@ -181,6 +186,7 @@ const Sidebar = () => {
                   ? "w-fit"
                   : "w-fit lg:w-full"
               }`}
+              onClick={() => window.search_modal.showModal()}
             >
               <ListItemPrefix
                 className={` ${
@@ -208,7 +214,12 @@ const Sidebar = () => {
               </p>
             </ListItem>
             <SearchModal />
-            <Link to="/explore">
+            <Link
+              to="/explore"
+              className={`${
+                location.pathname.slice(0, 7) === "/direct" ? "w-fit" : "w-full"
+              }`}
+            >
               <ListItem
                 className={`${
                   theme === "dark" &&
@@ -246,7 +257,12 @@ const Sidebar = () => {
               </ListItem>
             </Link>
 
-            <Link to="/direct/inbox">
+            <Link
+              to="/direct/inbox"
+              className={`${
+                location.pathname.slice(0, 7) === "/direct" ? "w-fit" : "w-full"
+              }`}
+            >
               <ListItem
                 className={`${
                   theme === "dark" &&
@@ -284,7 +300,12 @@ const Sidebar = () => {
               </ListItem>
             </Link>
 
-            <Link to={"/p/create"}>
+            <Link
+              to={"/p/create"}
+              className={`${
+                location.pathname.slice(0, 7) === "/direct" ? "w-fit" : "w-full"
+              }`}
+            >
               <ListItem
                 className={`${
                   theme === "dark" &&
@@ -321,7 +342,12 @@ const Sidebar = () => {
                 </p>
               </ListItem>
             </Link>
-            <a href={`/${user.username}/`}>
+            <Link
+              to={`/${user.username}/`}
+              className={`${
+                location.pathname.slice(0, 7) === "/direct" ? "w-fit" : "w-full"
+              }`}
+            >
               <ListItem
                 className={`${
                   theme === "dark" &&
@@ -358,7 +384,7 @@ const Sidebar = () => {
                   Profile
                 </p>
               </ListItem>
-            </a>
+            </Link>
           </List>
         </Card>
       )}

@@ -58,7 +58,7 @@ const Login = ({user}) => {
           <div className="mockup-phone bg-[#946CF3]">
             <div className="camera"></div>
             <div className="display">
-              <div className="artboard artboard-demo phone-1 text-white">
+              <div className="artboard artboard-demo phone-1 text-white bg-[#946CF3]">
                 <Lottie animationData={loginAnimation} className="w-full" />
               </div>
             </div>
@@ -131,7 +131,7 @@ const Login = ({user}) => {
                 </div>
 
                 <Button
-                  className="nunito normal-case text-sm"
+                  className="nunito normal-case text-md px-3 py-2 bg-primary rounded-full font-normal"
                   type="submit"
                   disabled={isSubmitting}
                 >

@@ -1,26 +1,39 @@
 import React,{useContext, useRef, useState,useEffect} from 'react'
-import { PaperPlaneRight, ImageSquare, XCircle } from "@phosphor-icons/react";
+import {
+  PaperPlaneRight,
+  ImageSquare,
+  XCircle,
+  Heart,
+} from "@phosphor-icons/react";
 import { ChatContext } from '../context/ChatContext';
+import { UserContext } from '../context/UserContext';
 
 const MessageInput = ({chat}) => {
   const [message,setMessage] = useState('')
   const [messageType,setMessageType] = useState('text')
   const [images,setImages] = useState([])
+  
+  // const socket = io('http://localhost:4000')
 
   const formRef = useRef()
 
-  const {messageLoading,sendMessage} = useContext(ChatContext)
+  const {messageLoading,sendMessage,loadChat} = useContext(ChatContext)
+  const {theme} = useContext(UserContext)
 
   const send = async(e)=>{
     e.preventDefault()
-    
-    await sendMessage({
+
+    const newMessage = {
       sender: chat.members[0]._id,
       receiver: chat.members[1]._id,
       message,
       files: images,
-      type: messageType
-    })
+      type: messageType,
+    };
+    
+    await sendMessage(newMessage)
+
+    // socket.emit('sendMessage',newMessage)
     
     setMessage('')
     setImages([])
@@ -40,8 +53,11 @@ const MessageInput = ({chat}) => {
   }
 
   useEffect(()=>{
-    console.log(images)
-  },[images])
+    const chatLoad = async()=>{
+      await loadChat()
+    }
+    chatLoad()
+  },[chat])
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -56,10 +72,22 @@ const MessageInput = ({chat}) => {
     setImages(images.filter(image=>image.id !== id))
   }
 
+  const handleLikeMessage = async()=>{
+    await sendMessage({
+      sender: chat.members[0]._id,
+      receiver: chat.members[1]._id,
+      message,
+      files: [],
+      type: 'like'
+    })
+  }
+
   return (
     <div className="w-full p-4">
       <form
-        className="w-full border border-gray-300 px-4 py-2.5 rounded-xl items-center justify-center"
+        className={`w-full border ${
+          theme === "light" ? "border-gray-300" : "border-dark"
+        } px-4 py-2.5 rounded-xl items-center justify-center`}
         onSubmit={send}
         ref={formRef}
       >
@@ -83,7 +111,11 @@ const MessageInput = ({chat}) => {
               );
             })}
 
-            <div className="p-3 bg-gray-100 rounded-lg">
+            <div
+              className={`p-3 ${
+                theme === "light" ? "bg-gray-100 " : "bg-dark"
+              } rounded-lg`}
+            >
               <label
                 htmlFor="send_images"
                 className="text-gray-500 hover:cursor-pointer"
@@ -110,7 +142,7 @@ const MessageInput = ({chat}) => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             rows={1}
-            className="outline-0 resize-none w-full"
+            className="outline-0 resize-none w-full bg-transparent"
             placeholder="Your message..."
           />
           {message.length > 0 || images.length > 0 ? (
@@ -127,7 +159,7 @@ const MessageInput = ({chat}) => {
               <div>
                 <label
                   htmlFor="send_images"
-                  className="text-gray-500"
+                  className="text-gray-500 hover:cursor-pointer"
                   onClick={() => setMessageType("image")}
                 >
                   <ImageSquare size={27} weight="regular" />
@@ -141,6 +173,10 @@ const MessageInput = ({chat}) => {
                   multiple
                 />
               </div>
+
+              <button className="text-gray-500" onClick={handleLikeMessage}>
+                <Heart size={27} weight="regular" />
+              </button>
             </div>
           )}
         </div>

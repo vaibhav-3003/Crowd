@@ -8,10 +8,15 @@ import chatRoute from './routes/chat.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import cloudinary from 'cloudinary'
+import http from 'http'
+import {Server} from 'socket.io'
+import { sendMessage } from './controllers/message.js';
 
 dotenv.config()
 
 const app = express();
+// const server = http.createServer(app)
+// const io = new Server(server)
 
 //middlewares
 app.use(express.json({limit:'10mb'}));
@@ -35,6 +40,12 @@ cloudinary.v2.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
+
+// io.on('connection',(socket)=>{
+//   console.log('a user connected')
+
+//   socket.on('sendMessage',sendMessage)
+// })
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port: ${process.env.port}`)

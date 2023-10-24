@@ -13,7 +13,7 @@ import ThemeSwitcher from '../components/ThemeSwitcher'
 
 const Profile = () => {
     const {username} = useParams()
-    const {dispatch,user,userProfile,loadUserWithUsername,followAndUnfollow,userFollowed,userLoading,isFollowed,error} = useContext(UserContext)
+    const {dispatch,user,userProfile,loadUserWithUsername,followAndUnfollow,userFollowed,userLoading,isFollowed,error,theme} = useContext(UserContext)
     const {posts,fetchUserPosts,loading} = useContext(PostContext)
 
     const [tab,setTab] = useState('posts')
@@ -49,7 +49,7 @@ const Profile = () => {
         userFunc();
         postFunc();
         followed()
-    },[])
+    },[username])
 
     useEffect(()=>{
       setFollow(isFollowed)
@@ -92,7 +92,7 @@ const Profile = () => {
                 </Link>
               ) : (
                 <Button
-                  className="nunito normal-case text-sm font-normal w-28 rounded-full"
+                  className={`nunito normal-case text-sm font-normal w-28 rounded-full p-2 ${follow ? 'bg-none border-primary text-primary':'bg-primary text-white'}`}
                   variant={follow ? "outlined" : "filled"}
                   onClick={followUser}
                 >

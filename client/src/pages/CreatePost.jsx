@@ -107,31 +107,31 @@ const CreatePost = () => {
               </button>
             </div>
           )}
-        </form>
 
-        <form className="py-5 w-11/12 md:w-4/5 lg:w-3/4 px-4">
-          <Textarea
-            variant="standard"
-            label="caption"
-            className={`nunito ${
-              theme === "light" ? "text-black" : "text-gray-500"
-            } text-lg`}
-            color="blue"
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            required
-            maxLength={2000}
-          />
-          <p className="text-sm text-gray-500 w-full text-end mt-1">
-            {caption.length} / 2000
-          </p>
-          <Button
-            className="bg-primary text-sm nunito w-full md:w-[200px] mt-5 mb-6 rounded-full"
-            type="submit"
-            disabled={loading}
-          >
-            Post
-          </Button>
+          <div className="py-5 w-full mt-10">
+            <Textarea
+              variant="standard"
+              label="caption"
+              className={`nunito ${
+                theme === "light" ? "text-black" : "text-gray-500"
+              } text-lg`}
+              color="blue"
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              required
+              maxLength={2000}
+            />
+            <p className="text-sm text-gray-500 w-full text-end mt-1">
+              {caption.length} / 2000
+            </p>
+            <Button
+              className="bg-primary text-sm nunito w-full md:w-[200px] mt-5 mb-6 rounded-full"
+              type="submit"
+              disabled={loading}
+            >
+              Post
+            </Button>
+          </div>
         </form>
         <ToastContainer />
       </div>

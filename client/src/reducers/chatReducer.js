@@ -45,7 +45,7 @@ const ChatReducer = (state,action)=>{
         case 'SET_CHAT':
             return{
                 ...state,
-                chat: action.payload.chat
+                chat: action.payload.chat,
             }
         
         case 'SET_MESSAGE_LOADING_TRUE':
@@ -58,6 +58,12 @@ const ChatReducer = (state,action)=>{
             return{
                 ...state,
                 messageLoading: false
+            }
+        
+        case 'SET_NEW_CHAT':
+            return{
+                ...state,
+                newChat: action.payload.chat
             }
         
         default:

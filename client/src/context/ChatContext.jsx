@@ -10,7 +10,8 @@ const initialState = {
     chatLoading: true,
     chatError: null,
     chat: null,
-    messageLoading: false
+    messageLoading: false,
+    newChat:{},
 }
 
 
@@ -86,7 +87,26 @@ const ChatProvider = ({children})=>{
         }
     }
 
-    return <ChatContext.Provider value={{...state,setChatId,showChatList,loadChat,sendMessage}}>
+    const createChat = async({sender,receiver})=>{
+        try {
+            const { data } = await axios.post(
+              "http://localhost:4000/api/v1/create/chat",
+              {
+                senderId: sender,
+                receiverId: receiver,
+              },
+              config
+            );
+            dispatch({type:'SET_NEW_CHAT',payload:data})
+        } catch (error) {
+            dispatch({
+              type: "SET_ERROR",
+              payload: error.response.data.message,
+            });
+        }
+    }
+
+    return <ChatContext.Provider value={{...state,setChatId,showChatList,loadChat,sendMessage,createChat}}>
         {children}
     </ChatContext.Provider>
 }

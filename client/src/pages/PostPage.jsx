@@ -5,27 +5,26 @@ import {
   IconButton,
   Avatar,
   Button,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
   Spinner,
 } from "@material-tailwind/react";
+
 import {
-  HeartIcon as OutlineHeart,
-  ChatBubbleOvalLeftIcon,
-  FaceSmileIcon,
-  EllipsisHorizontalIcon,
-  ChevronLeftIcon,
-} from "@heroicons/react/24/outline";
-import {
-  HeartIcon as SolidHeart,
-} from "@heroicons/react/24/solid";
+  DotsThreeOutline,
+  Trash,
+  NotePencil,
+  Heart,
+  ChatCircle,
+  Smiley,
+  CaretLeft,
+} from "@phosphor-icons/react";
+
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useContext } from 'react';
 import { PostContext } from '../context/PostContext';
 import { UserContext } from '../context/UserContext';
+import DeleteModal from '../components/DeleteModal';
+import EditPostModal from '../components/EditPostModal';
 
 const PostPage = () => {
     const {id} = useParams()
@@ -116,7 +115,7 @@ const PostPage = () => {
             }`}
           >
             <Link to={"/"}>
-              <ChevronLeftIcon className="w-6 h-6 font-bold" />
+              <CaretLeft size={28} className="font-bold" />
             </Link>
             <h3 className="text-center w-full text-xl md:text-3xl font-bold">
               Post
@@ -144,20 +143,34 @@ const PostPage = () => {
                     />
                     <span>{post && post.owner.username}</span>
                   </Link>
-                  <Menu>
-                    <MenuHandler>
-                      <IconButton className="mr-4 rounded-full" variant="text">
-                        <EllipsisHorizontalIcon className="w-5 h-5 text-gray-500" />
-                      </IconButton>
-                    </MenuHandler>
-                    <MenuList>
-                      <MenuItem className="nunito text-red-500">
-                        Delete
-                      </MenuItem>
-                      <MenuItem className="nunito">Edit</MenuItem>
-                      <MenuItem className="nunito">About this account</MenuItem>
-                    </MenuList>
-                  </Menu>
+                  <div className="dropdown dropdown-end">
+                    <button tabIndex={0} className="text-gray-500">
+                      <DotsThreeOutline size={20} />
+                    </button>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                      <li>
+                        <label
+                          htmlFor="delete_modal"
+                          className="flex items-center text-red-500 gap-2"
+                        >
+                          <Trash size={20} />
+                          <span>Delete</span>
+                        </label>
+                      </li>
+                      <li>
+                        <label
+                          htmlFor="edit_modal"
+                          className="flex items-center gap-2"
+                        >
+                          <NotePencil size={20} />
+                          <span>Edit</span>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
 
                 <div className="w-full mt-2 px-2">
@@ -176,15 +189,22 @@ const PostPage = () => {
                         onClick={() => setLikes(id)}
                       >
                         {isPostLiked ? (
-                          <SolidHeart className="w-6 h-6 text-red-500" />
+                          <Heart
+                            size={28}
+                            className="text-red-500"
+                            weight="fill"
+                          />
                         ) : (
-                          <OutlineHeart className="w-6 h-6 text-red-500" />
+                          <Heart
+                            size={28}
+                            className={`${theme === "dark" && "text-gray-500"}`}
+                          />
                         )}
                       </IconButton>
                       <Link to={`/p/${id}/comments`}>
                         <IconButton variant="text" className="rounded-full">
-                          <ChatBubbleOvalLeftIcon
-                            className={`w-6 h-6 scale-110 ${
+                          <ChatCircle
+                            className={`${
                               theme === "light" ? "text-black" : "text-gray-500"
                             }`}
                           />
@@ -225,7 +245,6 @@ const PostPage = () => {
                             );
                           })}
                     </div>
-
                     <p className="font-semibold text-sm">{likes} likes</p>
                   </div>
 
@@ -271,30 +290,43 @@ const PostPage = () => {
                       />
                       <span>{post && post.owner.username}</span>
                     </Link>
-                    <Menu>
-                      <MenuHandler>
-                        <IconButton
-                          className="mr-4 rounded-full"
-                          variant="text"
+                    {post && post.owner._id === user._id && (
+                      <div className="dropdown dropdown-end">
+                        <button tabIndex={0} className="text-gray-500">
+                          <DotsThreeOutline size={20} />
+                        </button>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                         >
-                          <EllipsisHorizontalIcon className="w-5 h-5" />
-                        </IconButton>
-                      </MenuHandler>
-                      <MenuList>
-                        <MenuItem className="nunito text-red-500">
-                          Delete
-                        </MenuItem>
-                        <MenuItem className="nunito">Edit</MenuItem>
-                        <MenuItem className="nunito">
-                          About this account
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
+                          <li>
+                            <label
+                              htmlFor="delete_modal"
+                              className="flex items-center text-red-500 gap-2"
+                            >
+                              <Trash size={20} />
+                              <span>Delete</span>
+                            </label>
+                          </li>
+                          <li>
+                            <label
+                              htmlFor="edit_modal"
+                              className="flex items-center gap-2"
+                            >
+                              <NotePencil size={20} />
+                              <span>Edit</span>
+                            </label>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
                   {post.comments.length === 0 ? (
                     <div
-                      className="border-b flex-grow flex flex-col overflow-auto justify-center items-center"
+                      className={`border-b ${
+                        theme === "dark" && "border-dark"
+                      } flex-grow flex flex-col overflow-auto justify-center items-center`}
                       key={post._id}
                     >
                       <h2 className="text-3xl font-semibold">
@@ -378,15 +410,27 @@ const PostPage = () => {
                           onClick={() => setLikes(id)}
                         >
                           {isPostLiked ? (
-                            <SolidHeart className="w-6 h-6 text-red-500" />
+                            <Heart
+                              size={28}
+                              className="text-red-500"
+                              weight="fill"
+                            />
                           ) : (
-                            <OutlineHeart className="w-6 h-6 text-red-500" />
+                            <Heart
+                              size={28}
+                              className={`${
+                                theme === "light"
+                                  ? "text-black"
+                                  : "text-gray-500"
+                              }`}
+                            />
                           )}
                         </IconButton>
                         <Link to={`/p/${id}`}>
                           <IconButton variant="text" className="rounded-full">
-                            <ChatBubbleOvalLeftIcon
-                              className={`w-6 h-6 scale-110 ${
+                            <ChatCircle
+                              size={28}
+                              className={`${
                                 theme === "light"
                                   ? "text-black"
                                   : "text-gray-500"
@@ -479,7 +523,14 @@ const PostPage = () => {
                             className="rounded-full"
                             onClick={handleIconBox}
                           >
-                            <FaceSmileIcon className="w-6 h-6 text-gray-600" />
+                            <Smiley
+                              size={28}
+                              className={`${
+                                theme === "light"
+                                  ? "text-black"
+                                  : "text-gray-500"
+                              }`}
+                            />
                           </IconButton>
                         </div>
                       </form>
@@ -497,6 +548,8 @@ const PostPage = () => {
           )}
         </div>
       )}
+      <DeleteModal />
+      <EditPostModal />
     </>
   );
 }

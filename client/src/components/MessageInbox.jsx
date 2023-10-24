@@ -1,5 +1,5 @@
 import React, { useEffect,useContext } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams,useNavigate } from 'react-router-dom'
 import ChatNavbar from './ChatNavbar'
 import Messages from './Messages'
 import MessageInput from './MessageInput'
@@ -9,14 +9,14 @@ const MessageInbox = () => {
     const {chatId} = useParams()
     const {chat,loadChat} = useContext(ChatContext)
 
-    useEffect(()=>{
-      const showChat = async()=>{
-        await loadChat(chatId)
-      }
-      showChat()
-    },[])
+    useEffect(() => {
+      const showChat = async () => {
+        await loadChat(chatId);
+      };
+      showChat();
+    }, [chatId]);
   return (
-    <div className='border flex flex-col h-full max-h-screen'>
+    <div className='flex flex-col h-full max-h-screen'>
       <ChatNavbar chat={chat}/>
 
       <Messages chat={chat}/>

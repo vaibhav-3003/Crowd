@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ChatContext } from '../context/ChatContext';
 import {UserContext} from '../context/UserContext';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {NotePencil } from '@phosphor-icons/react'
+import CreateChatModal from './CreateChatModal';
 
 const Chats = () => {
-  const {user} = useContext(UserContext)
+  const {user,theme} = useContext(UserContext)
   const {showChatList,chatListLoading,chats} = useContext(ChatContext)
-  const [chat,setChat] = useState([])
+
+  const location = useLocation()
 
   const convertDateToTimeAgo = (dateString) => {
     const messageTime = new Date(dateString);
@@ -35,25 +37,27 @@ const Chats = () => {
     }
     showChats()
   },[])
+  
 
-  return (
-    <div className="w-full lg:min-w-[380px] lg:w-[380px]">
+  return (  
+    <div className={`w-full min-w-full lg:min-w-[380px] lg:w-[380px] border-r ${theme==='dark' && 'border-dark'} ${(window.innerWidth <= 1024 && location.pathname.slice(0,10)==='/direct/t/') ? 'hidden':'block'}`}>
       <div className="flex items-center justify-between mt-8">
         <h3 className="text-xl font-bold mx-4">{user.username}</h3>
-        <button className="rounded-full hover:scale-110 active:scale-90 duration-300 ease-in-out text-gray-500 hover:bg-gray-100 p-2 mr-2">
+        <label htmlFor='chat_modal' className={`rounded-full hover:scale-110 active:scale-90 duration-300 ease-in-out text-gray-500 ${theme==='light'?'hover:bg-gray-100':'hover:bg-dark'} p-2 mr-2`}>
           <NotePencil size={25} weight="regular" />
-        </button>
+        </label>
       </div>
 
       {/* messages */}
       <div className="mt-4 flex flex-col">
-        <h4 className="text-md font-semibold text-gray-800 mx-4">Messages</h4>
+        <h4 className={`text-md font-semibold ${theme==='light'?'text-gray-800':'text-gray-500'} mx-4`}>Messages</h4>
         <div className="mt-5 flex flex-col gap-3 overflow-y-auto">
           {chats
             ? chats.map((chat) => {
                 return (
+                  chat.messages.length>0 && 
                   <Link
-                    className="flex items-center px-3 py-2 hover:bg-blue-gray-50 hover:cursor-pointer z-20"
+                    className={`flex items-center px-3 py-2 ${theme==='dark'?'hover:bg-dark':'hover:bg-blue-gray-50'} hover:cursor-pointer z-20`}
                     key={chat._id}
                     to={`/direct/t/${chat._id}`}
                   >
@@ -61,20 +65,23 @@ const Chats = () => {
                       <img
                         src={chat.members[1].avatar.url}
                         alt="profile"
-                        className="w-[60px] rounded-full"
+                        className="w-[60px] h-[60px] rounded-full object-cover"
                       />
                     </div>
                     <div className="ml-3">
-                      <h5 className="text-md font-semibold text-gray-800">
+                      <h5 className={`text-md font-semibold ${theme==='light'?'text-black':'text-gray-500'}`}>
                         {chat.members[1].name}
                       </h5>
                       <div className="flex items-center">
                         <p className="text-sm text-gray-500">
-                          {chat.messages[chat.messages.length - 1].type==='image'? 'sent an image': chat.messages[chat.messages.length - 1].message}
+                          {chat.messages && chat.messages[chat.messages.length - 1].type ===
+                          "image"
+                            ? "sent an image"
+                            : chat.messages && chat.messages[chat.messages.length - 1].type==='like' ? 'sent a like' :chat.messages[chat.messages.length - 1].message}
                         </p>
                         <p className="text-sm text-gray-500 flex items-center">
                           <span className="mx-1 text-xl">&#183;</span>
-                          {convertDateToTimeAgo(
+                          {chat.messages && convertDateToTimeAgo(
                             chat.messages[chat.messages.length - 1].createdAt
                           )}
                         </p>
@@ -86,6 +93,7 @@ const Chats = () => {
             : ""}
         </div>
       </div>
+      <CreateChatModal/>
     </div>
   );
 }

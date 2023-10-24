@@ -203,7 +203,7 @@ const PostProvider = ({children})=>{
         getPosts()
     },[])
 
-    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved,getAllPosts,deletePost,updatePost}}>
+    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved,getAllPosts,deletePost,updatePost,getFollowingPosts}}>
         {children}
     </PostContext.Provider>
 }

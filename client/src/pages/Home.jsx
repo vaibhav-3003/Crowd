@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react'
 import Post from '../components/Post'
-import Suggestions from '../components/Suggestions'
 import { PostContext } from '../context/PostContext'
 import { Spinner } from '@material-tailwind/react'
 import logo_light from "../assets/Crowd.png";
@@ -8,14 +7,16 @@ import logo_dark from "../assets/logo_dark.png";
 import { UserContext } from '../context/UserContext'
 
 const Home = () => {
-  const {followingPosts,loading} = useContext(PostContext)
+  const {getFollowingPosts,followingPosts,loading} = useContext(PostContext)
   const {theme} = useContext(UserContext)
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     await getFollowingPosts();
-  //   };
-  //   getPosts();
-  // }, []);
+
+  useEffect(()=>{
+    const postOfFollowings = async()=>{
+      await getFollowingPosts()
+    }
+
+    postOfFollowings()
+  },[])
 
   return (
     <div className="md:px-28">
@@ -30,7 +31,7 @@ const Home = () => {
         ) : (
           <div className="flex justify-between">
             <div className="flex flex-col gap-6">
-              {followingPosts &&
+              {loading ? <Spinner /> : followingPosts &&
                 followingPosts.map((post) => {
                   return (
                     <Post
@@ -44,9 +45,6 @@ const Home = () => {
                     />
                   );
                 })}
-            </div>
-            <div className="hidden md:block">
-              <Suggestions />
             </div>
           </div>
         )}

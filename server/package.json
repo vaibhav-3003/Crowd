@@ -5,10 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "vaibhav",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",

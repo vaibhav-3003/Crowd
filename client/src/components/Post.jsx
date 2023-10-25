@@ -12,54 +12,25 @@ import { PostContext } from '../context/PostContext';
 import { UserContext } from '../context/UserContext';
 import LazyLoad from 'react-lazyload'
 
-const Post = ({id,avatar,username,image,likes,caption}) => {
+const Post = ({id,avatar,username,image,likes,caption,post}) => {
 
   const {
-    dispatch,
     postSaved,
-    isPostSaved,
-    isSaved,
     likePost,
-    postLiked,
-    isPostLiked,
-    increaseLikes,
-    decreaseLikes,
   } = useContext(PostContext); 
 
-  const {theme} = useContext(UserContext)
+  const {theme,user} = useContext(UserContext)
+  const [isLiked,setIsLiked] = useState(post && post.likes.includes(user._id))
+  const [isSaved,setIsSaved] = useState(post && post.saved.includes(user._id))
 
   const savePost = async(id)=>{
-    if(isSaved){
-      dispatch({type:'SET_SAVED',payload:'false'})
-    }else{
-      dispatch({ type: "SET_SAVED", payload: "true" });
-    }
     await postSaved(id)
+    setIsSaved(!isSaved)
   }
 
-  useEffect(()=>{
-    const getSaved = async()=>{
-      await isPostSaved(id)
-    }
-    getSaved()
-  },[])
-
-  useEffect(()=>{
-    const likedPost = async () => {
-      await postLiked(id);
-    };
-    likedPost()
-  },[isSaved])
-
-  const setLikes = async () => {
+  const setLikes = async (id) => {
     await likePost(id);
-    if (isPostLiked) {
-      dispatch({ type: "SET_POST_LIKED", payload: { message: "Unliked" } });
-      decreaseLikes();
-    } else {
-      dispatch({ type: "SET_POST_LIKED", payload: { message: "Liked" } });
-      increaseLikes();
-    }
+    setIsLiked(!isLiked)
   };
 
   return (
@@ -95,7 +66,7 @@ const Post = ({id,avatar,username,image,likes,caption}) => {
             className="rounded-full hover:scale-110 active:scale-75 duration-300 ease-in-out transition-all"
             onClick={() => setLikes(id)}
           >
-            {isPostLiked ? (
+            {isLiked ? (
               <SolidHeart className="w-6 h-6 text-red-500" />
             ) : (
               <OutlineHeart className="w-6 h-6 text-red-500" />

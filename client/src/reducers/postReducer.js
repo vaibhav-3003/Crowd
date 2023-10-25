@@ -50,48 +50,10 @@ const PostReducer = (state,action)=>{
           }
         }
       
-      case 'SET_POST_LIKED':
-        if(action.payload.message==='Liked'){
-          return {
-            ...state,
-            isPostLiked: true,
-          };
-        }else{
-          return {
-            ...state,
-            isPostLiked: false,
-          };
-        }
-
-      case 'INCREASE_LIKES':
-        return {
-          ...state,
-          likes: state.likes + 1
-        }
-      
-      case 'DECREASE_LIKES':
-        return {
-          ...state,
-          likes: state.likes - 1
-        }
-      
       case 'SET_FOLLOWING_POSTS':
         return {
           ...state,
           followingPosts: action.payload
-        }
-      
-      case 'SET_SAVED':
-        if(action.payload==='true'){
-          return {
-            ...state,
-            isSaved: true
-          }
-        }else{
-          return {
-            ...state,
-            isSaved: false
-          }
         }
       
       case 'SET_ALL_POSTS':

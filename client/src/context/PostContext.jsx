@@ -11,8 +11,6 @@ const initialState = {
     post: null,
     comments:null,
     ownerComment:null,
-    isPostLiked: null,
-    isSaved: null,
     likes: null,
     allPosts:[]
 }
@@ -39,6 +37,7 @@ const PostProvider = ({children})=>{
             dispatch({type:'POST_UPLOAD_SUCCESS',payload:data})
             dispatch({ type: "SET_LOADING_FALSE" });
         } catch (error) {
+            console.log(error)
             dispatch({
               type: "SET_ERROR",
               payload: error.response.data.message,
@@ -99,27 +98,6 @@ const PostProvider = ({children})=>{
         }
     }
 
-    const postLiked = async(id)=>{
-        try {
-            const { data } = await axios.get(
-              `http://localhost:4000/api/v1/post/liked/${id}`,{
-                withCredentials: true,
-              }
-            );
-            dispatch({ type: "SET_POST_LIKED",payload: data});
-        } catch (error) {
-            dispatch({ type: "SET_ERROR", payload: error.response.data.message });
-        }
-    }
-    
-    const increaseLikes = ()=>{
-        dispatch({type: 'INCREASE_LIKES'})
-    }
-
-    const decreaseLikes = ()=>{
-        dispatch({type: 'DECREASE_LIKES'})
-    }
-
     const getFollowingPosts = async()=>{
         try {
             dispatch({type: 'SET_LOADING_TRUE'})
@@ -139,17 +117,6 @@ const PostProvider = ({children})=>{
                 withCredentials: true
             })
             // dispatch({type: 'SET_SAVED',payload: data.message})
-        } catch (error) {
-            dispatch({type: 'SET_ERROR',payload:error.response.data.message})
-        }
-    }
-
-    const isPostSaved = async(id)=>{
-        try {
-            const {data} = await axios.get(`http://localhost:4000/api/v1/saved/post/${id}`,{
-                withCredentials: true
-            })
-            dispatch({type: 'SET_SAVED',payload: data.message})
         } catch (error) {
             dispatch({type: 'SET_ERROR',payload:error.response.data.message})
         }
@@ -203,7 +170,7 @@ const PostProvider = ({children})=>{
         getPosts()
     },[])
 
-    return <PostContext.Provider value={{...state,dispatch,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postLiked,increaseLikes,decreaseLikes,postSaved,isPostSaved,getAllPosts,deletePost,updatePost,getFollowingPosts}}>
+    return <PostContext.Provider value={{...state,uploadPost,fetchUserPosts,fetchPost,commentOnPost,likePost,postSaved,getAllPosts,deletePost,updatePost,getFollowingPosts}}>
         {children}
     </PostContext.Provider>
 }

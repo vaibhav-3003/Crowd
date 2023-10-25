@@ -1,5 +1,5 @@
 import express from 'express';
-import {commentOnPost, createPost, deleteComment, deletePost, fetchUserPosts, getAllPosts, getPost, getPostOfFollowing, isPostSaved, likeAndUnlikePost, postLiked, savePost, updateCaption} from '../controllers/post.js';
+import {commentOnPost, createPost, deleteComment, deletePost, fetchUserPosts, getAllPosts, getPost, getPostOfFollowing, likeAndUnlikePost, updateCaption,savePost} from '../controllers/post.js';
 import { isAuthenticated } from '../middlewares/auth.js';
 
 const router = express.Router()
@@ -8,8 +8,6 @@ router.post('/post/upload',isAuthenticated,createPost)
 
 router.get('/post/like/:id',isAuthenticated,likeAndUnlikePost)
 
-router.get('/post/liked/:id',isAuthenticated,postLiked)
-
 router.get('/:username/posts',fetchUserPosts)
 
 router.get('/allposts',isAuthenticated,getAllPosts)
@@ -17,8 +15,6 @@ router.get('/allposts',isAuthenticated,getAllPosts)
 router.get('/post/:id',isAuthenticated,getPost)
 
 router.get('/save/post/:id',isAuthenticated,savePost)
-
-router.get('/saved/post/:id',isAuthenticated,isPostSaved)
 
 router.put('/post/update/:id',isAuthenticated,updateCaption)
 

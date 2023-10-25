@@ -42,6 +42,7 @@ const Home = () => {
                       image={post.image.url}
                       likes={post.likes.length}
                       caption={post.caption}
+                      post = {post}
                     />
                   );
                 })}

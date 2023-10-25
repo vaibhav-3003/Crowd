@@ -10,14 +10,20 @@ import {
 import logo_light from '../assets/Crowd.png'
 import logo_dark from '../assets/logo_dark.png'
 import { Link, useLocation } from 'react-router-dom';
-import { IconButton } from "@material-tailwind/react";
+import {
+  IconButton,
+  Popover,
+  PopoverHandler,
+  PopoverContent,
+} from "@material-tailwind/react";
 import {
   ChatCircleDots,
   House,
   MagnifyingGlass,
   Compass,
   PlusSquare,
-  Hash
+  Hash,
+  List as HamBurgerList,
 } from "@phosphor-icons/react";
 import { UserContext } from '../context/UserContext';
 import SearchModal from './SearchModal';
@@ -27,6 +33,7 @@ const Sidebar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth<=715);
   const {user,theme} = useContext(UserContext)
   const location = useLocation()
+
 
   useEffect(() => {
 
@@ -49,8 +56,10 @@ const Sidebar = () => {
       {isMobile ? (
         <div
           className={`w-full fixed bottom-0 border-t ${
-            theme === "dark" ? "border-dark bg-[#1D232A]":"bg-white"
-          } justify-between px-4 py-3 z-20 items-center ${location.pathname.slice(0,10)==='/direct/t/' ?'hidden':'flex'}`}
+            theme === "dark" ? "border-dark bg-[#1D232A]" : "bg-white"
+          } justify-between px-4 py-3 z-20 items-center ${
+            location.pathname.slice(0, 10) === "/direct/t/" ? "hidden" : "flex"
+          }`}
         >
           <Link to="/">
             <IconButton variant="text">
@@ -385,6 +394,91 @@ const Sidebar = () => {
                 </p>
               </ListItem>
             </Link>
+
+            <Popover>
+              <PopoverHandler>
+                <ListItem
+                  className={`${
+                    theme === "dark" &&
+                    "hover:bg-[#313a44] active:bg-[#313a44] focus:bg-[#313a44]"
+                  } ${
+                    location.pathname.slice(0, 7) === "/direct"
+                      ? "w-fit"
+                      : "w-fit lg:w-full"
+                  }`}
+                >
+                  <ListItemPrefix
+                    className={`${
+                      location.pathname.slice(0, 7) === "/direct"
+                        ? "mr-0"
+                        : "mr-0 lg:mr-4"
+                    }`}
+                  >
+                    <HamBurgerList
+                      className={`h-7 w-7 ${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    />
+                  </ListItemPrefix>
+                  <p
+                    className={`${
+                      theme === "light" ? "text-black" : "text-gray-500"
+                    } ${
+                      location.pathname.slice(0, 7) === "/direct"
+                        ? "hidden"
+                        : "hidden lg:block"
+                    }`}
+                  >
+                    More
+                  </p>
+                </ListItem>
+              </PopoverHandler>
+              <PopoverContent
+                className={`z-20 p-2 ${
+                  theme === "dark" && "bg-[#1D232A] border-dark"
+                }`}
+              >
+                <div className={`w-[200px] `}>
+                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
+                    <PlusSquare
+                      className={`h-7 w-7 ${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    />
+                    <p>Saved</p>
+                  </div>
+                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
+                    <PlusSquare
+                      className={`h-7 w-7 ${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    />
+                    <p>Switch appearence</p>
+                  </div>
+                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
+                    <PlusSquare
+                      className={`h-7 w-7 ${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    />
+                    <p>Switch accounts</p>
+                  </div>
+
+                  <div className="flex justify-center px-2 my-2">
+                    <hr className="w-full" />
+                  </div>
+
+                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
+                    <PlusSquare
+                      className={`h-7 w-7 ${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    />
+                    <p>Log out</p>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </List>
         </Card>
       )}

@@ -52,7 +52,11 @@ const PostComments = () => {
 
   return (
     <div className="flex flex-col lg:ml-72 md:ml-20 pb-16 md:pb-0 h-screen">
-      <div className={`z-20 flex-none px-4 py-3 flex items-center sticky top-0 ${theme==='light'?'bg-gray-50':'bg-dark'} md:hidden justify-between`}>
+      <div
+        className={`z-20 flex-none px-4 py-3 flex items-center sticky top-0 ${
+          theme === "light" ? "bg-gray-50" : "bg-dark"
+        } md:hidden justify-between`}
+      >
         <Link to={`/p/${id}`}>
           <ChevronLeftIcon className="w-6 h-6 font-bold" />
         </Link>
@@ -61,12 +65,16 @@ const PostComments = () => {
       </div>
 
       {post && comments && post.comments.length === 0 ? (
-        <div className="border-b flex-grow flex flex-col overflow-auto justify-center items-center h-full">
+        <div className={`border-b ${theme==='dark' && 'border-dark'} flex-grow flex flex-col overflow-auto justify-center items-center h-full`}>
           <h2 className="text-3xl font-semibold">No comments yet.</h2>
           <p className="mt-2">Start the conversation</p>
         </div>
       ) : (
-        <div className={`border-b ${theme==='dark' && 'border-dark'} flex-grow flex flex-col overflow-auto pt-2 px-2 md:pt-6 h-full`}>
+        <div
+          className={`border-b ${
+            theme === "dark" && "border-dark"
+          } flex-grow flex flex-col overflow-auto pt-2 px-2 md:pt-6 h-full`}
+        >
           {/* comment box */}
           {loading ? (
             <div className="w-full flex justify-center items-center">
@@ -158,7 +166,9 @@ const PostComments = () => {
               ) : (
                 <Button
                   variant="text"
-                  className={`font-bold p-2 ${theme==='dark' && 'text-gray-500'}`}
+                  className={`font-bold p-2 ${
+                    theme === "dark" && "text-gray-500"
+                  }`}
                   type="submit"
                   disabled={loading}
                 >

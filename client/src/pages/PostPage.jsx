@@ -31,8 +31,9 @@ const PostPage = () => {
     const [comment, setComment] = useState("");
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
     const [iconBoxVisible,setIconBoxVisible] = useState(false)
-    const {fetchPost,post,loading,comments,commentOnPost,ownerComment,likePost,postLiked,isPostLiked,dispatch,likes,increaseLikes,decreaseLikes} = useContext(PostContext)
+    const {fetchPost,post,loading,comments,commentOnPost,ownerComment,likePost,likes} = useContext(PostContext)
     const {theme,user} = useContext(UserContext)
+    const [isLiked,setIsLiked] = useState(post && post.likes.some(like=>like._id===user._id))
 
     useEffect(() => {
       const handleResize = () => {
@@ -41,21 +42,21 @@ const PostPage = () => {
       handleResize();
       window.addEventListener("resize", handleResize);
 
-      const userPost = async () => {
-        await fetchPost(id);
-      };
-
-      const likedPost = async()=>{
-        await postLiked(id);
-      }
-
-      userPost();
-      likedPost();
-
       return () => {
         window.removeEventListener("resize", handleResize);
       };
     }, []); 
+
+    useEffect(()=>{
+      const userPost = async () => {
+        await fetchPost(id);
+      };
+      userPost();
+    },[id])
+
+    useEffect(()=>{
+      setIsLiked(post && post.likes.some((like) => like._id === user._id));
+    },[post])
 
     const handleIconBox = ()=>{
       setIconBoxVisible(!iconBoxVisible)
@@ -94,15 +95,8 @@ const PostPage = () => {
     }
 
     const setLikes = async(id)=>{
-      
       await likePost(id)
-      if(isPostLiked){
-        dispatch({type:'SET_POST_LIKED', payload: {message: 'Unliked'}})
-        decreaseLikes()
-      }else{
-        dispatch({ type: "SET_POST_LIKED", payload: { message: "Liked" } });
-        increaseLikes()
-      }
+      setIsLiked(!isLiked)
     }
 
   return (
@@ -188,7 +182,7 @@ const PostPage = () => {
                         className="rounded-full hover:scale-110 active:scale-75 duration-300 ease-in-out transition-all"
                         onClick={() => setLikes(id)}
                       >
-                        {isPostLiked ? (
+                        {isLiked ? (
                           <Heart
                             size={28}
                             className="text-red-500"
@@ -204,6 +198,7 @@ const PostPage = () => {
                       <Link to={`/p/${id}/comments`}>
                         <IconButton variant="text" className="rounded-full">
                           <ChatCircle
+                            size={28}
                             className={`${
                               theme === "light" ? "text-black" : "text-gray-500"
                             }`}
@@ -409,7 +404,7 @@ const PostPage = () => {
                           className="rounded-full hover:scale-110 active:scale-75 duration-300 ease-in-out transition-all"
                           onClick={() => setLikes(id)}
                         >
-                          {isPostLiked ? (
+                          {isLiked ? (
                             <Heart
                               size={28}
                               className="text-red-500"

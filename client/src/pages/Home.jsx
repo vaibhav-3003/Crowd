@@ -19,10 +19,14 @@ const Home = () => {
   },[])
 
   return (
-    <div className="md:px-28">
+    <div className="md:px-28 min-h-screen max-h-auto">
       <div className="pb-20 md:pb-5 md:ml-5 lg:ml-72">
         <div className="py-6 px-3 flex justify-center items-center">
-          <img src={theme==='light'?logo_light:logo_dark} alt="logo" className="w-20 md:w-24" />
+          <img
+            src={theme === "light" ? logo_light : logo_dark}
+            alt="logo"
+            className="w-20 md:w-24"
+          />
         </div>
         {loading ? (
           <div className="py-4 flex justify-center items-center">
@@ -31,7 +35,10 @@ const Home = () => {
         ) : (
           <div className="flex justify-between">
             <div className="flex flex-col gap-6">
-              {loading ? <Spinner /> : followingPosts &&
+              {loading ? (
+                <Spinner />
+              ) : (
+                followingPosts &&
                 followingPosts.map((post) => {
                   return (
                     <Post
@@ -42,15 +49,33 @@ const Home = () => {
                       image={post.image.url}
                       likes={post.likes.length}
                       caption={post.caption}
-                      post = {post}
+                      post={post}
                     />
                   );
-                })}
+                })
+              )}
             </div>
           </div>
         )}
-      <div className='flex justify-center items-center py-4'>
-        <p className={`text-md md:text-lg ${theme==='light'?'text-gray-400':'text-gray-700'}`}>No more Posts</p></div>
+        <div className="flex justify-center items-center py-4">
+          {followingPosts.length === 0 ? (
+            <p
+              className={`text-md md:text-lg ${
+                theme === "light" ? "text-gray-800" : "text-gray-500"
+              }`}
+            >
+              Follow users to see posts
+            </p>
+          ) : (
+            <p
+              className={`text-md md:text-lg ${
+                theme === "light" ? "text-gray-800" : "text-gray-500"
+              }`}
+            >
+              No more Posts
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

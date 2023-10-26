@@ -9,11 +9,10 @@ import SavedPosts from '../components/SavedPosts'
 import { PostContext } from '../context/PostContext'
 import LoadingPage from './LoadingPage'
 import ErrorPage from './ErrorPage'
-import ThemeSwitcher from '../components/ThemeSwitcher'
 
 const Profile = () => {
     const {username} = useParams()
-    const {dispatch,user,userProfile,loadUserWithUsername,followAndUnfollow,userFollowed,userLoading,isFollowed,error,theme} = useContext(UserContext)
+    const {dispatch,user,userProfile,loadUserWithUsername,followAndUnfollow,userFollowed,userLoading,isFollowed} = useContext(UserContext)
     const {posts,fetchUserPosts,loading} = useContext(PostContext)
 
     const [tab,setTab] = useState('posts')
@@ -99,7 +98,6 @@ const Profile = () => {
                   {isFollowed ? "Unfollow" : "Follow"}
                 </Button>
               )}
-              <ThemeSwitcher />
             </div>
           </div>
           <div className="flex gap-5 md:gap-8 mt-5">

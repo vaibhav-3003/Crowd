@@ -9,7 +9,7 @@ import {
 
 import logo_light from '../assets/Crowd.png'
 import logo_dark from '../assets/logo_dark.png'
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   IconButton,
   Popover,
@@ -24,14 +24,21 @@ import {
   PlusSquare,
   Hash,
   List as HamBurgerList,
+  Bookmark,
+  BookmarkSimple,
+  Moon,
+  Sun,
+  User,
+  SignOut,
 } from "@phosphor-icons/react";
 import { UserContext } from '../context/UserContext';
 import SearchModal from './SearchModal';
+import LoginModal from './LoginModal';
 
 const Sidebar = () => {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth<=715);
-  const {user,theme} = useContext(UserContext)
+  const {user,theme,logout,toggleTheme} = useContext(UserContext)
   const location = useLocation()
 
 
@@ -50,6 +57,14 @@ const Sidebar = () => {
     };
     
   }, []); 
+
+  const navigate = useNavigate()
+
+  const handleLogout = async()=>{
+    localStorage.removeItem("theme")
+    await logout()
+    navigate('/account/login')
+  }
 
   return (
     <>
@@ -438,44 +453,107 @@ const Sidebar = () => {
                   theme === "dark" && "bg-[#1D232A] border-dark"
                 }`}
               >
-                <div className={`w-[200px] `}>
-                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
-                    <PlusSquare
-                      className={`h-7 w-7 ${
+                <div className={`w-[200px]`}>
+                  <Link
+                    to={`/${user && user.username}/`}
+                    className={`flex items-center gap-2 w-full mb-2 ${
+                      theme === "light"
+                        ? "hover:bg-blue-gray-50"
+                        : "hover:bg-dark"
+                    } p-2.5 rounded-lg`}
+                  >
+                    <BookmarkSimple
+                      size={24}
+                      className={`${
                         theme === "light" ? "text-gray-800" : "text-gray-500"
                       }`}
                     />
-                    <p>Saved</p>
-                  </div>
-                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
-                    <PlusSquare
-                      className={`h-7 w-7 ${
+                    <p
+                      className={`${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    >
+                      Saved
+                    </p>
+                  </Link>
+
+                  <button
+                    className={`flex items-center gap-2 w-full mb-2 ${
+                      theme === "light"
+                        ? "hover:bg-blue-gray-50"
+                        : "hover:bg-dark"
+                    } p-2.5 rounded-lg`}
+                    onClick={toggleTheme}
+                  >
+                    {theme === "dark" ? (
+                      <Moon
+                        size={24}
+                        className={`${
+                          theme === "light" ? "text-gray-800" : "text-gray-500"
+                        }`}
+                      />
+                    ) : (
+                      <Sun
+                        size={24}
+                        className={`${
+                          theme === "light" ? "text-gray-800" : "text-gray-500"
+                        }`}
+                      />
+                    )}
+
+                    <p
+                      className={`${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    >
+                      Switch appearence
+                    </p>
+                  </button>
+
+                  <button
+                    className={`flex items-center gap-2 w-full mb-2 ${
+                      theme === "light"
+                        ? "hover:bg-blue-gray-50"
+                        : "hover:bg-dark"
+                    } p-2.5 rounded-lg`}
+                    onClick={() =>
+                      document.getElementById("login_modal").showModal()
+                    }
+                  >
+                    <User
+                      size={24}
+                      className={`${
                         theme === "light" ? "text-gray-800" : "text-gray-500"
                       }`}
                     />
-                    <p>Switch appearence</p>
-                  </div>
-                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
-                    <PlusSquare
-                      className={`h-7 w-7 ${
+                    <p
+                      className={`${
                         theme === "light" ? "text-gray-800" : "text-gray-500"
                       }`}
-                    />
-                    <p>Switch accounts</p>
-                  </div>
+                    >
+                      Switch accounts
+                    </p>
+                  </button>
+
+                  <LoginModal/>
 
                   <div className="flex justify-center px-2 my-2">
-                    <hr className="w-full" />
+                    <hr
+                      className={`w-full ${theme === "dark" && "border-dark"}`}
+                    />
                   </div>
 
-                  <div className="flex items-center gap-2 w-full hover:bg-gray-200 p-2.5 rounded-lg">
-                    <PlusSquare
-                      className={`h-7 w-7 ${
-                        theme === "light" ? "text-gray-800" : "text-gray-500"
-                      }`}
-                    />
+                  <button
+                    className={`flex text-red-500 items-center gap-2 w-full mb-2 ${
+                      theme === "light"
+                        ? "hover:bg-blue-gray-50"
+                        : "hover:bg-dark"
+                    } p-2.5 rounded-lg`}
+                    onClick={handleLogout}
+                  >
+                    <SignOut size={24} />
                     <p>Log out</p>
-                  </div>
+                  </button>
                 </div>
               </PopoverContent>
             </Popover>

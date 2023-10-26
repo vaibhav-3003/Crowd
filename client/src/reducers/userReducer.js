@@ -76,6 +76,12 @@ const UserReducer = (state,action)=>{
                 ...state,
                 theme: action.payload
             }
+        
+        case 'SET_USER_NULL':
+            return {
+                ...state,
+                user: null
+            }
     
         default:
             return {

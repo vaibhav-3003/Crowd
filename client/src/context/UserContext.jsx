@@ -163,6 +163,21 @@ const UserProvider = ({children})=>{
         }
     }
 
+    const logout = async () => {
+      try {
+        dispatch({ type: "SET_LOADING_TRUE" });
+        Cookies.remove("token");
+        dispatch({type: 'SET_USER_NULL'})
+        dispatch({ type: "SET_LOADING_FALSE" });
+      } catch (error) {
+        dispatch({ type: "SET_LOADING_FALSE" });
+        dispatch({
+          type: "SET_USER_ERROR",
+          payload: error.response.data.message,
+        });
+      }
+    };
+
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
@@ -172,7 +187,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed,toggleTheme}}>
+        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed,toggleTheme,logout}}>
             {children}
         </UserContext.Provider>
     )

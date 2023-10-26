@@ -80,6 +80,7 @@ const Register = ({user}) => {
           >
             <div>
               <Input
+                color="blue-gray"
                 label="username"
                 required
                 autoComplete="off"
@@ -100,6 +101,7 @@ const Register = ({user}) => {
             </div>
             <div>
               <Input
+                color='blue-gray'
                 label="name"
                 required
                 autoComplete="off"
@@ -114,6 +116,7 @@ const Register = ({user}) => {
             </div>
             <div>
               <Input
+                color='blue-gray'
                 label="email"
                 type="email"
                 required
@@ -130,6 +133,7 @@ const Register = ({user}) => {
             <div>
               <div className="relative flex w-full">
                 <Input
+                  color='blue-gray'
                   label="password"
                   type={isPassVisible ? "text" : "password"}
                   className="nunito pr-10"
@@ -171,6 +175,7 @@ const Register = ({user}) => {
             <div>
               <div className="relative flex w-full">
                 <Input
+                  color='blue-gray'
                   label="confirm password"
                   type={isConfPassVisible ? "text" : "password"}
                   className="nunito pr-10"
@@ -206,7 +211,7 @@ const Register = ({user}) => {
               )}
             </div>
             <Button
-              className="nunito w-full flex justify-center items-center gap-2"
+              className="nunito bg-primary rounded-full w-full flex justify-center items-center gap-2"
               type="submit"
               disabled={isSubmitting}
             >

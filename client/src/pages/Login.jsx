@@ -79,6 +79,7 @@ const Login = ({user}) => {
               <div className="w-4/5 flex flex-col gap-6">
                 <div className="w-full">
                   <Input
+                    color='blue-gray'
                     label="email"
                     type="email"
                     className="nunito"
@@ -95,6 +96,7 @@ const Login = ({user}) => {
                 <div>
                   <div className="relative flex w-full">
                     <Input
+                    color='blue-gray'
                       type={isPassVisible ? "text" : "password"}
                       label="password"
                       className="nunito pr-20"

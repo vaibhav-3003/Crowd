@@ -82,7 +82,7 @@ const Profile = () => {
         <div className="flex flex-col justify-center items-center md:items-start md:justify-start md:ml-16">
           <div className="flex gap-5 justify-center items-center flex-wrap md:justify-start">
             <h2 className="text-2xl">{userProfile && userProfile.username}</h2>
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               {user && user.username === username ? (
                 <Link to={`/${username}/edit`}>
                   <Button className="bg-primary nunito normal-case text-sm font-normal rounded-full">
@@ -91,7 +91,11 @@ const Profile = () => {
                 </Link>
               ) : (
                 <Button
-                  className={`nunito normal-case text-sm font-normal w-28 rounded-full p-2 ${follow ? 'bg-none border-primary text-primary':'bg-primary text-white'}`}
+                  className={`nunito normal-case text-sm font-normal w-28 rounded-full p-2 ${
+                    follow
+                      ? "bg-none border-primary text-primary"
+                      : "bg-primary text-white"
+                  }`}
                   variant={follow ? "outlined" : "filled"}
                   onClick={followUser}
                 >

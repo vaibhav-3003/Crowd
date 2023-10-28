@@ -9,7 +9,7 @@ import { useNavigate,Link } from 'react-router-dom';
 
 const EditProfile = () => {
     const {username} = useParams()
-    const {loadUserWithUsername,userProfile,changeProfilePhoto,error,updateProfile,isLoading} = useContext(UserContext)
+    const {user,loadUserWithUsername,userProfile,changeProfilePhoto,error,updateProfile,isLoading,deleteProfileImage} = useContext(UserContext)
     const [profileImage,setProfileImage] = useState(userProfile && userProfile.avatar.url)
 
     const {theme} = useContext(UserContext)
@@ -26,7 +26,7 @@ const EditProfile = () => {
 
     const editProfile = async(data) => {
       await updateProfile(data)
-      navigate(`/${username}`)
+      setProfileImage(user.avatar.url)
     }
 
     const handleProfileChange = async(e)=>{
@@ -53,6 +53,12 @@ const EditProfile = () => {
 
       Reader.readAsDataURL(file);
       profileModal.current.checked = false
+    }
+
+    const deleteProfilePicture = async()=>{
+      await deleteProfileImage()
+      profileModal.current.checked = false
+      navigate(`/${user.username}/`)
     }
 
     useEffect(()=>{
@@ -139,18 +145,23 @@ const EditProfile = () => {
                         />
                       </label>
                     </div>
-                    <div
-                      className={`py-2 border-t w-full flex justify-center items-center ${
-                        theme === "dark" && "border-dark"
-                      }`}
-                    >
-                      <button
-                        className="text-red-600"
-                        onClick={() => console.log("remove")}
+                    {user.avatar.public_id !==
+                      "crowd/profiles/default_pa5rxq" && (
+                      <div
+                        className={`py-2 border-t w-full flex justify-center items-center ${
+                          theme === "dark" && "border-dark"
+                        }`}
                       >
-                        Remove Current Photo
-                      </button>
-                    </div>
+                        <button
+                          className="text-red-600"
+                          onClick={deleteProfilePicture}
+                          disabled={isLoading}
+                        >
+                          Remove Current Photo
+                        </button>
+                      </div>
+                    )}
+
                     <div
                       className={`py-2 border-t w-full flex justify-center items-center ${
                         theme === "dark" && "border-dark"
@@ -192,7 +203,7 @@ const EditProfile = () => {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? <Spinner className="w-4" color='blue'/> : null}
+              {isLoading ? <Spinner className="w-4" color="blue" /> : null}
               Submit
             </Button>
           </form>

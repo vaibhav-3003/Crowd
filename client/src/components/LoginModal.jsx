@@ -8,10 +8,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {Eye,EyeSlash } from '@phosphor-icons/react'
 import { useNavigate } from 'react-router-dom';
+import { PostContext } from '../context/PostContext';
 
 const LoginModal = () => {
     const [isPassVisible, setIsPassVisible] = useState(false);
-    const { userLogin, loginError,theme } = useContext(UserContext);
+    const { userLogin, loginError,theme,loadUser } = useContext(UserContext);
+    const {getFollowingPosts} = useContext(PostContext)
     const [error, setError] = useState('');
     const [isOpen,setIsOpen] = useState(true)
 
@@ -38,7 +40,10 @@ const LoginModal = () => {
 
     const handleLogin = async (data) => {
       await userLogin(data);
-      setIsOpen(false)  
+      setIsOpen(false)
+      await loadUser()
+      await getFollowingPosts()
+      
       navigate('/')
         
     };

@@ -13,7 +13,8 @@ import {
   forgotPassword,
   resetPassword,
   updateProfileImage,
-  userFollowed
+  userFollowed,
+  deleteProfilePicture
 } from "../controllers/user.js";
 import { isAuthenticated } from '../middlewares/auth.js';
 
@@ -34,6 +35,8 @@ router.put('/update/password',isAuthenticated,updatePassword)
 router.put('/update/profile',isAuthenticated,updateProfile)
 
 router.put('/update/profile/photo',isAuthenticated,updateProfileImage)
+
+router.delete('/delete/profile/photo',isAuthenticated,deleteProfilePicture)
 
 router.delete('/delete/me',isAuthenticated,deleteMyProfile)
 

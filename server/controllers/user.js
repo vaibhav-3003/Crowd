@@ -239,6 +239,7 @@ export const updateProfileImage = async(req,res)=>{
     }
 
     const {avatar} = req.body
+    const result = await cloudinary.v2.uploader.destroy(user.avatar.public_id);
     const myCloud = await cloudinary.v2.uploader.upload(avatar, {
       folder: "crowd/profiles",
     });
@@ -482,6 +483,31 @@ export const resetPassword = async(req,res)=>{
     res.status(200).json({
       success: true,
       message: "Password Updated Successfully"
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const deleteProfilePicture = async(req,res)=>{
+  try {
+    
+    const user = await User.findById(req.user._id)
+
+    const result = await cloudinary.uploader.destroy(user.avatar.public_id)
+
+    user.avatar.public_id = "crowd/profiles/default_pa5rxq"
+    user.avatar.url = "https://res.cloudinary.com/dsz55cxdz/image/upload/v1693316753/crowd/profiles/default_pa5rxq.jpg"
+
+    await user.save()
+
+    res.status(200).json({
+      success: true,
+      message: "Profile Picture Deleted"
     })
 
   } catch (error) {

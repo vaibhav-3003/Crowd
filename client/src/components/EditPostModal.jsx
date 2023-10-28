@@ -42,7 +42,7 @@ const EditPostModal = () => {
       <input type="checkbox" id="edit_modal" className="modal-toggle" />
       <div className="modal">
         <form
-          className="modal-box p-0 max-w-[800px]"
+          className="modal-box p-0 max-w-[800px]" 
           onSubmit={(e) => handleEditPost(e, post && post._id, caption)}
         >
           {/* header */}
@@ -61,8 +61,8 @@ const EditPostModal = () => {
           </div>
 
           {/* body */}
-          <div className="flex w-full">
-            <div className="w-1/2">
+          <div className="flex flex-col md:flex-row w-full">
+            <div className="w-full md:w-1/2">
               {post && (
                 <img
                   src={post.image.url}
@@ -71,7 +71,7 @@ const EditPostModal = () => {
                 />
               )}
             </div>
-            <div className="w-1/2">
+            <div className="w-full md:w-1/2">
               {post && (
                 <div className="w-full p-2">
                   <div className="w-full flex items-center gap-2 p-4">

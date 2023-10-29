@@ -7,18 +7,20 @@ export const createPost = async(req,res)=>{
 
         const {
             caption,
-            image
+            post,
+            type
         } = req.body
 
-        if(!image){
+        if(!post){
             return res.status(400).json({
                 success: false,
-                message: 'Image is required !'
+                message: 'Post is required !'
             })
         }
 
-        const myCloud = await cloudinary.v2.uploader.upload(image,{
-            folder: "crowd/posts"
+        const myCloud = await cloudinary.v2.uploader.upload(post,{
+            folder: "crowd/posts",
+            resource_type: type
         });
 
         const newPostData = {
@@ -27,6 +29,7 @@ export const createPost = async(req,res)=>{
                 public_id:myCloud.public_id,
                 url: myCloud.secure_url
             },
+            type,
             owner: req.user._id
         };
 

@@ -21,7 +21,7 @@ const PostProvider = ({children})=>{
     
     const [state,dispatch] = useReducer(reducer,initialState)
 
-    const uploadPost = async(caption,image)=>{
+    const uploadPost = async(caption,post,type)=>{
         try {
             dispatch({ type: "SET_LOADING_TRUE" });
             const config = {
@@ -32,7 +32,8 @@ const PostProvider = ({children})=>{
             }
             const {data} = await axios.post('http://localhost:4000/api/v1/post/upload',{
                 caption,
-                image,
+                post,
+                type
             },config)
             dispatch({type:'POST_UPLOAD_SUCCESS',payload:data})
             dispatch({ type: "SET_LOADING_FALSE" });

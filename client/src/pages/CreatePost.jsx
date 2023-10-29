@@ -1,19 +1,25 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState,useRef } from 'react'
 import { CloudArrowUpIcon,TrashIcon } from '@heroicons/react/24/solid';
 import { PostContext } from '../context/PostContext';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from '../context/UserContext';
 import {IconButton,Button} from '@material-tailwind/react';
-import { Smiley } from '@phosphor-icons/react';
+import { Pause, Play, Smiley, SpeakerHigh, SpeakerSlash } from '@phosphor-icons/react';
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
 const CreatePost = () => {
 
-  const [image,setImage] = useState(undefined)
+  const [post,setPost] = useState(undefined)
+  const [postType,setPostType] = useState('')
   const [caption,setCaption] = useState('')
   const [iconBoxVisible, setIconBoxVisible] = useState(false);
+
+  const [isPlaying,setIsPlaying] = useState(true)
+  const [isMuted,setIsMuted] = useState(true)
+
+  const videoPlayer = useRef()
 
   const {uploadPost,loading,error} = useContext(PostContext)
   const {theme,user} = useContext(UserContext)
@@ -31,8 +37,14 @@ const CreatePost = () => {
 
     Reader.onload = (e)=>{
       if(Reader.readyState === 2){
-        setImage(Reader.result)
+        setPost(Reader.result)
       }
+    }
+
+    if (file.type.startsWith("image/")) {
+      setPostType("image");
+    } else if (file.type.startsWith("video/")) {
+      setPostType("video");
     }
 
     Reader.readAsDataURL(file)
@@ -41,17 +53,18 @@ const CreatePost = () => {
   const submitHandler = async(e)=>{
     e.preventDefault()
 
-    await uploadPost(caption,image)
+    await uploadPost(caption,post,postType)
 
     if(error){
       toast.error(error, {
         position: toast.POSITION.TOP_CENTER,
       });
+      setCaption('')
     }else{
       toast.success('Post Uploaded Successfully', {
         position: toast.POSITION.TOP_CENTER,
       });
-      setImage(undefined)
+      setPost(undefined)
       setCaption('')
     }
   }
@@ -74,6 +87,38 @@ const CreatePost = () => {
     setCaption(caption + emoji);
   };
 
+  const handlePlayingVideo = ()=>{
+    setIsPlaying(!isPlaying)
+
+    if(isPlaying){
+      videoPlayer.current.pause()
+    }else{
+      videoPlayer.current.play()
+    }
+  }
+
+  const handleSound = ()=>{
+    setIsMuted(!isMuted)
+
+    if(isMuted){
+      videoPlayer.current.muted = false
+    }else{
+      videoPlayer.current.muted = true
+    }
+  }
+
+  const handleDelete = ()=>{
+    setPost(undefined);
+
+    if(isMuted===false){
+      setIsMuted(true);
+    }
+
+    if(isPlaying===false){
+      setIsPlaying(true);
+    }
+  }
+
   return (
     <div className="w-full pb-20 md:pb-0">
       <div className="md:ml-20 lg:ml-72 min-h-screen flex flex-col items-center">
@@ -90,7 +135,7 @@ const CreatePost = () => {
               theme === "light" ? "bg-gray-200" : "bg-dark"
             } rounded-md px-4`}
           >
-            {!image ? (
+            {!post ? (
               <label className="cursor-pointer flex justify-center items-center h-full">
                 <div className="py-4 w-full flex flex-col items-center justify-center h-full border-2 border-gray-500 border-dashed">
                   <div className="flex flex-col justify-center items-center">
@@ -100,7 +145,7 @@ const CreatePost = () => {
                     <p className="text-lg">Click to Upload</p>
                   </div>
                   <p className="hidden sm:block mt-32  text-gray-400 ">
-                    Use high-quality JPG,SVG,PNG or GIF
+                    Use high-quality Images and Videos
                   </p>
                 </div>
                 <input
@@ -108,22 +153,56 @@ const CreatePost = () => {
                   name="upload-image"
                   onChange={handleImageChange}
                   className="w-0 h-0"
-                  accept="image/*"
+                  accept="image/*,video/*"
                 />
               </label>
             ) : (
               <div className="relative h-full">
-                <img
-                  src={image}
-                  alt="uploaded-image"
-                  className="h-full w-full bg-cover object-cover"
-                />
+                {postType === "image" ? (
+                  <img
+                    src={post}
+                    alt="uploaded-image"
+                    className="h-full w-full bg-cover object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full relative">
+                    <video
+                      src={post}
+                      className="cursor-pointer h-full w-full bg-cover object-cover"
+                      ref={videoPlayer}
+                      onClick={handlePlayingVideo}
+                      autoPlay
+                    />
+                    <button
+                      type="button"
+                      className="absloute absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                      onClick={handlePlayingVideo}
+                    >
+                      {!isPlaying && (
+                        <Play size={80} color="#fff" weight="fill" />
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                      onClick={handleSound}
+                    >
+                      {isMuted ? (
+                        <SpeakerSlash size={15} color="#fff" />
+                      ) : (
+                        <SpeakerHigh size={15} color="#fff" />
+                      )}
+                    </button>
+                  </div>
+                )}
+
                 <button
                   type="button"
-                  className={`absolute bottom-3 right-3 p-2 rounded-full ${
+                  className={`absolute bottom-3 left-3 p-2 rounded-full ${
                     theme === "light" ? "bg-white" : "bg-dark"
                   }  text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out`}
-                  onClick={() => setImage(undefined)}
+                  onClick={handleDelete}
                 >
                   <TrashIcon className="h-5 w-5 text-red-600" />
                 </button>
@@ -180,8 +259,11 @@ const CreatePost = () => {
               )}
             </div>
 
-            <Button type='submit' className='px-4 py-2 rounded-full normal-case font-normal bg-primary w-full md:w-[250px] text-md mt-4'>
-                Post
+            <Button
+              type="submit"
+              className="px-4 py-2 rounded-full normal-case font-normal bg-primary w-full md:w-[250px] text-md mt-4"
+            >
+              Post
             </Button>
           </div>
         </form>

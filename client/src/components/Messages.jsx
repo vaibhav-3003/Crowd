@@ -4,7 +4,7 @@ import Lottie from "lottie-react";
 import heartAnimation from '../animations/heart.json'
 
 const Messages = ({chat}) => {
-  const {user} = useContext(UserContext)
+  const {user,theme} = useContext(UserContext)
   const [messages,setMessages] = useState(chat && chat.messages)
   
 
@@ -74,7 +74,6 @@ const Messages = ({chat}) => {
                 </div>
               </div>
             ) : (
-              
               <div className="chat chat-end" key={message._id}>
                 <div className="chat-bubble bg-primary text-white">
                   {message.message}
@@ -88,7 +87,11 @@ const Messages = ({chat}) => {
             )
           ) : (
             <div className="chat chat-start" key={message._id}>
-              <div className="chat-bubble bg-gray-100 text-gray-800">
+              <div
+                className={`chat-bubble  ${
+                  theme === "light" ? "bg-gray-100 text-gray-800" : "bg-dark text-white"
+                }`}
+              >
                 {message.message}
               </div>
               <div className="chat-footer">

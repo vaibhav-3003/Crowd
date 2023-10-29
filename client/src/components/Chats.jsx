@@ -60,6 +60,7 @@ const Chats = () => {
                     className={`flex items-center px-3 py-2 ${theme==='dark'?'hover:bg-dark':'hover:bg-blue-gray-50'} hover:cursor-pointer z-20`}
                     key={chat._id}
                     to={`/direct/t/${chat._id}`}
+                    
                   >
                     <div>
                       <img
@@ -77,7 +78,7 @@ const Chats = () => {
                           {chat.messages && chat.messages[chat.messages.length - 1].type ===
                           "image"
                             ? "sent an image"
-                            : chat.messages && chat.messages[chat.messages.length - 1].type==='like' ? 'sent a like' :chat.messages[chat.messages.length - 1].message}
+                            : chat.messages && chat.messages[chat.messages.length - 1].type==='like' ? 'sent a like' :chat.messages[chat.messages.length - 1].message.length<30?chat.messages[chat.messages.length - 1].message:chat.messages[chat.messages.length -1].message.slice(0,31)+"..."}
                         </p>
                         <p className="text-sm text-gray-500 flex items-center">
                           <span className="mx-1 text-xl">&#183;</span>

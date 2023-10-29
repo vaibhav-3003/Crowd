@@ -52,12 +52,16 @@ const ChatProvider = ({children})=>{
     const loadChat = async(chatId)=>{
         try{
             dispatch({type: 'SET_CHAT_LOADING_TRUE'})
-            const { data } = await axios.get(
-              `http://localhost:4000/api/v1/chat/${chatId}`,
-              config
-            );
-            dispatch({ type: "SET_CHAT", payload: data });
-            dispatch({ type: "SET_CHAT_LOADING_FALSE" });
+            if(chatId!==undefined){
+                const { data } = await axios.get(
+                  `http://localhost:4000/api/v1/chat/${chatId}`,
+                  config
+                );
+                dispatch({ type: "SET_CHAT", payload: data });
+                dispatch({ type: "SET_CHAT_LOADING_FALSE" });
+                return 
+            }
+            
         }catch(error){
             dispatch({ type: "SET_CHAT_LOADING_FALSE" });
             dispatch({

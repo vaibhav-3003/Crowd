@@ -12,8 +12,6 @@ const MessageInput = ({chat}) => {
   const [message,setMessage] = useState('')
   const [messageType,setMessageType] = useState('text')
   const [images,setImages] = useState([])
-  
-  // const socket = io('http://localhost:4000')
 
   const formRef = useRef()
 
@@ -33,10 +31,10 @@ const MessageInput = ({chat}) => {
     
     await sendMessage(newMessage)
 
-    // socket.emit('sendMessage',newMessage)
-    
-    setMessage('')
+    await loadChat(chat._id)
+
     setImages([])
+    setMessage('')
   }
 
   const handleImageShow = (e)=>{
@@ -51,13 +49,6 @@ const MessageInput = ({chat}) => {
       j+=1
     }
   }
-
-  useEffect(()=>{
-    const chatLoad = async()=>{
-      await loadChat()
-    }
-    chatLoad()
-  },[chat])
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {

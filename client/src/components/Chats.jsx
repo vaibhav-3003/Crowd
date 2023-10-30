@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { ChatContext } from '../context/ChatContext';
+import React, { useContext, useEffect } from 'react'
 import {UserContext} from '../context/UserContext';
 import { Link, useLocation } from 'react-router-dom';
 import {NotePencil } from '@phosphor-icons/react'
 import CreateChatModal from './CreateChatModal';
 
-const Chats = () => {
+const Chats = ({chats}) => {
   const {user,theme} = useContext(UserContext)
-  const {showChatList,chatListLoading,chats} = useContext(ChatContext)
 
   const location = useLocation()
 
@@ -31,14 +29,6 @@ const Chats = () => {
     }
   };
 
-  useEffect(()=>{
-    const showChats = async()=>{
-      await showChatList()
-    }
-    showChats()
-  },[])
-  
-
   return (  
     <div className={`w-full min-w-full lg:min-w-[380px] lg:w-[380px] border-r ${theme==='dark' && 'border-dark'} ${(window.innerWidth <= 1024 && location.pathname.slice(0,10)==='/direct/t/') ? 'hidden':'block'}`}>
       <div className="flex items-center justify-between mt-8">
@@ -52,46 +42,76 @@ const Chats = () => {
       <div className="mt-4 flex flex-col">
         <h4 className={`text-md font-semibold ${theme==='light'?'text-gray-800':'text-gray-500'} mx-4`}>Messages</h4>
         <div className="mt-5 flex flex-col gap-3 overflow-y-auto">
-          {chats
-            ? chats.map((chat) => {
+          {chats &&
+             chats.map((chat) => {
+              if (!chat._id) {
+                return null;
+              }
                 return (
-                  chat.messages.length>0 && 
-                  <Link
-                    className={`flex items-center px-3 py-2 ${theme==='dark'?'hover:bg-dark':'hover:bg-blue-gray-50'} hover:cursor-pointer z-20`}
-                    key={chat._id}
-                    to={`/direct/t/${chat._id}`}
-                    
-                  >
-                    <div>
-                      <img
-                        src={chat.members[1].avatar.url}
-                        alt="profile"
-                        className="w-[60px] h-[60px] rounded-full object-cover"
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <h5 className={`text-md font-semibold ${theme==='light'?'text-black':'text-gray-500'}`}>
-                        {chat.members[1].name}
-                      </h5>
-                      <div className="flex items-center">
-                        <p className="text-sm text-gray-500">
-                          {chat.messages && chat.messages[chat.messages.length - 1].type ===
-                          "image"
-                            ? "sent an image"
-                            : chat.messages && chat.messages[chat.messages.length - 1].type==='like' ? 'sent a like' :chat.messages[chat.messages.length - 1].message.length<30?chat.messages[chat.messages.length - 1].message:chat.messages[chat.messages.length -1].message.slice(0,31)+"..."}
-                        </p>
-                        <p className="text-sm text-gray-500 flex items-center">
-                          <span className="mx-1 text-xl">&#183;</span>
-                          {chat.messages && convertDateToTimeAgo(
-                            chat.messages[chat.messages.length - 1].createdAt
-                          )}
-                        </p>
+                  chat.messages.length > 0 && (
+                    <Link
+                      className={`flex items-center px-3 py-2 ${
+                        theme === "dark"
+                          ? "hover:bg-dark"
+                          : "hover:bg-blue-gray-50"
+                      } hover:cursor-pointer z-20`}
+                      key={chat._id}
+                      to={`/direct/t/${chat._id}`}
+                    >
+                      <div>
+                        <img
+                          src={
+                            chat.members.find(
+                              (member) => member._id !== user._id
+                            ).avatar.url
+                          }
+                          alt="profile"
+                          className="w-[60px] h-[60px] rounded-full object-cover"
+                        />
                       </div>
-                    </div>
-                  </Link>
+                      <div className="ml-3">
+                        <h5
+                          className={`text-md font-semibold ${
+                            theme === "light" ? "text-black" : "text-gray-500"
+                          }`}
+                        >
+                          {
+                            chat.members.find(
+                              (member) => member._id !== user._id
+                            ).name
+                          }
+                        </h5>
+                        <div className="flex items-center">
+                          <p className="text-sm text-gray-500">
+                            {chat.messages &&
+                            chat.messages[chat.messages.length - 1].type ===
+                              "image"
+                              ? "sent an image"
+                              : chat.messages &&
+                                chat.messages[chat.messages.length - 1].type ===
+                                  "like"
+                              ? "sent a like"
+                              : chat.messages[chat.messages.length - 1].message
+                                  .length < 30
+                              ? chat.messages[chat.messages.length - 1].message
+                              : chat.messages[
+                                  chat.messages.length - 1
+                                ].message.slice(0, 31) + "..."}
+                          </p>
+                          <p className="text-sm text-gray-500 flex items-center">
+                            <span className="mx-1 text-xl">&#183;</span>
+                            {chat.messages &&
+                              convertDateToTimeAgo(
+                                chat.messages[chat.messages.length - 1]
+                                  .createdAt
+                              )}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  )
                 );
-              })
-            : ""}
+              })}
         </div>
       </div>
       <CreateChatModal/>

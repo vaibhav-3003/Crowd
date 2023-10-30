@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import {
-  ChatCircleDots,
+ MessengerLogo,
 
 } from "@phosphor-icons/react";
 import { Button } from "@material-tailwind/react";
@@ -22,7 +22,7 @@ const Messages = () => {
       {location.pathname === "/direct/inbox" ? (
         <div className="w-full h-full hidden lg:flex flex-col items-center justify-center">
           <div className="rounded-full border-gray-500 border-2 w-[120px] h-[120px] flex justify-center items-center">
-            <ChatCircleDots weight="thin" className="w-20 h-20 text-gray-500" />
+            <MessengerLogo weight="thin" className="w-20 h-20 text-gray-500" />
           </div>
           <h3 className="text-xl font-bold text-center mt-3">Your Messages</h3>
           <p className="text-center text-gray-600">

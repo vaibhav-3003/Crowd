@@ -77,7 +77,7 @@ const CreateChatModal = () => {
     <div>
       <input type="checkbox" id="chat_modal" className="modal-toggle" ref={modalRef}/>
       <div className="modal">
-        <div className="modal-box p-0 min-w-[550px]">
+        <div className="modal-box p-0 md:min-w-[550px]">
           {/* header */}
           <div className="flex justify-between items-center p-4">
             <div></div>

@@ -30,6 +30,7 @@ import {
   Sun,
   User,
   SignOut,
+  MessengerLogo,
 } from "@phosphor-icons/react";
 import { UserContext } from '../context/UserContext';
 import SearchModal from './SearchModal';
@@ -107,15 +108,6 @@ const Sidebar = () => {
             </IconButton>
           </Link>
 
-          <Link to="/direct/inbox">
-            <IconButton variant="text">
-              <ChatCircleDots
-                className={`h-8 w-8 ${
-                  theme === "light" ? "text-gray-800" : "text-gray-500"
-                }`}
-              />
-            </IconButton>
-          </Link>
           <Link to="/p/create">
             <IconButton variant="text">
               <PlusSquare
@@ -128,6 +120,154 @@ const Sidebar = () => {
           <Link to={`/${user.username}/`}>
             <Avatar src={user.avatar.url} className="w-8 h-8" />
           </Link>
+
+          <Popover>
+            <PopoverHandler>
+              <ListItem
+                className={`${
+                  theme === "dark" &&
+                  "hover:bg-[#313a44] active:bg-[#313a44] focus:bg-[#313a44]"
+                } ${
+                  location.pathname.slice(0, 7) === "/direct"
+                    ? "w-fit"
+                    : "w-fit lg:w-full"
+                }`}
+              >
+                <ListItemPrefix
+                  className={`${
+                    location.pathname.slice(0, 7) === "/direct"
+                      ? "mr-0"
+                      : "mr-0 lg:mr-4"
+                  }`}
+                >
+                  <HamBurgerList
+                    className={`h-7 w-7 ${
+                      theme === "light" ? "text-gray-800" : "text-gray-500"
+                    }`}
+                  />
+                </ListItemPrefix>
+                <p
+                  className={`${
+                    theme === "light" ? "text-black" : "text-gray-500"
+                  } ${
+                    location.pathname.slice(0, 7) === "/direct"
+                      ? "hidden"
+                      : "hidden lg:block"
+                  }`}
+                >
+                  More
+                </p>
+              </ListItem>
+            </PopoverHandler>
+            <PopoverContent
+              className={`z-20 p-2 ${
+                theme === "dark" && "bg-[#1D232A] border-dark"
+              }`}
+            >
+              <div className={`w-[200px]`}>
+                <Link
+                  to={`/${user && user.username}/`}
+                  className={`flex items-center gap-2 w-full mb-2 ${
+                    theme === "light"
+                      ? "hover:bg-blue-gray-50"
+                      : "hover:bg-dark"
+                  } p-2.5 rounded-lg`}
+                >
+                  <BookmarkSimple
+                    size={24}
+                    className={`${
+                      theme === "light" ? "text-gray-800" : "text-gray-500"
+                    }`}
+                  />
+                  <p
+                    className={`${
+                      theme === "light" ? "text-gray-800" : "text-gray-500"
+                    }`}
+                  >
+                    Saved
+                  </p>
+                </Link>
+
+                <button
+                  className={`flex items-center gap-2 w-full mb-2 ${
+                    theme === "light"
+                      ? "hover:bg-blue-gray-50"
+                      : "hover:bg-dark"
+                  } p-2.5 rounded-lg`}
+                  onClick={toggleTheme}
+                >
+                  {theme === "dark" ? (
+                    <Moon
+                      size={24}
+                      className={`${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    />
+                  ) : (
+                    <Sun
+                      size={24}
+                      className={`${
+                        theme === "light" ? "text-gray-800" : "text-gray-500"
+                      }`}
+                    />
+                  )}
+
+                  <p
+                    className={`${
+                      theme === "light" ? "text-gray-800" : "text-gray-500"
+                    }`}
+                  >
+                    Switch appearence
+                  </p>
+                </button>
+
+                <button
+                  className={`flex items-center gap-2 w-full mb-2 ${
+                    theme === "light"
+                      ? "hover:bg-blue-gray-50"
+                      : "hover:bg-dark"
+                  } p-2.5 rounded-lg`}
+                  onClick={() =>
+                    document.getElementById("login_modal").showModal()
+                  }
+                >
+                  <User
+                    size={24}
+                    className={`${
+                      theme === "light" ? "text-gray-800" : "text-gray-500"
+                    }`}
+                  />
+                  <p
+                    className={`${
+                      theme === "light" ? "text-gray-800" : "text-gray-500"
+                    }`}
+                  >
+                    Switch accounts
+                  </p>
+                </button>
+
+                <LoginModal />
+
+                <div className="flex justify-center px-2 my-2">
+                  <hr
+                    className={`w-full ${theme === "dark" && "border-dark"}`}
+                  />
+                </div>
+
+                <button
+                  className={`flex text-red-500 items-center gap-2 w-full mb-2 ${
+                    theme === "light"
+                      ? "hover:bg-blue-gray-50"
+                      : "hover:bg-dark"
+                  } p-2.5 rounded-lg`}
+                  onClick={handleLogout}
+                >
+                  <SignOut size={24} />
+                  <p>Log out</p>
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       ) : (
         <Card
@@ -304,7 +444,7 @@ const Sidebar = () => {
                       : "mr-0 lg:mr-4"
                   }`}
                 >
-                  <ChatCircleDots
+                  <MessengerLogo
                     className={`h-7 w-7 ${
                       theme === "light" ? "text-gray-800" : "text-gray-500"
                     }`}
@@ -535,7 +675,7 @@ const Sidebar = () => {
                     </p>
                   </button>
 
-                  <LoginModal/>
+                  <LoginModal />
 
                   <div className="flex justify-center px-2 my-2">
                     <hr

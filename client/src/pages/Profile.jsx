@@ -18,6 +18,7 @@ const Profile = () => {
     const [tab,setTab] = useState('posts')
 
     const [follow,setFollow] = useState(isFollowed)
+    const [savedPosts,setSavedPosts] = useState([])
 
     const followUser = async()=>{
       await userFollowed(username);
@@ -53,6 +54,10 @@ const Profile = () => {
     useEffect(()=>{
       setFollow(isFollowed)
     },[isFollowed,dispatch])
+
+    useEffect(()=>{
+      setSavedPosts(userProfile && userProfile.savedPosts)
+    },[userProfile])
 
   return userLoading ? (
     <LoadingPage />
@@ -231,7 +236,7 @@ const Profile = () => {
                 <Spinner />
               </div>
             ) : (
-              <SavedPosts posts={user.savedPosts} />
+              <SavedPosts posts={savedPosts} />
             )
           ) : null}
         </div>

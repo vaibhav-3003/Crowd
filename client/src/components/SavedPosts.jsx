@@ -2,6 +2,7 @@ import React from "react";
 import UserPost from "./UserPost";
 
 const SavedPosts = ({ posts }) => {
+
   return (
     <div className="w-full mt-5 grid grid-cols-3 gap-1 ">
       {posts.length > 0 ? (
@@ -10,9 +11,10 @@ const SavedPosts = ({ posts }) => {
             <UserPost
               key={post._id}
               postId={post._id}
-              imageSrc={post.image.url}
+              source={post.image.url}
               likes={post.likes.length}
               comments={post.comments.length}
+              type={post.type}
             />
           );
         })

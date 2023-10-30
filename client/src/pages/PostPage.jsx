@@ -141,7 +141,7 @@ const PostPage = () => {
   return (
     <>
       {isMobile ? (
-        <div className="ml-0 md:ml-[97px] lg:ml-[273px] pb-20 ">
+        <div className="ml-0 md:ml-[97px] lg:ml-[273px] pb-24 ">
           <div
             className={`px-4 py-3 flex items-center sticky top-0 z-20 ${
               theme === "light" ? "bg-gray-50" : "bg-dark"
@@ -176,42 +176,87 @@ const PostPage = () => {
                     />
                     <span>{post && post.owner.username}</span>
                   </Link>
-                  <div className="dropdown dropdown-end">
-                    <button tabIndex={0} className="text-gray-500">
-                      <DotsThreeOutline size={20} />
-                    </button>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                    >
-                      <li>
-                        <label
-                          htmlFor="delete_modal"
-                          className="flex items-center text-red-500 gap-2"
-                        >
-                          <Trash size={20} />
-                          <span>Delete</span>
-                        </label>
-                      </li>
-                      <li>
-                        <label
-                          htmlFor="edit_modal"
-                          className="flex items-center gap-2"
-                        >
-                          <NotePencil size={20} />
-                          <span>Edit</span>
-                        </label>
-                      </li>
-                    </ul>
-                  </div>
+                  {post.owner._id === user._id && (
+                    <div className="dropdown dropdown-end">
+                      <button tabIndex={0} className="text-gray-500">
+                        <DotsThreeOutline size={20} />
+                      </button>
+                      <ul
+                        tabIndex={0}
+                        className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                      >
+                        <li>
+                          <label
+                            htmlFor="delete_modal"
+                            className="flex items-center text-red-500 gap-2"
+                          >
+                            <Trash size={20} />
+                            <span>Delete</span>
+                          </label>
+                        </li>
+                        <li>
+                          <label
+                            htmlFor="edit_modal"
+                            className="flex items-center gap-2"
+                          >
+                            <NotePencil size={20} />
+                            <span>Edit</span>
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
-                <div className="w-full mt-2 px-2">
-                  <img
-                    src={post && post.image.url}
-                    alt="post image"
-                    className="w-full object-cover h-[400px] md:h-[600px]"
-                  />
+                <div className="w-full mt-2">
+                  {post.type === "video" ? (
+                    <div className="relative">
+                      <video
+                        src={post.image.url}
+                        alt="post"
+                        className="w-full object-cover min-h-[500px] cursor-pointer"
+                        ref={videoPlayer}
+                        onClick={handlePlayingVideo}
+                        autoPlay
+                      />
+                      <button
+                        type="button"
+                        className="absloute absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        onClick={handlePlayingVideo}
+                      >
+                        {!isPlaying && (
+                          <Play size={80} color="#fff" weight="fill" />
+                        )}
+                      </button>
+
+                      {isSound ? (
+                        <button
+                          type="button"
+                          className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                          onClick={handleSound}
+                        >
+                          {isMuted ? (
+                            <SpeakerSlash size={15} color="#fff" />
+                          ) : (
+                            <SpeakerHigh size={15} color="#fff" />
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                        >
+                          <SpeakerX size={15} color="#fff" />
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <img
+                      src={post && post.image.url}
+                      alt="post"
+                      className="w-full object-cover min-h-[500px]"
+                    />
+                  )}
 
                   {/* like,comment,save */}
                   <div className="flex justify-between items-center">

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../context/UserContext'
 import { Avatar } from '@material-tailwind/react'
+import { Link } from 'react-router-dom'
 
 const SearchModal = () => {
     const [searchText,setSearchText] = useState('')
@@ -69,13 +70,13 @@ const SearchModal = () => {
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user) => {
               return (
-                <a
+                <Link
                   className={`p-2 rounded-lg flex gap-4 items-center ${
                     theme === "light"
                       ? "hover:bg-gray-100"
                       : "hover:bg-[#313a44]"
                   }`}
-                  href={`/${user.username}`}
+                  to={`/${user.username}`}
                   key={user._id}
                 >
                   <Avatar src={user.avatar.url} className="w-12 h-12" />
@@ -83,7 +84,7 @@ const SearchModal = () => {
                     <p className="font-bold">{user.username}</p>
                     <p className="text-sm text-gray-500">{user.name}</p>
                   </div>
-                </a>
+                </Link>
               );
             })
           ) : searchText !== "" ? (

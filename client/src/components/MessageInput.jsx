@@ -16,14 +16,16 @@ const MessageInput = ({chat}) => {
   const formRef = useRef()
 
   const {messageLoading,sendMessage,loadChat} = useContext(ChatContext)
-  const {theme} = useContext(UserContext)
+  const {theme,user} = useContext(UserContext)
 
   const send = async(e)=>{
     e.preventDefault()
 
+    const receiver = chat.members.find((member) => member._id !== user._id);
+
     const newMessage = {
-      sender: chat.members[0]._id,
-      receiver: chat.members[1]._id,
+      sender: user._id,
+      receiver: receiver._id,
       message,
       files: images,
       type: messageType,
@@ -64,9 +66,10 @@ const MessageInput = ({chat}) => {
   }
 
   const handleLikeMessage = async()=>{
+    const receiver = chat.members.find((member) => member._id !== user._id);
     await sendMessage({
-      sender: chat.members[0]._id,
-      receiver: chat.members[1]._id,
+      sender: user._id,
+      receiver: receiver._id,
       message,
       files: [],
       type: 'like'

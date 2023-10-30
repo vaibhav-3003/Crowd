@@ -86,54 +86,59 @@ const Post = ({id,avatar,username,source,likes,caption,post}) => {
 
       {/* Post Image */}
       <div>
-        <LazyLoad height={200}>
-          {post.type === "video" ? (
-            <div className="relative">
-              <video
-                src={source}
-                alt="post"
-                className="w-full min-h-[468px] object-cover cursor-pointer"
-                ref={videoPlayer}
-                onClick={handlePlayingVideo}
-                autoPlay
-              />
+        {post.type === "video" ? (
+          <div className="relative">
+            <video
+              src={source}
+              alt="post"
+              className="w-full min-h-[468px] object-cover cursor-pointer"
+              ref={videoPlayer}
+              onClick={handlePlayingVideo}
+              autoPlay
+              loop
+              muted
+              onLoadedData={() => {
+                videoPlayer.current.play();
+              }}
+            />
+            <button
+              type="button"
+              className="absloute absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              onClick={handlePlayingVideo}
+            >
+              {!isPlaying && <Play size={80} color="#fff" weight="fill" />}
+            </button>
+
+            {isSound ? (
               <button
                 type="button"
-                className="absloute absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                onClick={handlePlayingVideo}
+                className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                onClick={handleSound}
               >
-                {!isPlaying && <Play size={80} color="#fff" weight="fill" />}
+                {isMuted ? (
+                  <SpeakerSlash size={15} color="#fff" />
+                ) : (
+                  <SpeakerHigh size={15} color="#fff" />
+                )}
               </button>
-
-              {isSound ? (
-                <button
-                  type="button"
-                  className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
-                  onClick={handleSound}
-                >
-                  {isMuted ? (
-                    <SpeakerSlash size={15} color="#fff" />
-                  ) : (
-                    <SpeakerHigh size={15} color="#fff" />
-                  )}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
-                >
-                  <SpeakerX size={15} color="#fff" />
-                </button>
-              )}
-            </div>
-          ) : (
+            ) : (
+              <button
+                type="button"
+                className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+              >
+                <SpeakerX size={15} color="#fff" />
+              </button>
+            )}
+          </div>
+        ) : (
+          <LazyLoad height={200}>
             <img
               src={source}
               alt="post"
               className="md:rounded-md mb-2 aspect-square object-cover"
             />
-          )}
-        </LazyLoad>
+          </LazyLoad>
+        )}
       </div>
 
       {/* Post Actions */}

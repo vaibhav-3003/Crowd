@@ -333,7 +333,7 @@ export const myProfile = async(req,res)=>{
 export const getUserProfile = async(req,res)=>{
   try {
     const username = req.params.username;
-    const user = await User.findOne({username}).populate('posts');
+    const user = await User.findOne({username}).populate('posts savedPosts');
 
     if(!user){
       return res.status(404).json({

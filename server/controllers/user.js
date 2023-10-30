@@ -26,8 +26,8 @@ export const register = async(req,res)=>{
           email,
           password,
           avatar: {
-            public_id: "crowd/profiles/default_pa5rxq",
-            url: "https://res.cloudinary.com/dsz55cxdz/image/upload/v1693316753/crowd/profiles/default_pa5rxq.jpg",
+            public_id: "crowd/profiles/default_ls1vxg",
+            url: "https://res.cloudinary.com/dsz55cxdz/image/upload/v1698656287/crowd/profiles/default_ls1vxg.jpg",
           },
         });
 
@@ -498,10 +498,11 @@ export const deleteProfilePicture = async(req,res)=>{
     
     const user = await User.findById(req.user._id)
 
-    const result = await cloudinary.uploader.destroy(user.avatar.public_id)
+    const result = await cloudinary.v2.uploader.destroy(user.avatar.public_id)
 
-    user.avatar.public_id = "crowd/profiles/default_pa5rxq"
-    user.avatar.url = "https://res.cloudinary.com/dsz55cxdz/image/upload/v1693316753/crowd/profiles/default_pa5rxq.jpg"
+    user.avatar.public_id = "crowd/profiles/default_ls1vxg";
+    user.avatar.url =
+      "https://res.cloudinary.com/dsz55cxdz/image/upload/v1698656287/crowd/profiles/default_ls1vxg.jpg";
 
     await user.save()
 

@@ -46,7 +46,7 @@ const Home = () => {
                       id={post._id}
                       avatar={post.owner.avatar.url}
                       username={post.owner.username}
-                      image={post.image.url}
+                      source={post.image.url}
                       likes={post.likes.length}
                       caption={post.caption}
                       post={post}

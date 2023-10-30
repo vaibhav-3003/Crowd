@@ -107,6 +107,8 @@ export const deletePost = async(req,res)=>{
             })
         }
 
+        const result = await cloudinary.v2.uploader.destroy(post.image.public_id);
+
         await post.deleteOne();
 
         const user = await User.findById(req.user._id);

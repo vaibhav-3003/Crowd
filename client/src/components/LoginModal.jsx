@@ -40,11 +40,14 @@ const LoginModal = () => {
 
     const handleLogin = async (data) => {
       await userLogin(data);
-      setIsOpen(false)
+      // if(error.length===0){
+      //   setIsOpen(false)
+      // }
       await loadUser()
       await getFollowingPosts()
       
-      navigate('/')
+      console.log(error)
+      // navigate('/')
         
     };
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Avatar } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
 import { IconButton } from "@material-tailwind/react";
@@ -7,12 +7,13 @@ import {
   BookmarkIcon as OutlineBookMark,
   ChatBubbleOvalLeftIcon,
 } from "@heroicons/react/24/outline";
+import { SpeakerHigh,SpeakerSlash,SpeakerX,Play } from '@phosphor-icons/react';
 import { HeartIcon as SolidHeart,BookmarkIcon as SolidBookMark } from "@heroicons/react/24/solid";
 import { PostContext } from '../context/PostContext';
 import { UserContext } from '../context/UserContext';
 import LazyLoad from 'react-lazyload'
 
-const Post = ({id,avatar,username,image,likes,caption,post}) => {
+const Post = ({id,avatar,username,source,likes,caption,post}) => {
 
   const {
     postSaved,
@@ -23,6 +24,12 @@ const Post = ({id,avatar,username,image,likes,caption,post}) => {
   const [isLiked,setIsLiked] = useState(post && post.likes.includes(user._id))
   const [isSaved,setIsSaved] = useState(post && post.saved.includes(user._id))
 
+  const[isPlaying,setIsPlaying] = useState(true)
+  const[isMuted,setIsMuted] = useState(true)
+  const[isSound,setIsSound] = useState(undefined)
+
+  const videoPlayer = useRef()
+
   const savePost = async(id)=>{
     await postSaved(id)
     setIsSaved(!isSaved)
@@ -32,6 +39,36 @@ const Post = ({id,avatar,username,image,likes,caption,post}) => {
     await likePost(id);
     setIsLiked(!isLiked)
   };
+  const handlePlayingVideo = () => {
+    setIsPlaying(!isPlaying);
+
+    if (isPlaying) {
+      videoPlayer.current.pause();
+    } else {
+      videoPlayer.current.play();
+    }
+  };
+
+  const handleSound = () => {
+    setIsMuted(!isMuted);
+
+    if (isMuted) {
+      videoPlayer.current.muted = false;
+    } else {
+      videoPlayer.current.muted = true;
+    }
+  };
+
+  useEffect(() => {
+    const canPlayAudio =
+      videoPlayer.current &&
+      videoPlayer.current.canPlayType("audio/mp4") !== "";
+    if (canPlayAudio) {
+      setIsSound(true);
+    } else {
+      setIsSound(false);
+    }
+  }, [videoPlayer.current]);
 
   return (
     <div className="w-full md:w-[468px]">
@@ -50,11 +87,52 @@ const Post = ({id,avatar,username,image,likes,caption,post}) => {
       {/* Post Image */}
       <div>
         <LazyLoad height={200}>
-          <img
-            src={image}
-            alt="post"
-            className="md:rounded-md mb-2 aspect-square object-cover"
-          />
+          {post.type === "video" ? (
+            <div className="relative">
+              <video
+                src={source}
+                alt="post"
+                className="w-full min-h-[468px] object-cover cursor-pointer"
+                ref={videoPlayer}
+                onClick={handlePlayingVideo}
+                autoPlay
+              />
+              <button
+                type="button"
+                className="absloute absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                onClick={handlePlayingVideo}
+              >
+                {!isPlaying && <Play size={80} color="#fff" weight="fill" />}
+              </button>
+
+              {isSound ? (
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                  onClick={handleSound}
+                >
+                  {isMuted ? (
+                    <SpeakerSlash size={15} color="#fff" />
+                  ) : (
+                    <SpeakerHigh size={15} color="#fff" />
+                  )}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                >
+                  <SpeakerX size={15} color="#fff" />
+                </button>
+              )}
+            </div>
+          ) : (
+            <img
+              src={source}
+              alt="post"
+              className="md:rounded-md mb-2 aspect-square object-cover"
+            />
+          )}
         </LazyLoad>
       </div>
 

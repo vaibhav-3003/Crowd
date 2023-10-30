@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useRef} from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import {
@@ -16,6 +16,10 @@ import {
   ChatCircle,
   Smiley,
   CaretLeft,
+  Play,
+  SpeakerHigh,
+  SpeakerSlash,
+  SpeakerX
 } from "@phosphor-icons/react";
 
 import data from "@emoji-mart/data";
@@ -35,6 +39,12 @@ const PostPage = () => {
     const {theme,user} = useContext(UserContext)
     const [isLiked,setIsLiked] = useState(post && post.likes.some(like=>like._id===user._id))
 
+    const [isPlaying,setIsPlaying] = useState(true)
+    const[isMuted,setIsMuted] = useState(true)
+    const [isSound, setIsSound] = useState(undefined);
+    const videoPlayer = useRef()
+
+    
     useEffect(() => {
       const handleResize = () => {
         setIsMobile(window.innerWidth <= 1200);
@@ -61,6 +71,15 @@ const PostPage = () => {
     const handleIconBox = ()=>{
       setIconBoxVisible(!iconBoxVisible)
     }
+
+    useEffect(()=>{
+      const canPlayAudio = videoPlayer.current && videoPlayer.current.canPlayType("audio/mp4") !== "";
+      if(canPlayAudio){
+        setIsSound(true)
+      }else{
+        setIsSound(false)
+      }
+    },[videoPlayer.current])
 
     const addEmoji = (e)=>{
       const sym = e.unified.split("_")
@@ -98,6 +117,26 @@ const PostPage = () => {
       await likePost(id)
       setIsLiked(!isLiked)
     }
+
+    const handlePlayingVideo = () => {
+      setIsPlaying(!isPlaying);
+
+      if (isPlaying) {
+        videoPlayer.current.pause();
+      } else {
+        videoPlayer.current.play();
+      }
+    };
+
+    const handleSound = () => {
+      setIsMuted(!isMuted);
+
+      if (isMuted) {
+        videoPlayer.current.muted = false;
+      } else {
+        videoPlayer.current.muted = true;
+      }
+    };
 
   return (
     <>
@@ -258,13 +297,56 @@ const PostPage = () => {
           ) : (
             post &&
             comments && (
-              <div className="flex grow justify-center">
+              <div className="flex grow justify-center min-h-[500px]">
                 <div className="w-1/2 h-full">
-                  <img
-                    src={post && post.image.url}
-                    alt="post image"
-                    className="w-full object-cover h-4/5"
-                  />
+                  {post.type === "video" ? (
+                    <div className="relative">
+                      <video
+                        src={post.image.url}
+                        alt="post"
+                        className="w-full object-cover min-h-[500px] cursor-pointer"
+                        ref={videoPlayer}
+                        onClick={handlePlayingVideo}
+                        autoPlay
+                      />
+                      <button
+                        type="button"
+                        className="absloute absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        onClick={handlePlayingVideo}
+                      >
+                        {!isPlaying && (
+                          <Play size={80} color="#fff" weight="fill" />
+                        )}
+                      </button>
+
+                      {isSound ? (
+                        <button
+                          type="button"
+                          className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                          onClick={handleSound}
+                        >
+                          {isMuted ? (
+                            <SpeakerSlash size={15} color="#fff" />
+                          ) : (
+                            <SpeakerHigh size={15} color="#fff" />
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="rounded-full p-1.5 bg-dark absolute bottom-3 right-3 active:opacity-90"
+                        >
+                          <SpeakerX size={15} color="#fff" />
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <img
+                      src={post && post.image.url}
+                      alt="post"
+                      className="w-full object-cover min-h-[500px]"
+                    />
+                  )}
                 </div>
                 <div className="flex flex-col w-1/2 px-4 relative">
                   {/* profile show */}

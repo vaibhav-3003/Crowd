@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { PostContext } from '../context/PostContext';
 import { Avatar } from '@material-tailwind/react';
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { Smiley } from '@phosphor-icons/react';
+import { Smiley,Play } from '@phosphor-icons/react';
 import { UserContext } from '../context/UserContext';
 import {IconButton} from '@material-tailwind/react';
 
@@ -12,6 +12,8 @@ const EditPostModal = () => {
     const {theme} = useContext(UserContext)
     const [caption,setCaption] = useState('')
     const [iconBoxVisible, setIconBoxVisible] = useState(false);
+    const [isPlaying,setIsPlaying] = useState(true)
+    const videoPlayer = useRef()
 
     const handleEditPost = async(e,id,caption)=>{
       e.preventDefault()
@@ -33,8 +35,17 @@ const EditPostModal = () => {
         }
       });
       let emoji = String.fromCodePoint(...codeArray);
-      console.log(emoji)
       setCaption(caption + emoji);
+    };
+
+    const handlePlayingVideo = () => {
+      setIsPlaying(!isPlaying);
+
+      if (isPlaying) {
+        videoPlayer.current.pause();
+      } else {
+        videoPlayer.current.play();
+      }
     };
 
   return (
@@ -42,7 +53,7 @@ const EditPostModal = () => {
       <input type="checkbox" id="edit_modal" className="modal-toggle" />
       <div className="modal">
         <form
-          className="modal-box p-0 max-w-[800px]" 
+          className="modal-box p-0 max-w-[800px]"
           onSubmit={(e) => handleEditPost(e, post && post._id, caption)}
         >
           {/* header */}
@@ -63,13 +74,34 @@ const EditPostModal = () => {
           {/* body */}
           <div className="flex flex-col md:flex-row w-full">
             <div className="w-full md:w-1/2">
-              {post && (
-                <img
-                  src={post.image.url}
-                  alt="post image"
-                  className="w-full h-full object-cover"
-                />
-              )}
+              {post &&
+                (post.type === "video" ? (
+                  <div className='relative h-full'>
+                    <video
+                      src={post.image.url}
+                      alt="post"
+                      className="w-full h-full object-cover cursor-pointer"
+                      autoPlay
+                      ref={videoPlayer}
+                      onClick={handlePlayingVideo}
+                    />
+                    <button
+                      type="button"
+                      className="absloute absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                      onClick={handlePlayingVideo}
+                    >
+                      {!isPlaying && (
+                        <Play size={80} color="#fff" weight="fill" />
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <img
+                    src={post.image.url}
+                    alt="post"
+                    className="w-full h-full object-cover"
+                  />
+                ))}
             </div>
             <div className="w-full md:w-1/2">
               {post && (

@@ -16,6 +16,7 @@ import PostPage from './pages/PostPage'
 import PostComments from './pages/PostComments'
 import EditProfile from './pages/EditProfile'
 import Explore from './pages/Explore'
+import ForgotPassword from './pages/ForgotPassword'
 import Inbox from './pages/Inbox'
 
 function App() {
@@ -128,8 +129,16 @@ function App() {
             }
           />
 
-          <Route path="/account/login" element={<Login user={user}/>} />
+          <Route path="/account/login" element={<Login user={user} />} />
           <Route path="/account/register" element={<Register user={user} />} />
+          <Route
+            path="/accounts/password/reset"
+            element={<ForgotPassword user={user} />}
+          />
+          <Route
+            path="/accounts/password/reset/:token"
+            element={<ForgotPassword user={user} />}
+          />
 
           {/* <Route path="/*" element={<ErrorPage />} /> */}
         </Routes>

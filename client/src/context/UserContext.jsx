@@ -9,6 +9,7 @@ const initialState = {
     loginError: null,
     registerError: null,
     error:null,
+    resetPasswordError:null,
     user:null,
     userProfile: null,
     isFollowed: null,
@@ -194,6 +195,38 @@ const UserProvider = ({children})=>{
         }
     }
 
+    const forgotPassword = async(email)=>{
+        try {
+            dispatch({type:'SET_LOADING_TRUE'})
+            const {data} = await axios.post('http://localhost:4000/api/v1/forgot/password',{
+                email,
+            })
+            dispatch({type:'SET_LOADING_FALSE'})
+        } catch (error) {
+            dispatch({ type: "SET_LOADING_FALSE" });
+            dispatch({
+              type: "SET_USER_ERROR",
+              payload: error.response.data.message,
+            });
+        }
+    }
+
+    const resetPassword = async(password,token)=>{
+        try {
+            dispatch({ type: "SET_LOADING_TRUE" });
+            const {data} = await axios.put(`http://localhost:4000/api/v1/password/reset/${token}`,{
+                password,
+            })
+            dispatch({ type: "SET_LOADING_FALSE" });
+        } catch (error) {
+            dispatch({ type: "SET_LOADING_FALSE" });
+            dispatch({
+              type: "SET_RESET_PASSWORD_ERROR",
+              payload: error.response.data.message,
+            });
+        }
+    }
+
     useEffect(()=>{
         const user = async()=>{
             await loadUser()
@@ -203,7 +236,7 @@ const UserProvider = ({children})=>{
     },[])
 
     return (
-        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed,toggleTheme,logout,deleteProfileImage}}>
+        <UserContext.Provider value={{...state,dispatch,userLogin,userRegister,loadUser,loadUserWithUsername,changeProfilePhoto,updateProfile,followAndUnfollow,userFollowed,toggleTheme,logout,deleteProfileImage,forgotPassword,resetPassword}}>
             {children}
         </UserContext.Provider>
     )

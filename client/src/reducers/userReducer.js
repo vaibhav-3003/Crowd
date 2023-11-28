@@ -82,6 +82,13 @@ const UserReducer = (state,action)=>{
                 ...state,
                 user: null
             }
+            
+        case 'SET_RESET_PASSWORD_ERROR':
+            console.log(action.payload)
+            return{
+                ...state,
+                resetPasswordError: action.payload
+            }
     
         default:
             return {

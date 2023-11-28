@@ -142,7 +142,7 @@ const Login = ({user}) => {
               </div>
             </form>
             <Link
-              to="/forgot/password"
+              to="/accounts/password/reset"
               className="text-sm text-gray-500 hover:text-blue-600 hover:underline"
             >
               Forgot Password ?

@@ -77,13 +77,7 @@ const Home = () => {
               Follow users to see posts
             </p>
           ) : (
-            <p
-              className={`text-md md:text-lg ${
-                theme === "light" ? "text-gray-800" : "text-gray-500"
-              }`}
-            >
-              No more Posts
-            </p>
+            null
           )}
         </div>
       </div>

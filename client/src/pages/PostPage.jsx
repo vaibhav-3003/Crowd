@@ -165,7 +165,7 @@ const PostPage = () => {
                 {/* profile show */}
                 <div className="flex-none w-full px-4 py-3 flex justify-between items-center mt-2">
                   <Link
-                    to={`${post.owner.username}`}
+                    to={`/${post.owner.username}`}
                     className="flex items-center justify-center gap-2"
                   >
                     <Avatar

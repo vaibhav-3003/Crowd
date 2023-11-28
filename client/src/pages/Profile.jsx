@@ -62,7 +62,7 @@ const Profile = () => {
   return userLoading ? (
     <LoadingPage />
   ) : userProfile ? (
-    <div className="md:ml-16 lg:ml-72 pb-20 min-h-screen max-h-auto">
+    <div className="md:ml-16 lg:ml-72 pb-24 min-h-screen max-h-auto">
       <div className="w-full px-8 md:px-20 py-10 flex flex-wrap md:flex-nowrap justify-center  md:justify-start gap-8">
         <Avatar
           src={userProfile && userProfile.avatar.url}

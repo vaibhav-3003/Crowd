@@ -3,7 +3,6 @@ import {
  MessengerLogo,
 
 } from "@phosphor-icons/react";
-import { Button } from "@material-tailwind/react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import MessageInbox from '../components/MessageInbox';
 import CreateChatModal from '../components/CreateChatModal';

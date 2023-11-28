@@ -43,8 +43,7 @@ const CreateChatModal = () => {
     })
     setSelectedUser(null)
     setSearchValue('')
-    window.chat_modal.checked = false
-
+    modalRef.current.checked = false
   }
 
   useEffect(() => {

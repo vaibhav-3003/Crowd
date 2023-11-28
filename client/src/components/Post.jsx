@@ -11,7 +11,6 @@ import { SpeakerHigh,SpeakerSlash,SpeakerX,Play } from '@phosphor-icons/react';
 import { HeartIcon as SolidHeart,BookmarkIcon as SolidBookMark } from "@heroicons/react/24/solid";
 import { PostContext } from '../context/PostContext';
 import { UserContext } from '../context/UserContext';
-import LazyLoad from 'react-lazyload'
 
 const Post = ({id,avatar,username,source,likes,caption,post}) => {
 
@@ -131,13 +130,11 @@ const Post = ({id,avatar,username,source,likes,caption,post}) => {
             )}
           </div>
         ) : (
-          <LazyLoad height={200}>
             <img
               src={source}
               alt="post"
               className="md:rounded-md mb-2 aspect-square object-cover"
             />
-          </LazyLoad>
         )}
       </div>
 
